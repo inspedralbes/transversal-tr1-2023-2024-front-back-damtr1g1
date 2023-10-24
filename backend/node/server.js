@@ -12,44 +12,30 @@ server.listen(PORT, function () {
     console.log("Server running on port " + PORT);
 });
 
-// Configuració de la conexió a la base de dades
-/* const dbConfig = {
-    host: 'localhost',
-    user: 'tu_usuario',
-    password: 'tu_contraseña',
-    database: 'nombre_de_tu_base_de_datos'
-}; */
-
-// Crear la connexió a la base de datos
-// const connection = mysql.createConnection(dbConfig);
-
-// Conectar a la base de dades
-/*connection.connect((err) => {
-    if (err) {
-        console.error('Error al conectar a la base de datos: ' + err.stack);
-        return;
-    }
-    console.log('Conexión a la base de datos exitosa');
-});*/
-
-// Ruta per a obtenir dades de la base de dades
-/*app.get('/api/datos', (req, res) => {
-    connection.query('SELECT * FROM nombre_de_tu_tabla', (error, results, fields) => {
-        if (error) throw error;
-        res.send(results);
-    });
-});*/
+// Enviar els poductes de la DB al client 
+app.post('/api/ShoppingCartData', (req, res) => {
+    connection.query('SELECT * FROM Usuarios', (error, results, fields) => {
+        if (error) {
+            // Errors 
+            return res.status(500).json({ error: 'Ocurrió un error al consultar la base de datos.' });
+        } else {
+            return res.json(results)
+        }
+    })
+})
 
 
-io.on('connection', (socket) => {
-    console.log('Un usuario se ha conectado');
+// Eliminar productes de la DB y eniviar els canvis
+app.post('/api/EliminarData', (req, res) => {
+    const productId = req.body.id; // El client ens envia el id del producte
 
-    socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Un usuario se ha desconectado');
+    const query = 'DELETE FROM Productos WHERE id = ?'; // Borrem el producte que ens han dit
+    connection.query(query, [productId], (error, results, fields) => {
+        if (error) {
+            res.status(500).json({ message: 'Error al eliminar el producto.' });
+        } else {
+            res.status(200).json({ message: `Producto con ID ${productId} eliminado correctamente.` });
+        }
     });
 });
 
