@@ -47,15 +47,15 @@ app.get('/', function (req, res) {
     res.send("Conectat al server")
 })
 
-// Ruta para obtener datos de la base de datos
+// Ruta per a validar el login 
 app.get('/api/validacioLogin', (req, res) => {
-    const usuarioSolicitado = req.query.usuario; // Obtén el usuario de la solicitud
-    const contrasenyaSolicitada = req.query.contrasenya; // Obtén la contraseña de la solicitud
+    const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
+    const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
-    // Consulta la base de datos para validar el usuario y la contraseña
+    // Consulta la DB para validar l'usuari i la contrasenya
     connection.query('SELECT * FROM Usuarios', (error, results, fields) => {
         if (error) {
-            // Manejo de errores en caso de que ocurra algún problema con la consulta
+            // Errors 
             return res.status(500).json({ error: 'Ocurrió un error al consultar la base de datos.' });
         }
 
@@ -64,20 +64,14 @@ app.get('/api/validacioLogin', (req, res) => {
 
         if (usuarioEncontrado) {
             // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-            return res.status(200).json({ message: 'Inicio de sesión exitoso' });
+            return res.status(200).json({ Boolean: true });
         } else {
             // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-            return res.status(401).json({ error: 'Credenciales inválidas' });
+            return res.status(401).json({ Boolean: false });
         }
     });
 });
 
-app.get('/api/DB', (req, res) => {
-    // Consultar la base de datos para validar el usuario y la contraseña
-    connection.query('SELECT * FROM Usuarios', (error, results, fields) => {
-        res.status(200).json(results);
-    });
-})
 
 // Código para cerrar la conexión cuando el servidor se cierre
 process.on('SIGINT', () => {
