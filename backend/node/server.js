@@ -33,11 +33,11 @@ app.get("/", function (req, res) {
 });
 
 // Ruta per a validar el login
-app.get("/api/validacioLogin", (req, res) => {
+app.get("/api/validacioLogin", async (req, res) => {
   const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
   const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
-  crearDBConnnection()
+  await crearDBConnnection();
   // Consulta la DB para validar l'usuari i la contrasenya
   con.query("SELECT * FROM Usuarios", (error, results, fields) => {
     if (error) {
@@ -76,57 +76,116 @@ function closeDBconnection() {
 }
 
 //falta fer lo dels fixers d'imatges
-function crearProducte(idproducte,imatge_Nom,producte_Categoria,producte_Definicio,producte_Nom,producte_Preu,producte_Quantitat) {
-    const nouProducte = {
-        id_producte: idproducte,
-        imatgeNom: imatge_Nom,
-        producteCategoria: producte_Categoria,
-        producteDefinicio: producte_Definicio,
-        producteNom: producte_Nom,
-        productePreu: producte_Preu,
-        producteQuantitat: producte_Quantitat
+function crearProducte(
+  idproducte,
+  imatge_Nom,
+  producte_Categoria,
+  producte_Definicio,
+  producte_Nom,
+  producte_Preu,
+  producte_Quantitat
+) {
+  const nouProducte = {
+    id_producte: idproducte,
+    imatgeNom: imatge_Nom,
+    producteCategoria: producte_Categoria,
+    producteDefinicio: producte_Definicio,
+    producteNom: producte_Nom,
+    productePreu: producte_Preu,
+    producteQuantitat: producte_Quantitat,
+  };
 
-    };
-
-    // Inserta nou producte en la tabla de Producte
-    con.query('INSERT INTO Producte SET ?', nouProducte, (error, results) => {
-        if (error) {
-            console.error('Error al insertar Producte:', error);
-        } else {
-            console.log('Producte insertado con éxito. ID del Producte:', nouProducte.id_producte);
-        }
-
-
-    });
+  // Inserta nou producte en la tabla de Producte
+  con.query("INSERT INTO Producte SET ?", nouProducte, (error, results) => {
+    if (error) {
+      console.error("Error al insertar Producte:", error);
+    } else {
+      console.log(
+        "Producte insertado con éxito. ID del Producte:",
+        nouProducte.id_producte
+      );
+    }
+  });
 }
 //function eliminar productes
-function deleteProducte(idProducteEliminar){
-    con.query('DELETE FROM Producte WHERE id_producte=?',idProducteEliminar, (error, results) => {
-        if (error) {
-            console.error('Error al insertar Producte:', error);
-        } else {
-            console.log('Producte eliminado con éxito. ID del Producte:', idProducteEliminar);
-        }
-
-    });
+function deleteProducte(idProducteEliminar) {
+  con.query(
+    "DELETE FROM Producte WHERE id_producte=?",
+    idProducteEliminar,
+    (error, results) => {
+      if (error) {
+        console.error("Error al insertar Producte:", error);
+      } else {
+        console.log(
+          "Producte eliminado con éxito. ID del Producte:",
+          idProducteEliminar
+        );
+      }
+    }
+  );
 }
 //function crear carrito
-function crearCarrito(idCarrito,nomUsuari){
-    const nouCarrito = {
-        id_carrito: idCarrito,
-        usuario: nomUsuari
+function crearCarrito(idCarrito, nomUsuari) {
+  const nouCarrito = {
+    id_carrito: idCarrito,
+    usuario: nomUsuari,
+  };
+  con.query("INSERT INTO Carrito SET ?", nouCarrito, (error, results) => {
+    if (error) {
+      console.error("Error al insertar Carrito:", error);
+    } else {
+      console.log(
+        "Carrito insertado con éxito. ID del Carrito:",
+        nouCarrito.id_carrito
+      );
     }
-    con.query('INSERT INTO Carrito SET ?', nouCarrito, (error, results) => {
-        if (error) {
-            console.error('Error al insertar Carrito:', error);
-        } else {
-            console.log('Carrito insertado con éxito. ID del Carrito:', nouCarrito.i);
-        }
-
-
-    });
+  });
 }
-
+//function crear carrito_productes
+function crearCarritoProducte(
+  quantitat,
+  idCarrito,
+  idCarritoProducto,
+  idProducto
+) {
+  const nouCarritoProducte = {
+    cantidad: quantitat,
+    id_carrito: idCarrito,
+    id_carrito_producto: idCarritoProducto,
+    id_producte: idProducto,
+  };
+  con.query(
+    "INSERT INTO Carrito_Productos SET ?",
+    nouCarritoProducte,
+    (error, results) => {
+      if (error) {
+        console.error("Error al insertar Carrito Producto:", error);
+      } else {
+        console.log(
+          "Carrito Producto insertado con éxito. ID del Carrito Producto:",
+          nouCarritoProducte.id_carrito_producto
+        );
+      }
+    }
+  );
+}
+//function borrar carrito_producto
+function deleteCarritoProducto(idCarritoProductoEliminar) {
+  con.query(
+    "DELETE FROM Carrito_Productos WHERE id_carrito_producto=?",
+    idCarritoProductoEliminar,
+    (error, results) => {
+      if (error) {
+        console.error("Error al borrar carrito_producto:", error);
+      } else {
+        console.log(
+          "carrito Producto eliminado con éxito. ID del carrito Producto:",
+          idCarritoProductoEliminar
+        );
+      }
+    }
+  );
+}
 server.listen(PORT, function () {
   console.log("Server running on port " + PORT);
 });
