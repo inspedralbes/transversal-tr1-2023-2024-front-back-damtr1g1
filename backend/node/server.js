@@ -1,107 +1,132 @@
-const express = require('express');
-//const socketIo = require('socket.io');
-const mysql = require('mysql');
+const express = require("express");
+const http = require("http");
+const mysql = require("mysql");
 const PORT = 3000;
-
-const bodyParser = require('body-parser');
-
 const app = express();
-app.use(bodyParser.json());
+const server = http.createServer(app);
 
-//const io = socketIo(server);
-
-app.listen(PORT, function () {
-    console.log("Server running on port " + PORT);
-});
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 // Configuració de la conexió a la base de dades
-const dbConfig = {
-    host: 'dam.inspedralbes.cat',
-    user: 'a22tomybanog_Projecte1',
-    password: 'Projecte1',
-    database: 'a22tomybanog_Projecte1'
-};
+var con = null;
 
-// Crear la connexió a la base de datos
-const connection = mysql.createConnection(dbConfig);
+function crearDBConnnection() {
+    con = mysql.createConnection({
+        host: "dam.inspedralbes.cat",
+        user: "a22tomybanog_Projecte1",
+        password: "Projecte1",
+        database: "a22tomybanog_Projecte1",
+    });
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Error al conectar a la base de datos: ' + err.stack);
-        return;
-    }
-    console.log('Conexión a la base de datos exitosa');
-});
-
-function closeDBconnection() {
-    connection.end((err) => {
+    con.connect((err) => {
         if (err) {
-            console.error('Error al cerrar la conexión: ' + err.stack);
+            console.error("Error al conectar a la base de datos: " + err.stack);
             return;
         }
-        console.log('Conexión cerrada exitosamente.');
+        console.log("Conexión a la base de datos exitosa");
     });
 }
 
+app.get("/", function (req, res) {
+    res.send("Conectat al server");
+});
 
-
-app.get('/', function (req, res) {
-    res.send("Conectat al server")
-})
-
-// Ruta per a validar el login 
-app.get('/api/validacioLogin', (req, res) => {
+// Ruta per a validar el login
+app.get("/api/validacioLogin", (req, res) => {
     const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
     const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
+    crearDBConnnection()
     // Consulta la DB para validar l'usuari i la contrasenya
-    connection.query('SELECT * FROM Usuarios', (error, results, fields) => {
+    con.query("SELECT * FROM Usuarios", (error, results, fields) => {
         if (error) {
-            // Errors 
-            return res.status(500).json({ error: 'Ocurrió un error al consultar la base de datos.' });
+            // Errors
+            return res
+                .status(500)
+                .json({ error: "Ocurrió un error al consultar la base de datos." });
         }
 
         // Verifica si hay algún usuario que coincida con la solicitud
-        const usuarioEncontrado = results.find(user => user.usuario === usuarioSolicitado && user.contrasenya === contrasenyaSolicitada);
+        const usuarioEncontrado = results.find(
+            (user) =>
+                user.usuario === usuarioSolicitado &&
+                user.contrasenya === contrasenyaSolicitada
+        );
 
         if (usuarioEncontrado) {
             // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
             return res.status(200).json({ Boolean: true });
         } else {
             // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-            return res.status(401).json({ Boolean: false + "Error" });
+            return res.status(401).json({ Boolean: false });
         }
     });
+    closeDBconnection();
 });
 
-// Enviar els poductes de la DB al client 
-app.post('/api/ShoppingCartData', (req, res) => {
-    connection.query('SELECT * FROM Usuarios', (error, results, fields) => {
-        if (error) {
-            // Errors 
-            return res.status(500).json({ error: 'Ocurrió un error al consultar la base de datos.' });
-        } else {
-            return res.json(results)
+function closeDBconnection() {
+    con.end((err) => {
+        if (err) {
+            console.error("Error al cerrar la conexión: " + err.stack);
+            return;
         }
-    })
-})
-
-
-// Eliminar productes de la DB y eniviar els canvis
-app.post('/api/EliminarData', (req, res) => {
-    const productId = req.body.id; // El client ens envia el id del producte
-
-    const query = 'DELETE FROM Productos WHERE id = ?'; // Borrem el producte que ens han dit
-    connection.query(query, [productId], (error, results, fields) => {
-        if (error) {
-            res.status(500).json({ message: 'Error al eliminar el producto.' });
-        } else {
-            res.status(200).json({ message: `Producto con ID ${productId} eliminado correctamente.` });
-        }
+        console.log("Conexión cerrada exitosamente.");
     });
-});
+}
 
-// Código para cerrar la conexión cuando el servidor se cierre
-process.on('SIGINT', () => {
-    connection.end();
+//falta fer lo dels fixers d'imatges
+function crearProducte(idproducte, imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat) {
+    const nouProducte = {
+        id_producte: idproducte,
+        imatgeNom: imatge_Nom,
+        producteCategoria: producte_Categoria,
+        producteDefinicio: producte_Definicio,
+        producteNom: producte_Nom,
+        productePreu: producte_Preu,
+        producteQuantitat: producte_Quantitat
+
+    };
+
+    // Inserta nou producte en la tabla de Producte
+    con.query('INSERT INTO Producte SET ?', nouProducte, (error, results) => {
+        if (error) {
+            console.error('Error al insertar Producte:', error);
+        } else {
+            console.log('Producte insertado con éxito. ID del Producte:', nouProducte.id_producte);
+        }
+
+
+    });
+}
+//function eliminar productes
+function deleteProducte(idProducteEliminar) {
+    con.query('DELETE FROM Producte WHERE id_producte=?', idProducteEliminar, (error, results) => {
+        if (error) {
+            console.error('Error al insertar Producte:', error);
+        } else {
+            console.log('Producte eliminado con éxito. ID del Producte:', idProducteEliminar);
+        }
+
+    });
+}
+//function crear carrito
+function crearCarrito(idCarrito, nomUsuari) {
+    const nouCarrito = {
+        id_carrito: idCarrito,
+        usuario: nomUsuari
+    }
+    con.query('INSERT INTO Carrito SET ?', nouCarrito, (error, results) => {
+        if (error) {
+            console.error('Error al insertar Carrito:', error);
+        } else {
+            console.log('Carrito insertado con éxito. ID del Carrito:', nouCarrito.i);
+        }
+
+
+    });
+}
+
+server.listen(PORT, function () {
+    console.log("Server running on port " + PORT);
 });
