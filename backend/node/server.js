@@ -13,23 +13,28 @@ server.listen(PORT, function () {
 });
 
 // Configuració de la conexió a la base de dades
-const dbConfig = {
-    host: 'dam.inspedralbes.cat',
-    user: 'a22tomybanog_Projecte1',
-    password: 'Projecte1',
-    database: 'a22tomybanog_Projecte1'
-};
+
 
 // Crear la connexió a la base de datos
-const connection = mysql.createConnection(dbConfig);
+function crearDBConnnection(){
+    const dbConfig = {
+        host: 'dam.inspedralbes.cat',
+        user: 'a22tomybanog_Projecte1',
+        password: 'Projecte1',
+        database: 'a22tomybanog_Projecte1'
+    };
+    const connection = mysql.createConnection(dbConfig);
+    connection.connect((err) => {
+        if (err) {
+            console.error('Error al conectar a la base de datos: ' + err.stack);
+            return;
+        }
+        console.log('Conexión a la base de datos exitosa');
+    });
+}
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Error al conectar a la base de datos: ' + err.stack);
-        return;
-    }
-    console.log('Conexión a la base de datos exitosa');
-});
+
+
 
 function closeDBconnection() {
     connection.end((err) => {
@@ -53,6 +58,7 @@ app.get('/api/validacioLogin', (req, res) => {
     const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
     // Consulta la DB para validar l'usuari i la contrasenya
+    crearDBConnnection()
     connection.query('SELECT * FROM Usuarios', (error, results, fields) => {
         if (error) {
             // Errors 
@@ -70,6 +76,7 @@ app.get('/api/validacioLogin', (req, res) => {
             return res.status(401).json({ Boolean: false });
         }
     });
+    closeDBconnection()
 });
 
 
