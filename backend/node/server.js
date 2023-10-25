@@ -75,6 +75,58 @@ function closeDBconnection() {
   });
 }
 
+//falta fer lo dels fixers d'imatges
+function crearProducte(idproducte,imatge_Nom,producte_Categoria,producte_Definicio,producte_Nom,producte_Preu,producte_Quantitat) {
+    const nouProducte = {
+        id_producte: idproducte,
+        imatgeNom: imatge_Nom,
+        producteCategoria: producte_Categoria,
+        producteDefinicio: producte_Definicio,
+        producteNom: producte_Nom,
+        productePreu: producte_Preu,
+        producteQuantitat: producte_Quantitat
+
+    };
+
+    // Inserta nou producte en la tabla de Producte
+    con.query('INSERT INTO Producte SET ?', nouProducte, (error, results) => {
+        if (error) {
+            console.error('Error al insertar Producte:', error);
+        } else {
+            console.log('Producte insertado con éxito. ID del Producte:', nouProducte.id_producte);
+        }
+
+
+    });
+}
+//function eliminar productes
+function deleteProducte(idProducteEliminar){
+    con.query('DELETE FROM Producte WHERE id_producte=?',idProducteEliminar, (error, results) => {
+        if (error) {
+            console.error('Error al insertar Producte:', error);
+        } else {
+            console.log('Producte eliminado con éxito. ID del Producte:', idProducteEliminar);
+        }
+
+    });
+}
+//function crear carrito
+function crearCarrito(idCarrito,nomUsuari){
+    const nouCarrito = {
+        id_carrito: idCarrito,
+        usuario: nomUsuari
+    }
+    con.query('INSERT INTO Carrito SET ?', nouCarrito, (error, results) => {
+        if (error) {
+            console.error('Error al insertar Carrito:', error);
+        } else {
+            console.log('Carrito insertado con éxito. ID del Carrito:', nouCarrito.i);
+        }
+
+
+    });
+}
+
 server.listen(PORT, function () {
   console.log("Server running on port " + PORT);
 });
