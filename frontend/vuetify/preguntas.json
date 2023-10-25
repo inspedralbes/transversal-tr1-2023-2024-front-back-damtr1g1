@@ -1,0 +1,64 @@
+{
+    "pel·lícules": [
+      {
+        "id": 1,
+        "títol": "El Padrino",
+        "any_estrena": 1972,
+        "imatge": "https://exemple.com/el_padrino.jpg"
+      },
+      {
+        "id": 2,
+        "títol": "Forrest Gump",
+        "any_estrena": 1994,
+        "imatge": "https://exemple.com/forrest_gump.jpg"
+      },
+      {
+        "id": 3,
+        "títol": "Titanic",
+        "any_estrena": 1997,
+        "imatge": "https://exemple.com/titanic.jpg"
+      },
+      {
+        "id": 4,
+        "títol": "El Senyor dels Anells: La Comunitat de l'Anell",
+        "any_estrena": 2001,
+        "imatge": "https://exemple.com/lotr_fellowship.jpg"
+      },
+      {
+        "id": 5,
+        "títol": "Pulp Fiction",
+        "any_estrena": 1994,
+        "imatge": "https://exemple.com/pulp_fiction.jpg"
+      },
+      {
+        "id": 6,
+        "títol": "Gladiator",
+        "any_estrena": 2000,
+        "imatge": "https://exemple.com/gladiator.jpg"
+      },
+      {
+        "id": 7,
+        "títol": "Matrix",
+        "any_estrena": 1999,
+        "imatge": "https://exemple.com/matrix.jpg"
+      },
+      {
+        "id": 8,
+        "títol": "Ciutadà Kane",
+        "any_estrena": 1941,
+        "imatge": "https://exemple.com/citizen_kane.jpg"
+      },
+      {
+        "id": 9,
+        "títol": "El Rey Lleó",
+        "any_estrena": 1994,
+        "imatge": "https://exemple.com/the_lion_king.jpg"
+      },
+      {
+        "id": 10,
+        "títol": "Inception",
+        "any_estrena": 2010,
+        "imatge": "https://exemple.com/inception.jpg"
+      }
+    ]
+  }
