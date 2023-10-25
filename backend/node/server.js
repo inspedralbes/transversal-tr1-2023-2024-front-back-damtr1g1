@@ -28,43 +28,6 @@ function crearDBConnnection() {
   });
 }
 
-app.get("/", function (req, res) {
-  res.send("Conectat al server");
-});
-
-// Ruta per a validar el login
-app.get("/api/validacioLogin", async (req, res) => {
-  const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
-  const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
-
-  await crearDBConnnection();
-  // Consulta la DB para validar l'usuari i la contrasenya
-  con.query("SELECT * FROM Usuarios", (error, results, fields) => {
-    if (error) {
-      // Errors
-      return res
-        .status(500)
-        .json({ error: "Ocurrió un error al consultar la base de datos." });
-    }
-
-    // Verifica si hay algún usuario que coincida con la solicitud
-    const usuarioEncontrado = results.find(
-      (user) =>
-        user.usuario === usuarioSolicitado &&
-        user.contrasenya === contrasenyaSolicitada
-    );
-
-    if (usuarioEncontrado) {
-      // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-      return res.status(200).json({ Boolean: true });
-    } else {
-      // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-      return res.status(401).json({ Boolean: false });
-    }
-  });
-  closeDBconnection();
-});
-
 function closeDBconnection() {
   con.end((err) => {
     if (err) {
@@ -107,6 +70,7 @@ function crearProducte(
     }
   });
 }
+
 //function eliminar productes
 function deleteProducte(idProducteEliminar) {
   con.query(
@@ -124,6 +88,7 @@ function deleteProducte(idProducteEliminar) {
     }
   );
 }
+
 //function crear carrito
 function crearCarrito(idCarrito, nomUsuari) {
   const nouCarrito = {
@@ -141,6 +106,7 @@ function crearCarrito(idCarrito, nomUsuari) {
     }
   });
 }
+
 //function crear carrito_productes
 function crearCarritoProducte(
   quantitat,
@@ -169,6 +135,7 @@ function crearCarritoProducte(
     }
   );
 }
+
 //function borrar carrito_producto
 function deleteCarritoProducto(idCarritoProductoEliminar) {
   con.query(
@@ -186,6 +153,48 @@ function deleteCarritoProducto(idCarritoProductoEliminar) {
     }
   );
 }
+
+app.get("/", function (req, res) {
+  res.send("Conectat al server");
+});
+
+// Ruta per a validar el login
+app.get("/api/validacioLogin", async (req, res) => {
+  const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
+  const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
+
+  await crearDBConnnection();
+  // Consulta la DB para validar l'usuari i la contrasenya
+  con.query("SELECT * FROM Usuarios", (error, results, fields) => {
+    if (error) {
+      // Errors
+      return res
+        .status(500)
+        .json({ error: "Ocurrió un error al consultar la base de datos." });
+    }
+
+    // Verifica si hay algún usuario que coincida con la solicitud
+    const usuarioEncontrado = results.find(
+      (user) =>
+        user.usuario === usuarioSolicitado &&
+        user.contrasenya === contrasenyaSolicitada
+    );
+
+    if (usuarioEncontrado) {
+      // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
+      return res.status(200).json({ Boolean: true });
+    } else {
+      // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
+      return res.status(401).json({ Boolean: false });
+    }
+  });
+  closeDBconnection();
+});
+
+app.post('api/AfegirProductes', async (req,res) =>{ 
+  await crearProducte();
+});
+
 server.listen(PORT, function () {
   console.log("Server running on port " + PORT);
 });
