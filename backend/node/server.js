@@ -34,35 +34,30 @@ app.get("/", function (req, res) {
 
 // Ruta per a validar el login
 app.get("/api/validacioLogin", (req, res) => {
-    const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
-    const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
+    const usuarioSolicitado = req.query.usuario;
+    const contrasenyaSolicitada = req.query.contrasenya;
 
-    crearDBConnnection()
-    // Consulta la DB para validar l'usuari i la contrasenya
-    con.query("SELECT * FROM Usuarios", (error, results, fields) => {
-        if (error) {
-            // Errors
-            return res
-                .status(500)
-                .json({ error: "Ocurrió un error al consultar la base de datos." });
-        }
+    crearDBConnnection().then((con) => {
+        con.query("SELECT * FROM Usuarios", (error, results, fields) => {
+            if (error) {
+                return res.status(500).json({ error: "Ocurrió un error al consultar la base de datos." });
+            }
+            const usuarioEncontrado = results.find(
+                (user) => user.usuario === usuarioSolicitado && user.contrasenya === contrasenyaSolicitada
+            );
 
-        // Verifica si hay algún usuario que coincida con la solicitud
-        const usuarioEncontrado = results.find(
-            (user) =>
-                user.usuario === usuarioSolicitado &&
-                user.contrasenya === contrasenyaSolicitada
-        );
-
-        if (usuarioEncontrado) {
-            // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-            return res.status(200).json({ Boolean: true });
-        } else {
-            // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-            return res.status(401).json({ Boolean: false });
-        }
+            if (usuarioEncontrado) {
+                closeDBconnection(con);
+                return res.status(200).json({ Boolean: true });
+            } else {
+                closeDBconnection(con);
+                return res.status(401).json({ Boolean: false });
+            }
+        });
+    }).catch((error) => {
+        console.error(error);
+        return res.status(500).json({ error: "Ocurrió un error al conectar con la base de datos." });
     });
-    closeDBconnection();
 });
 
 function closeDBconnection() {
