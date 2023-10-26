@@ -1,29 +1,9 @@
-.remove-outline {
-    outline: none;
+body {
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to right, #d4cbf1, #f8b5b1);
 }
 
-.add-question-input {
-    height: 50px;
-}
-
-.add-question-link {
-    text-align: center;
-    height: 300px;
-    width: 400px;
-    background-color: rgba(255, 255, 255, 0.425);
-}
-
-.add-question-correct {
-    height: 40px;
-    width: 300px;
-}
-
-.v-btn__content {
-    height: 50px;
-}
-
-.text-truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+body::-webkit-scrollbar {
+    display: none;
 }
