@@ -191,7 +191,7 @@ app.get("/api/validacioLogin", async (req, res) => {
     closeDBconnection();
 });
 
-app.get('api/AfegirProductes', async (req, res) => {
+app.get('/api/AfegirProductes', async (req, res) => {
     const idproducte = req.query.idproducte; // Obté la id producte del client
     const imatge_Nom = req.query.imatge; // Obté la imatge
     const producte_Categoria = req.query.producte_Categoria; // Obté la categoria del producte
@@ -201,9 +201,9 @@ app.get('api/AfegirProductes', async (req, res) => {
     const producte_Quantitat = req.query.producte_Quantitat; // Obté la quantitat del producte
     await crearDBConnnection();
     await crearProducte(idproducte, imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat);
-
-
+    closeDBconnection();
 });
+
 
 server.listen(PORT, function () {
     console.log("Server running on port " + PORT);
