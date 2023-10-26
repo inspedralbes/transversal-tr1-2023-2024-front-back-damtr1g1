@@ -57,7 +57,6 @@ function crearProducte(
         productePreu: producte_Preu,
         producteQuantitat: producte_Quantitat,
     };
-
     // Inserta nou producte en la tabla de Producte
     con.query("INSERT INTO Producte SET ?", nouProducte, (error, results) => {
         if (error) {
@@ -84,6 +83,7 @@ function deleteProducte(idProducteEliminar) {
                     "Producte eliminado con éxito. ID del Producte:",
                     idProducteEliminar
                 );
+                console.log(results)
             }
         }
     );
@@ -191,7 +191,7 @@ app.get("/api/validacioLogin", async (req, res) => {
     closeDBconnection();
 });
 
-app.get('/api/AfegirProductes', async (req, res) => {
+app.get('/api/AddProduct', async (req, res) => {
     const idproducte = req.query.idproducte; // Obté la id producte del client
     const imatge_Nom = req.query.imatge; // Obté la imatge
     const producte_Categoria = req.query.producte_Categoria; // Obté la categoria del producte
@@ -199,11 +199,48 @@ app.get('/api/AfegirProductes', async (req, res) => {
     const producte_Nom = req.query.producteNom; // Obté el nom del producte
     const producte_Preu = req.query.productePreu; // Obté el preu del producte
     const producte_Quantitat = req.query.producte_Quantitat; // Obté la quantitat del producte
+    await crearDBConnnection(); // Creem la conexió
+    await crearProducte(idproducte, imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
+    closeDBconnection(); // Tanquem la conexió 
+});
+
+app.get('/api/DeleteProduct', async (req,res) =>{
+    const idproducte = req.query.idproducte; // Obté la id producte del client
     await crearDBConnnection();
-    await crearProducte(idproducte, imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat);
+    await deleteProducte(idproducte);
     closeDBconnection();
 });
 
+app.get('/api/UpdateProduct', async (req,res) =>{
+});
+
+app.get('/api/CreateShoppingCart', async (req,res) =>{
+    const id_carrito = req.query.id_carrito;
+    const nomUsuari = req.query.nomUsuari;
+
+    await crearDBConnnection();
+    await crearCarrito(id_carrito, nomUsuari);
+    closeDBconnection();
+});
+
+app.get('/api/createShoppingCartProduct', async (req, res) => {
+    const quantitat = req.query.quantitat;
+    const idCarrito = req.query.idCarrito;
+    const idCarritoProducto = req.query.idCarritoProducto
+    const idProducto = req.query.idProducto
+
+    await crearDBConnnection();
+    await crearCarritoProducte(quantitat, idCarrito, idCarritoProducto, idProducto);
+    closeDBconnection();
+});
+
+app.get('/api/deleteShoppingCartProduct', async (req, res) => {
+    const idProducto = req.query.idProduct
+
+    await crearDBConnnection();
+    await deleteCarritoProducto(idProducto);
+    closeDBconnection();
+});
 
 server.listen(PORT, function () {
     console.log("Server running on port " + PORT);
