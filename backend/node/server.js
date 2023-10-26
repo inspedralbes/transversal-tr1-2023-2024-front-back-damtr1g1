@@ -7,6 +7,7 @@ const server = http.createServer(app);
 
 const { Server } = require("socket.io");
 const io = new Server(server);
+const { desarImatge, eliminarImatge } = require('./gestio_imatges');
 
 // Configuració de la conexió a la base de dades
 var con = null;
@@ -239,6 +240,15 @@ app.get('/api/deleteShoppingCartProduct', async (req, res) => {
 
     await crearDBConnnection();
     await deleteCarritoProducto(idProducto);
+    closeDBconnection();
+});
+
+app.get('/api/SaveImages', async (req, res) =>{
+    const nomFitxer = req.query.nomFitxer
+    const dadesImatge = req.query.dadesImatge
+
+    await crearDBConnnection();
+    await desarImatge(nomFitxer, dadesImatge);
     closeDBconnection();
 });
 
