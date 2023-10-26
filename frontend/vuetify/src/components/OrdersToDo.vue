@@ -26,25 +26,28 @@ export default {
           class="font-weight-bold text-center text-h3 py-6 text-truncate"
           style="color: #3d3976"
         >
-          {{ title }}
+          Awa
         </div>
-        <v-img height="200" :src="'/src/assets/img/' + img"> </v-img>
+        <v-img
+          height="200"
+          src="'/src/assets/img/order_icon.png'"
+          style="border-top: black"
+        >
+        </v-img>
         <v-container align="center" justify="center">
           <v-sheet class="ma-2" style="background: transparent">
-            <transition>
-              <v-btn
-                class="my-4"
-                height="50px"
-                width="170px"
-                rounded
-                @click="$router.push({ path: '/comandes' })"
-                style="
-                  background: linear-gradient(to left, #e8321a, #ff7a68);
-                  color: white;
-                "
-                >Entra
-              </v-btn>
-            </transition>
+            <v-btn
+              class="my-4"
+              height="50px"
+              width="170px"
+              rounded
+              @click="animation()"
+              style="
+                background: linear-gradient(to left, #e8321a, #ff7a68);
+                color: white;
+              "
+              >Entra
+            </v-btn>
           </v-sheet>
         </v-container>
       </v-card-title>
