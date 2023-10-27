@@ -41,7 +41,6 @@ function closeDBconnection() {
 
 //falta fer lo dels fixers d'imatges
 function crearProducte(
-    idproducte,
     imatge_Nom,
     producte_Categoria,
     producte_Definicio,
@@ -50,7 +49,6 @@ function crearProducte(
     producte_Quantitat
 ) {
     const nouProducte = {
-        id_producte: idproducte,
         imatgeNom: imatge_Nom,
         producteCategoria: producte_Categoria,
         producteDefinicio: producte_Definicio,
@@ -65,7 +63,7 @@ function crearProducte(
         } else {
             console.log(
                 "Producte insertado con éxito. ID del Producte:",
-                nouProducte.id_producte
+                nouProducte.producteNom
             );
         }
     });
@@ -84,7 +82,6 @@ function deleteProducte(idProducteEliminar) {
                     "Producte eliminado con éxito. ID del Producte:",
                     idProducteEliminar
                 );
-                console.log(results)
             }
         }
     );
@@ -192,39 +189,46 @@ app.get("/api/validacioLogin", async (req, res) => {
     closeDBconnection();
 });
 
-app.get('/api/AddProduct', async (req, res) => {
-    const idproducte = req.query.idproducte; // Obté la id producte del client
+app.post('/api/AddProduct', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     const imatge_Nom = req.query.imatge; // Obté la imatge
-    const producte_Categoria = req.query.producte_Categoria; // Obté la categoria del producte
+    const producte_Categoria = req.query.producteCategoria; // Obté la categoria del producte
     const producte_Definicio = req.query.producteDefinicio; // Obté la definicio del producte
     const producte_Nom = req.query.producteNom; // Obté el nom del producte
     const producte_Preu = req.query.productePreu; // Obté el preu del producte
-    const producte_Quantitat = req.query.producte_Quantitat; // Obté la quantitat del producte
+    const producte_Quantitat = req.query.producteQuantitat; // Obté la quantitat del producte
     await crearDBConnnection(); // Creem la conexió
-    await crearProducte(idproducte, imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
+    await crearProducte(imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
     closeDBconnection(); // Tanquem la conexió 
+    res.send({message: 'Afegit correctament'})
 });
 
-app.get('/api/DeleteProduct', async (req,res) =>{
+app.post('/api/DeleteProduct', async (req,res) =>{
+    res.header("Access-Control-Allow-Origin", "*");
     const idproducte = req.query.idproducte; // Obté la id producte del client
     await crearDBConnnection();
     await deleteProducte(idproducte);
     closeDBconnection();
+    res.send({ message: 'Eliminat correctament' })
 });
 
-app.get('/api/UpdateProduct', async (req,res) =>{
+app.post('/api/UpdateProduct', async (req,res) =>{
+    res.header("Access-Control-Allow-Origin", "*");
 });
 
-app.get('/api/CreateShoppingCart', async (req,res) =>{
+app.post('/api/CreateShoppingCart', async (req,res) =>{
+    res.header("Access-Control-Allow-Origin", "*");
     const id_carrito = req.query.id_carrito;
     const nomUsuari = req.query.nomUsuari;
 
     await crearDBConnnection();
     await crearCarrito(id_carrito, nomUsuari);
     closeDBconnection();
+    res.send({ message: 'Creat correctament' });
 });
 
-app.get('/api/createShoppingCartProduct', async (req, res) => {
+app.post('/api/createShoppingCartProduct', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     const quantitat = req.query.quantitat;
     const idCarrito = req.query.idCarrito;
     const idCarritoProducto = req.query.idCarritoProducto
@@ -233,17 +237,21 @@ app.get('/api/createShoppingCartProduct', async (req, res) => {
     await crearDBConnnection();
     await crearCarritoProducte(quantitat, idCarrito, idCarritoProducto, idProducto);
     closeDBconnection();
+    res.send({ message: 'Creat correctament' });
 });
 
-app.get('/api/deleteShoppingCartProduct', async (req, res) => {
+app.post('/api/deleteShoppingCartProduct', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     const idProducto = req.query.idProduct
 
     await crearDBConnnection();
     await deleteCarritoProducto(idProducto);
     closeDBconnection();
+    res.send({ message: 'Eliminat correctament' })
 });
 
-app.get('/api/SaveImages', async (req, res) =>{
+app.post('/api/SaveImages', async (req, res) =>{
+    res.header("Access-Control-Allow-Origin", "*");
     const nomFitxer = req.query.nomFitxer
     const dadesImatge = req.query.dadesImatge
 
