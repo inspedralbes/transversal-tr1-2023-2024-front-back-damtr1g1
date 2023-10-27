@@ -39,7 +39,19 @@ function closeDBconnection() {
     });
 }
 
-//falta fer lo dels fixers d'imatges
+function getUserData(username) {
+    return new Promise((resolve, reject) => {
+        con.query("SELECT * FROM Usuarios WHERE usuario = ?", [username], (error, results, fields) => {
+            if (error) {
+                console.error('Error al realizar la consulta: ' + error.message);
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
 function crearProducte(
     imatge_Nom,
     producte_Categoria,
@@ -70,21 +82,15 @@ function crearProducte(
 }
 //function select productes
 function selectProducte(callback){
-    
-
     con.query('SELECT * FROM Producte', (err, results, fields) => {
         if (err) {
             console.error('Error al realizar la consulta: ' + err.message);
             callback(err, null); // Devuelve el error en el callbac
             return;
         }
-        
         const ProductesJSON = JSON.stringify(results); // Convierte el objeto a JSON
-
         callback(null, ProductesJSON); //
     });
-    
-    
 }
 
 //function eliminar productes
@@ -219,13 +225,12 @@ app.post('/api/AddProduct', async (req, res) => {
     const producte_Quantitat = req.query.producteQuantitat; // Obté la quantitat del producte
     await crearDBConnnection(); // Creem la conexió
     await crearProducte(imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
-    await desarImatge(producte_Nom + ".png" ,imatge_Nom) // On imate_Nom serie el url 
+    await desarImatge(producte_Nom ,imatge_Nom) // On imate_Nom serie el url 
     closeDBconnection(); // Tanquem la conexió 
     res.send({message: 'Afegit correctament'})
 });
 
 app.get('/api/selectProducte', async (req, res) => {
-    
     await crearDBConnnection(); // Creem la conexió
     await selectProducte((err, productesJSON) => {
         if (err) {
@@ -234,7 +239,6 @@ app.get('/api/selectProducte', async (req, res) => {
             res.json(productesJSON)
         }
     });
-    
     await closeDBconnection(); // Tanquem la conexió 
 });
 
@@ -293,6 +297,25 @@ app.post('/api/SaveImages', async (req, res) =>{
     await desarImatge(nomFitxer, dadesImatge);
     closeDBconnection();
 });
+
+app.post('/api/getUserData', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    const username = req.query.username;
+    await crearDBConnnection();
+    try {
+        const userData = await getUserData(username);
+        if (userData.length === 0) {
+            res.status(404).json({ message: "Error, el usuario no existe" });
+        } else {
+            res.json(userData);
+        }
+    } catch (error) {
+        console.error('An error occurred: ' + error.message);
+        res.status(500).json({ error: "Error al dar los datos" });
+    }
+    closeDBconnection();
+});
+
 
 server.listen(PORT, function () {
     console.log("Server running on port " + PORT);
