@@ -1,5 +1,4 @@
 <script setup>
-import ArticleControlPanel from "./ArticleControlPanel.vue";
 </script>
 
 <script>

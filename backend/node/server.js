@@ -225,13 +225,13 @@ app.post('/api/AddProduct', async (req, res) => {
 });
 
 app.get('/api/selectProducte', async (req, res) => {
-    
+    res.header("Access-Control-Allow-Origin", "*");
     await crearDBConnnection(); // Creem la conexió
     await selectProducte((err, productesJSON) => {
         if (err) {
             console.error('Error: ' + err);
         } else {
-            res.json(productesJSON)
+            res.json(JSON.parse(productesJSON))
         }
     });
     
