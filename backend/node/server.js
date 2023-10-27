@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const mysql = require("mysql");
-const PORT = 3000;
+const PORT = 3001;
 const app = express();
 const server = http.createServer(app);
 
@@ -122,6 +122,7 @@ function crearCarrito(idCarrito, nomUsuari) {
         }
     });
 }
+// borrar carrito y select carrito
 
 //function crear carrito_productes
 function crearCarritoProducte(
@@ -151,6 +152,7 @@ function crearCarritoProducte(
         }
     );
 }
+//select carrito product
 
 //function borrar carrito_producto
 function deleteCarritoProducto(idCarritoProductoEliminar) {
