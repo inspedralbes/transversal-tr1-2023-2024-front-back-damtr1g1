@@ -121,7 +121,7 @@ function crearCarrito(nomUsuari) {
     });
 }
 // borrar carrito y select carrito
-function selectCarrito(){
+function selectCarrito(callback){
     con.query('SELECT * FROM Carrito', (err, results, fields) => {
         if (err) {
             console.error('Error al realizar la consulta: ' + err.message);
@@ -283,6 +283,28 @@ app.post('/api/CreateShoppingCart', async (req,res) =>{
     await crearCarrito(nomUsuari);
     closeDBconnection();
     res.json({ message: 'Creat correctament' });
+});
+app.get('/api/selectCarrito', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    await crearDBConnnection(); // Creem la conexió
+    await selectCarrito((err, CarritoJSON) => {
+        if (err) {
+            console.error('Error: ' + err);
+        } else {
+            res.json(JSON.parse(CarritoJSON))
+        }
+    });
+    
+    await closeDBconnection(); // Tanquem la conexió 
+});
+
+app.post('/api/DeleteCarrito', async (req,res) =>{
+    res.header("Access-Control-Allow-Origin", "*");
+    const idCarrito = req.query.idCarrito; // Obté la id producte del client
+    await crearDBConnnection();
+    await deleteCarrito(idCarrito);
+    closeDBconnection();
+    res.json({ message: 'Eliminat correctament' })
 });
 
 app.post('/api/createShoppingCartProduct', async (req, res) => {
