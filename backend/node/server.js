@@ -68,6 +68,24 @@ function crearProducte(
         }
     });
 }
+//function select productes
+function selectProducte(callback){
+    
+
+    con.query('SELECT * FROM Producte', (err, results, fields) => {
+        if (err) {
+            console.error('Error al realizar la consulta: ' + err.message);
+            callback(err, null); // Devuelve el error en el callbac
+            return;
+        }
+        
+        const ProductesJSON = JSON.stringify(results); // Convierte el objeto a JSON
+
+        callback(null, ProductesJSON); //
+    });
+    
+    
+}
 
 //function eliminar productes
 function deleteProducte(idProducteEliminar) {
@@ -199,8 +217,23 @@ app.post('/api/AddProduct', async (req, res) => {
     const producte_Quantitat = req.query.producteQuantitat; // Obté la quantitat del producte
     await crearDBConnnection(); // Creem la conexió
     await crearProducte(imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
+    await desarImatge(producte_Nom + ".png" ,imatge_Nom) // On imate_Nom serie el url 
     closeDBconnection(); // Tanquem la conexió 
     res.send({message: 'Afegit correctament'})
+});
+
+app.get('/api/selectProducte', async (req, res) => {
+    
+    await crearDBConnnection(); // Creem la conexió
+    await selectProducte((err, productesJSON) => {
+        if (err) {
+            console.error('Error: ' + err);
+        } else {
+            res.json(productesJSON)
+        }
+    });
+    
+    await closeDBconnection(); // Tanquem la conexió 
 });
 
 app.post('/api/DeleteProduct', async (req,res) =>{
@@ -209,7 +242,7 @@ app.post('/api/DeleteProduct', async (req,res) =>{
     await crearDBConnnection();
     await deleteProducte(idproducte);
     closeDBconnection();
-    res.send({ message: 'Eliminat correctament' })
+    res.json({ message: 'Eliminat correctament' })
 });
 
 app.post('/api/UpdateProduct', async (req,res) =>{
@@ -218,13 +251,12 @@ app.post('/api/UpdateProduct', async (req,res) =>{
 
 app.post('/api/CreateShoppingCart', async (req,res) =>{
     res.header("Access-Control-Allow-Origin", "*");
-    const id_carrito = req.query.id_carrito;
     const nomUsuari = req.query.nomUsuari;
 
     await crearDBConnnection();
-    await crearCarrito(id_carrito, nomUsuari);
+    await crearCarrito(nomUsuari);
     closeDBconnection();
-    res.send({ message: 'Creat correctament' });
+    res.json({ message: 'Creat correctament' });
 });
 
 app.post('/api/createShoppingCartProduct', async (req, res) => {
@@ -237,7 +269,7 @@ app.post('/api/createShoppingCartProduct', async (req, res) => {
     await crearDBConnnection();
     await crearCarritoProducte(quantitat, idCarrito, idCarritoProducto, idProducto);
     closeDBconnection();
-    res.send({ message: 'Creat correctament' });
+    res.json({ message: 'Creat correctament' });
 });
 
 app.post('/api/deleteShoppingCartProduct', async (req, res) => {
@@ -247,7 +279,7 @@ app.post('/api/deleteShoppingCartProduct', async (req, res) => {
     await crearDBConnnection();
     await deleteCarritoProducto(idProducto);
     closeDBconnection();
-    res.send({ message: 'Eliminat correctament' })
+    res.json({ message: 'Eliminat correctament' })
 });
 
 app.post('/api/SaveImages', async (req, res) =>{
