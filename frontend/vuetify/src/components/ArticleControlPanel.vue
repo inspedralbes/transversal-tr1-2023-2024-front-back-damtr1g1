@@ -3,7 +3,7 @@
 
 <script>
 export default {
-  props: ["title", "img", "id"],
+  props: ["title", "img", "path"],
   methods: {
     animation() {
       document.getElementById(this.id).className = "control-panel__animation";
@@ -15,7 +15,6 @@ export default {
 <template>
   <v-col sm="6" md="4" lg="3" cols="12">
     <v-card
-      :id="id"
       style="background: linear-gradient(#9094e9, #b0b8f1)"
       class="text-center"
       elevation="4"
@@ -37,7 +36,7 @@ export default {
                 height="50px"
                 width="170px"
                 rounded
-                @click="$router.push({ path: '/comandes' })"
+                @click="$router.push({ path: path })"
                 style="
                   background: linear-gradient(to left, #e8321a, #ff7a68);
                   color: white;

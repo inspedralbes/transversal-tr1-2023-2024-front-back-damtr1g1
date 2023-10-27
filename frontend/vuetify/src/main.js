@@ -3,6 +3,7 @@ import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import LandingPage from "@/components/LandingPage.vue";
 import Orders from "@/components/Orders.vue";
+import Products from "@/components/Products.vue";
 import App from "./App.vue";
 
 // Plugins
@@ -13,6 +14,7 @@ const router = createRouter({
   routes: [
     { path: "/", component: LandingPage },
     { path: "/comandes", component: Orders },
+    { path: "/productes", component: Products },
   ],
 });
 
