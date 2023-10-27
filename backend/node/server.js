@@ -106,9 +106,8 @@ function deleteProducte(idProducteEliminar) {
 }
 
 //function crear carrito
-function crearCarrito(idCarrito, nomUsuari) {
+function crearCarrito(nomUsuari) {
     const nouCarrito = {
-        id_carrito: idCarrito,
         usuario: nomUsuari,
     };
     con.query("INSERT INTO Carrito SET ?", nouCarrito, (error, results) => {
@@ -116,13 +115,38 @@ function crearCarrito(idCarrito, nomUsuari) {
             console.error("Error al insertar Carrito:", error);
         } else {
             console.log(
-                "Carrito insertado con éxito. ID del Carrito:",
-                nouCarrito.id_carrito
+                "Carrito insertado con éxito"
             );
         }
     });
 }
 // borrar carrito y select carrito
+function selectCarrito(){
+    con.query('SELECT * FROM Carrito', (err, results, fields) => {
+        if (err) {
+            console.error('Error al realizar la consulta: ' + err.message);
+            callback(err, null); // Devuelve el error en el callbac
+            return;
+        }
+        
+        const CarritoJSON = JSON.stringify(results); // Convierte el objeto a JSON
+
+        callback(null, CarritoJSON); //
+    });
+}
+function deleteCarrito(idCarrito){
+    con.query("DELETE FROM Carrito WHERE id_carrito=?",idCarrito,(error, results) => {
+        if (error) {
+            console.error("Error al eliminar carrito:", error);
+        } else {
+            console.log(
+                "carrito eliminado con éxito. ID del carrito:",
+                idCarrito
+            );
+        }
+    })
+}
+
 
 //function crear carrito_productes
 function crearCarritoProducte(
