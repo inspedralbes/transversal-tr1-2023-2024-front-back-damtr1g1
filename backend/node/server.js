@@ -39,7 +39,7 @@ function closeDBconnection() {
     });
 }
 
-//falta fer lo dels fixers d'imatges                          (comprobada)
+//falta fer lo dels fixers d'imatges                           (comprobada)
 function crearProducte(
     imatge_Nom,
     producte_Categoria,
@@ -68,7 +68,7 @@ function crearProducte(
         }
     });
 }
-//function select productes                                   (comprobada)     
+//function select productes                                    (comprobada)     
 function selectProducte(callback){
     
 
@@ -87,7 +87,7 @@ function selectProducte(callback){
     
 }
 
-//function eliminar productes                                 (comprobada)
+//function eliminar productes                                  (comprobada)
 function deleteProducte(idProducteEliminar) {
     con.query(
         "DELETE FROM Producte WHERE id_producte=?",
@@ -105,7 +105,7 @@ function deleteProducte(idProducteEliminar) {
     );
 }
 
-//function crear carrito                                      (comprobada)
+//function crear carrito                                       (comprobada)
 function crearCarrito(nomUsuari) {
     const nouCarrito = {
         usuario: nomUsuari,
@@ -120,7 +120,7 @@ function crearCarrito(nomUsuari) {
         }
     });
 }
-//function select carrito                                     (comprobada)
+//function select carrito                                      (comprobada)
 function selectCarrito(callback){
     con.query('SELECT * FROM Carrito', (err, results, fields) => {
         if (err) {
@@ -134,7 +134,7 @@ function selectCarrito(callback){
         callback(null, CarritoJSON); //
     });
 }
-//function delete carrito                                     (comprobada)
+//function delete carrito                                      (comprobada)
 function deleteCarrito(idCarrito){
     con.query("DELETE FROM Carrito WHERE id_carrito=?",idCarrito,(error, results) => {
         if (error) {
@@ -147,9 +147,7 @@ function deleteCarrito(idCarrito){
         }
     })
 }
-
-
-//function crear carrito_productes
+//function crear carrito_productes                             (comprobada)
 function crearCarritoProducte(
     quantitat,
     idCarrito,
@@ -174,7 +172,7 @@ function crearCarritoProducte(
         }
     );
 }
-//select carrito product
+//select carrito product                                       (comprobada)
 function selectCarritoProducto(callback){
     con.query("SELECT * FROM Carrito_Productos", (err, results, fields) => {
         if (err) {
@@ -188,7 +186,7 @@ function selectCarritoProducto(callback){
         callback(null, CarritoProductosJSON); //
     });
 }
-//function borrar carrito_producto
+//function borrar carrito_producto                             (comprobada)
 function deleteCarritoProducto(idCarritoProductoEliminar) {
     con.query(
         "DELETE FROM Carrito_Productos WHERE id_carrito_producto=?",
@@ -317,7 +315,7 @@ app.post('/api/DeleteCarrito', async (req,res) =>{
     closeDBconnection();
     res.json({ message: 'Eliminat correctament' })
 });
-//Ruta crear carrito producte
+//Ruta crear carrito producte                                  (comprobada)
 app.post('/api/createShoppingCartProduct', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     const quantitat = req.query.quantitat;
@@ -329,7 +327,7 @@ app.post('/api/createShoppingCartProduct', async (req, res) => {
     closeDBconnection();
     res.json({ message: 'Creat correctament' });
 });
-//Ruta select carrito producte
+//Ruta select carrito producte                                 (comprobada)
 app.get('/api/selectCarritoProducte', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     await crearDBConnnection(); // Creem la conexió
@@ -343,13 +341,13 @@ app.get('/api/selectCarritoProducte', async (req, res) => {
     
     await closeDBconnection(); // Tanquem la conexió 
 });
-//Ruta borrar carrito producte 
+//Ruta borrar carrito producte                                 (comprobada)
 app.post('/api/deleteShoppingCartProduct', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
-    const idProducto = req.query.idProduct
+    const idCarritoProductoEliminar = req.query.idCarritoProductoEliminar
 
     await crearDBConnnection();
-    await deleteCarritoProducto(idProducto);
+    await deleteCarritoProducto(idCarritoProductoEliminar);
     closeDBconnection();
     res.json({ message: 'Eliminat correctament' })
 });
