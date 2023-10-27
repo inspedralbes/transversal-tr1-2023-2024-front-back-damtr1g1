@@ -1,9 +1,13 @@
 const express = require("express");
 const http = require("http");
 const mysql = require("mysql");
-const PORT = 3001;
+const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
+const PORT = 3001;
+
+// Configurar el middleware de CORS
+app.use(cors());
 
 const { Server } = require("socket.io");
 const io = new Server(server);
@@ -13,9 +17,23 @@ io.on("connection", (socket) => {
     console.log("Un cliente se ha conectado");
     // Aquí puedes agregar lógica adicional para recibir mensajes del cliente si es necesario
 
-    // Ejemplo de emisión de datos a los clientes conectados
-    io.emit("actualizacion_producto", { /* Datos del producto actualizados */ });
+    // Ejemplo de emisión de datos al cliente conectado
+    socket.emit("actualizacion_producto", { /* Datos del producto actualizados */ });
+
+    // Escuchar eventos personalizados del cliente
+    socket.on("actualizacion_producto_servidor", (datos) => {
+        // Lógica para actualizar los datos del producto en la base de datos
+        // También puedes enviar una confirmación al cliente de que los datos han sido actualizados
+        socket.emit("actualizacion_completada", { mensaje: "Los datos del producto se han actualizado con éxito." });
+    });
+
+    // Lógica para manejar eventos de desconexión de cliente
+    socket.on("disconnect", () => {
+        console.log("Un cliente se ha desconectado");
+        // Otras acciones de limpieza o gestión aquí
+    });
 });
+
 
 // Configuració de la conexió a la base de dades
 var con = null;
@@ -89,7 +107,7 @@ function crearProducte(
     });
 }
 //function select productes
-function selectProducte(callback){
+function selectProducte(callback) {
     con.query('SELECT * FROM Producte', (err, results, fields) => {
         if (err) {
             console.error('Error al realizar la consulta: ' + err.message);
@@ -233,9 +251,9 @@ app.post('/api/AddProduct', async (req, res) => {
     const producte_Quantitat = req.query.producteQuantitat; // Obté la quantitat del producte
     await crearDBConnnection(); // Creem la conexió
     await crearProducte(imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
-    await desarImatge(producte_Nom ,imatge_Nom) // On imate_Nom serie el url 
+    await desarImatge(producte_Nom, imatge_Nom) // On imate_Nom serie el url 
     closeDBconnection(); // Tanquem la conexió 
-    res.send({message: 'Afegit correctament'})
+    res.send({ message: 'Afegit correctament' })
 });
 
 app.get('/api/selectProducte', async (req, res) => {
@@ -250,7 +268,7 @@ app.get('/api/selectProducte', async (req, res) => {
     await closeDBconnection(); // Tanquem la conexió 
 });
 
-app.post('/api/DeleteProduct', async (req,res) =>{
+app.post('/api/DeleteProduct', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     const idproducte = req.query.idproducte; // Obté la id producte del client
     await crearDBConnnection();
@@ -259,11 +277,11 @@ app.post('/api/DeleteProduct', async (req,res) =>{
     res.json({ message: 'Eliminat correctament' })
 });
 
-app.post('/api/UpdateProduct', async (req,res) =>{
+app.post('/api/UpdateProduct', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
 });
 
-app.post('/api/CreateShoppingCart', async (req,res) =>{
+app.post('/api/CreateShoppingCart', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     const nomUsuari = req.query.nomUsuari;
 
@@ -296,7 +314,7 @@ app.post('/api/deleteShoppingCartProduct', async (req, res) => {
     res.json({ message: 'Eliminat correctament' })
 });
 
-app.post('/api/SaveImages', async (req, res) =>{
+app.post('/api/SaveImages', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     const nomFitxer = req.query.nomFitxer
     const dadesImatge = req.query.dadesImatge
