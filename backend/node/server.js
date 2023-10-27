@@ -9,6 +9,14 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const { desarImatge, eliminarImatge } = require('./gestio_imatges');
 
+io.on("connection", (socket) => {
+    console.log("Un cliente se ha conectado");
+    // Aquí puedes agregar lógica adicional para recibir mensajes del cliente si es necesario
+
+    // Ejemplo de emisión de datos a los clientes conectados
+    io.emit("actualizacion_producto", { /* Datos del producto actualizados */ });
+});
+
 // Configuració de la conexió a la base de dades
 var con = null;
 
