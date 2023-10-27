@@ -68,6 +68,24 @@ function crearProducte(
         }
     });
 }
+//function select productes
+function selectProducte(callback){
+    
+
+    con.query('SELECT * FROM Producte', (err, results, fields) => {
+        if (err) {
+            console.error('Error al realizar la consulta: ' + err.message);
+            callback(err, null); // Devuelve el error en el callbac
+            return;
+        }
+        
+        const ProductesJSON = JSON.stringify(results); // Convierte el objeto a JSON
+
+        callback(null, ProductesJSON); //
+    });
+    
+    
+}
 
 //function eliminar productes
 function deleteProducte(idProducteEliminar) {
@@ -202,6 +220,20 @@ app.post('/api/AddProduct', async (req, res) => {
     await desarImatge(,imatge_Nom) // On imate_Nom serie el url 
     closeDBconnection(); // Tanquem la conexió 
     res.send({message: 'Afegit correctament'})
+});
+
+app.get('/api/selectProducte', async (req, res) => {
+    
+    await crearDBConnnection(); // Creem la conexió
+    await selectProducte((err, productesJSON) => {
+        if (err) {
+            console.error('Error: ' + err);
+        } else {
+            res.json(productesJSON)
+        }
+    });
+    
+    await closeDBconnection(); // Tanquem la conexió 
 });
 
 app.post('/api/DeleteProduct', async (req,res) =>{
