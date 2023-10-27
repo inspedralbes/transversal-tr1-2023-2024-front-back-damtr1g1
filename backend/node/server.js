@@ -199,7 +199,7 @@ app.post('/api/AddProduct', async (req, res) => {
     const producte_Quantitat = req.query.producteQuantitat; // Obté la quantitat del producte
     await crearDBConnnection(); // Creem la conexió
     await crearProducte(imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
-    
+    await desarImatge(,imatge_Nom) // On imate_Nom serie el url 
     closeDBconnection(); // Tanquem la conexió 
     res.send({message: 'Afegit correctament'})
 });
