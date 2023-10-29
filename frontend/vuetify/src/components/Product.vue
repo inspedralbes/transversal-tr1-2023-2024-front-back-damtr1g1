@@ -16,26 +16,19 @@ export default {
           console.log(data);
         });
     },
-  }
-  //http://localhost:3001/api/image/peraConferencia.jpg
+  },
 };
 </script>
 <template>
-  <v-card
-    width="400"
-    elevation="4"
-    align="center"
-    justify="center"
-    id="data.id"
-  >
+  <v-card elevation="4">
     <v-card-title>
       <div class="font-weight-bold ms-1 mb-2 text-truncate">
-        {{ data.producteNom }}
+        {{ data.nom }}
       </div>
     </v-card-title>
     <v-img
       height="200"
-      :src="'http://localhost:3001/api/image/' + data.imatgeNom"
+      :src="'http://localhost:3001/api/getImage/' + data.imatgeNom"
       style="border-top: black"
     >
     </v-img>

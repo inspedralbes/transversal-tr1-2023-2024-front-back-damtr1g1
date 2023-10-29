@@ -12,6 +12,13 @@ body::-webkit-scrollbar {
     width: 70.8% !important;
 }
 
+@media screen and (max-width: 768px) {
+    .order-container {
+        width: 100% !important;
+    }
+  }
+
+
 
 /* .control-panel__animation {
     animation-name: cssAnimation;

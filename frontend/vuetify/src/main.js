@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import LandingPage from "@/components/LandingPage.vue";
 import Orders from "@/components/Orders.vue";
 import Products from "@/components/Products.vue";
+import AddProduct from "@/components/AddProduct.vue";
 import App from "./App.vue";
 
 // Plugins
@@ -15,6 +16,7 @@ const router = createRouter({
     { path: "/", component: LandingPage },
     { path: "/comandes", component: Orders },
     { path: "/productes", component: Products },
+    { path: "/afegir-producte", component: AddProduct },
   ],
 });
 

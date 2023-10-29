@@ -86,8 +86,7 @@ function selectProducte(callback) {
 //function eliminar productes                                  (comprobada)
 function deleteProducte(idProducteEliminar) {
   con.query(
-    "DELETE FROM Producte WHERE id_producte=?",
-    idProducteEliminar,
+    "DELETE FROM Producte WHERE id = " + idProducteEliminar,
     (error, results) => {
       if (error) {
         console.error("Error al insertar Producte:", error);
@@ -134,7 +133,7 @@ function crearCarrito(nomUsuari) {
   const nouCarrito = {
     usuario: nomUsuari,
   };
-  con.query("INSERT INTO Carrito SET ?", nouCarrito, (error, results) => {
+  con.query("INSERT INTO Carret SET ?", nouCarrito, (error, results) => {
     if (error) {
       console.error("Error al insertar Carrito:", error);
     } else {
@@ -144,7 +143,7 @@ function crearCarrito(nomUsuari) {
 }
 //function select carrito                                      (comprobada)
 function selectCarrito(callback) {
-  con.query("SELECT * FROM Carrito", (err, results, fields) => {
+  con.query("SELECT * FROM Carret", (err, results, fields) => {
     if (err) {
       console.error("Error al realizar la consulta: " + err.message);
       callback(err, null); // Devuelve el error en el callbac
@@ -159,7 +158,7 @@ function selectCarrito(callback) {
 //function delete carrito                                      (comprobada)
 function deleteCarrito(idCarrito) {
   con.query(
-    "DELETE FROM Carrito WHERE id_carrito=?",
+    "DELETE FROM Carret WHERE id=?",
     idCarrito,
     (error, results) => {
       if (error) {
@@ -178,7 +177,7 @@ function crearCarritoProducte(quantitat, idCarrito, idProducto) {
     id_producte: idProducto,
   };
   con.query(
-    "INSERT INTO Carrito_Productos SET ?",
+    "INSERT INTO Carret_Productes SET ?",
     nouCarritoProducte,
     (error, results) => {
       if (error) {
@@ -191,7 +190,7 @@ function crearCarritoProducte(quantitat, idCarrito, idProducto) {
 }
 //select carrito product                                       (comprobada)
 function selectCarritoProducto(callback) {
-  con.query("SELECT * FROM Carrito_Productos", (err, results, fields) => {
+  con.query("SELECT * FROM Carret_Productes", (err, results, fields) => {
     if (err) {
       console.error("Error al realizar la consulta: " + err.message);
       callback(err, null); // Devuelve el error en el callbac
@@ -206,7 +205,7 @@ function selectCarritoProducto(callback) {
 //function borrar carrito_producto                             (comprobada)
 function deleteCarritoProducto(idCarritoProductoEliminar) {
   con.query(
-    "DELETE FROM Carrito_Productos WHERE id_carrito_producto=?",
+    "DELETE FROM Carret_Productes WHERE id = ?",
     idCarritoProductoEliminar,
     (error, results) => {
       if (error) {
@@ -226,13 +225,13 @@ app.get("/", function (req, res) {
 });
 
 // Ruta per a validar el login
-app.get("/api/validacioLogin", async (req, res) => {
+app.get("/api/validateLogin", async (req, res) => {
   const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
   const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
   await crearDBConnnection();
   // Consulta la DB para validar l'usuari i la contrasenya
-  con.query("SELECT * FROM Usuarios", (error, results, fields) => {
+  con.query("SELECT * FROM Usuaris", (error, results, fields) => {
     if (error) {
       // Errors
       return res
@@ -258,7 +257,7 @@ app.get("/api/validacioLogin", async (req, res) => {
   closeDBconnection();
 });
 //Ruta afegir producte                                         (comprobada)
-app.post("/api/AddProduct", async (req, res) => {
+app.post("/api/addProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const imatge_Nom = req.query.imatge; // Obté la imatge
   const producte_Categoria = req.query.producteCategoria; // Obté la categoria del producte
@@ -280,7 +279,7 @@ app.post("/api/AddProduct", async (req, res) => {
   res.send({ message: "Afegit correctament" });
 });
 //Ruta select producte                                         (comprobada)
-app.get("/api/selectProducte", async (req, res) => {
+app.get("/api/getProducts", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   await crearDBConnnection(); // Creem la conexió
   await selectProducte((err, productesJSON) => {
@@ -293,21 +292,23 @@ app.get("/api/selectProducte", async (req, res) => {
 
   await closeDBconnection(); // Tanquem la conexió
 });
+
 //Ruta borrar producte                                         (comprobada)
-app.post("/api/DeleteProduct", async (req, res) => {
+app.post("/api/deleteProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const idproducte = req.query.idproducte; // Obté la id producte del client
+  console.log(idproducte);
   await crearDBConnnection();
   await deleteProducte(idproducte);
   closeDBconnection();
   res.json({ message: "Eliminat correctament" });
 });
 //Ruta update producte
-app.post("/api/UpdateProduct", async (req, res) => {
+app.post("/api/updateProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
 });
 //Ruta crear carrito compra                                    (comprobada)
-app.post("/api/CreateShoppingCart", async (req, res) => {
+app.post("/api/addShoppingCart", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const nomUsuari = req.query.nomUsuari;
 
@@ -317,7 +318,7 @@ app.post("/api/CreateShoppingCart", async (req, res) => {
   res.json({ message: "Creat correctament" });
 });
 //Ruta select carrito compra                                   (comprobada)
-app.get("/api/selectCarrito", async (req, res) => {
+app.get("/api/getCart", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   await crearDBConnnection(); // Creem la conexió
   await selectCarrito((err, CarritoJSON) => {
@@ -331,7 +332,7 @@ app.get("/api/selectCarrito", async (req, res) => {
   await closeDBconnection(); // Tanquem la conexió
 });
 //Ruta borrar carrito compra                                   (comprobada)
-app.post("/api/DeleteCarrito", async (req, res) => {
+app.post("/api/deleteCart", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const idCarrito = req.query.idCarrito; // Obté la id producte del client
   await crearDBConnnection();
@@ -340,7 +341,7 @@ app.post("/api/DeleteCarrito", async (req, res) => {
   res.json({ message: "Eliminat correctament" });
 });
 //Ruta crear carrito producte                                  (comprobada)
-app.post("/api/createShoppingCartProduct", async (req, res) => {
+app.post("/api/addShoppingCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const quantitat = req.query.quantitat;
   const idCarrito = req.query.idCarrito;
@@ -352,7 +353,7 @@ app.post("/api/createShoppingCartProduct", async (req, res) => {
   res.json({ message: "Creat correctament" });
 });
 //Ruta select carrito producte                                 (comprobada)
-app.get("/api/selectCarritoProducte", async (req, res) => {
+app.get("/api/getCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   await crearDBConnnection(); // Creem la conexió
   await selectCarritoProducto((err, CarritoProducteJSON) => {
@@ -376,7 +377,7 @@ app.post("/api/deleteShoppingCartProduct", async (req, res) => {
   res.json({ message: "Eliminat correctament" });
 });
 //Ruta guardar imatges
-app.post("/api/SaveImages", async (req, res) => {
+app.post("/api/addImage", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const nomFitxer = req.query.nomFitxer;
   const dadesImatge = req.query.dadesImatge;
@@ -391,8 +392,8 @@ server.listen(PORT, function () {
 });
 
 // Enviar els poductes de la DB al client
-app.post("/api/ShoppingCartData", (req, res) => {
-  connection.query("SELECT * FROM Usuarios", (error, results, fields) => {
+app.post("/api/getShoppingCart", (req, res) => {
+  connection.query("SELECT * FROM Usuaris", (error, results, fields) => {
     if (error) {
       // Errors
       return res
@@ -404,22 +405,7 @@ app.post("/api/ShoppingCartData", (req, res) => {
   });
 });
 
-// Eliminar productes de la DB y eniviar els canvis
-app.post("/api/EliminarData", (req, res) => {
-  const productId = req.body.id; // El client ens envia el id del producte
-
-  const query = "DELETE FROM Productos WHERE id = ?"; // Borrem el producte que ens han dit
-  connection.query(query, [productId], (error, results, fields) => {
-    if (error) {
-      res.status(500).json({ message: "Error al eliminar el producto." });
-    } else {
-      res.status(200).json({
-        message: `Producto con ID ${productId} eliminado correctamente.`,
-      });
-    }
-  });
-});
-
-app.get("/api/image/:img", (req, res) => {
+// Recibir la imagen del nombre pedido
+app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 })

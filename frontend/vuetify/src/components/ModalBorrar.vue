@@ -3,13 +3,13 @@ export default {
   props: ["data"],
   methods: {
     deleteQuestion: function (id) {
-      fetch(`http://localhost:4000/deletePregunta?id=${id}`, {
+      fetch(`http://localhost:3001/api/deleteProduct?idproducte=${id}`, {
         method: "POST",
         mode: "cors",
       })
         .then((response) => response.json())
-        .then((data) => {
-          window.location.reload();
+        .then(() => {
+          
         });
     },
   },
@@ -24,19 +24,18 @@ export default {
         class="v-btn v-btn--block v-btn--elevated v-theme--light v-btn--density-default v-btn--size-default v-btn--variant-elevated bg-red-lighten-2"
         text="Open Dialog"
       >
-        Esborrar
+        eliminar
       </v-btn>
     </template>
 
     <template v-slot:default="{ isActive }">
       <v-card>
-        <v-card-title class="text-center text-h5 font-weight-bold">
-          Estàs segur que vols esborrar {{ data.title }} de la llista de
-          pel·lícules?
+        <v-card-title class="text-center text-h5 font-weight-bold" style="white-space: break-spaces;">
+          Estàs segur que vols eliminar "{{ data.nom }}" de la llista de
+          productes?
         </v-card-title>
         <v-card-text>
-          Atenció! Si elimines aquesta pel·lícula, perdràs l'oportunitat
-          d'endevinar l'any en el proper concurs de cinèfils."
+          Recorda, un cop cliquis a 'Eliminar', aquest producte desapareixerà més ràpid que una pizza en una festa d'aniversari. La decisió és irreversible, així que assegura't que aquest producte hagi tingut una vida plena.
         </v-card-text>
 
         <v-spacer></v-spacer>
@@ -56,7 +55,7 @@ export default {
               <v-sheet class="ma-2">
                 <v-btn
                   class="px-5 bg-red"
-                  text="Esborrar"
+                  text="Eliminar"
                   block
                   @click="
                     isActive.value = false;
