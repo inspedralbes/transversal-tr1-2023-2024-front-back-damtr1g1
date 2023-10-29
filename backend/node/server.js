@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 const http = require("http");
 const mysql = require("mysql");
 const PORT = 3001;
@@ -418,3 +419,7 @@ app.post("/api/EliminarData", (req, res) => {
     }
   });
 });
+
+app.get("/api/image/:img", (req, res) => {
+  res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
+})

@@ -29,7 +29,7 @@ export default {
         elevation="4"
         rounded="xl"
       >
-        <v-sheet class="d-flex flex-wrap ml-10">
+        <v-sheet class="d-flex flex-wrap ml-10" style="background-color: transparent;">
           <v-sheet v-for="producte in productes" class="ma-5">
             <v-row justify="space-around">
               <Product :data="producte" />
