@@ -60,7 +60,7 @@ export default {
             variant="outlined"
             type="text"
             width="100px"
-            class="font-weight-bold text-center"
+            class="font-weight-bold text-center agregarNomProducte"
             placeholder="Nom del producte"
             v-model="data.title"
           />
@@ -73,7 +73,7 @@ export default {
           justify="center"
           rounded="l"
         >
-          <v-img :width="400" aspect-ratio="1/1" cover :src="data.poster">
+          <v-img :width="400" aspect-ratio="1/1" cover :src="data.imageNom">
             <input
               type="file"
               class="mt-10"
