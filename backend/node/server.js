@@ -18,24 +18,18 @@ const io = new Server(server, {
 });
 const { desarImatge, eliminarImatge } = require('./gestio_imatges');
 
-io.on("connection", (socket) => {
-    console.log("Un cliente se ha conectado");
-    // Aquí puedes agregar lógica adicional para recibir mensajes del cliente si es necesario
+io.on('connection', (socket) => {
+    console.log('Nuevo usuario conectado');
 
-    // Ejemplo de emisión de datos al cliente conectado
-    socket.emit("actualizacion_producto", { /* Datos del producto actualizados */ });
-
-    // Escuchar eventos personalizados del cliente
-    socket.on("actualizacion_producto_servidor", (datos) => {
-        // Lógica para actualizar los datos del producto en la base de datos
-        // También puedes enviar una confirmación al cliente de que los datos han sido actualizados
-        socket.emit("actualizacion_completada", { mensaje: "Los datos del producto se han actualizado con éxito." });
+    // Escucha los mensajes del cliente
+    socket.on('chat message', (msg) => {
+        // Envia el mensaje a todos los clientes, incluido el remitente
+        io.emit('chat message', msg);
     });
 
-    // Lógica para manejar eventos de desconexión de cliente
-    socket.on("disconnect", () => {
-        console.log("Un cliente se ha desconectado");
-        // Otras acciones de limpieza o gestión aquí
+    // Maneja la desconexión del usuario
+    socket.on('disconnect', () => {
+        console.log('Usuario desconectado');
     });
 });
 
