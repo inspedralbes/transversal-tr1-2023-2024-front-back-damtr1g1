@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const mysql = require("mysql");
-const PORT = 3000;
+const PORT = 3001;
 const app = express();
 const server = http.createServer(app);
 
@@ -176,12 +176,12 @@ app.get("/", function (req, res) {
 
 // Ruta per a validar el login
 app.get("/api/validacioLogin", async (req, res) => {
-    const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
+    const usuarioSolicitado = req.query.nom; // Obté l'usuari del client
     const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
     await crearDBConnnection();
     // Consulta la DB para validar l'usuari i la contrasenya
-    con.query("SELECT * FROM Usuarios", (error, results, fields) => {
+    con.query("SELECT * FROM Usuaris", (error, results, fields) => {
         if (error) {
             // Errors
             return res
@@ -192,7 +192,7 @@ app.get("/api/validacioLogin", async (req, res) => {
         // Verifica si hay algún usuario que coincida con la solicitud
         const usuarioEncontrado = results.find(
             (user) =>
-                user.usuario === usuarioSolicitado &&
+                user.nom === usuarioSolicitado &&
                 user.contrasenya === contrasenyaSolicitada
         );
 
@@ -217,7 +217,7 @@ app.post('/api/AddProduct', async (req, res) => {
     const producte_Quantitat = req.query.producteQuantitat; // Obté la quantitat del producte
     await crearDBConnnection(); // Creem la conexió
     await crearProducte(imatge_Nom, producte_Categoria, producte_Definicio, producte_Nom, producte_Preu, producte_Quantitat); // Inserta els productes a la DB
-    await desarImatge(,imatge_Nom) // On imate_Nom serie el url 
+    await desarImatge(imatge_Nom) // On imate_Nom serie el url 
     closeDBconnection(); // Tanquem la conexió 
     res.send({message: 'Afegit correctament'})
 });
