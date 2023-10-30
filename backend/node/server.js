@@ -42,29 +42,30 @@ function closeDBconnection() {
 
 //falta fer lo dels fixers d'imatges                           (comprobada)
 function crearProducte(
-  imatge_Nom,
-  producte_Categoria,
-  producte_Definicio,
-  producte_Nom,
-  producte_Preu,
-  producte_Quantitat
+  imatgeNom,
+  nom,
+  definicio,
+  preu,
+  categoria,
+  quantitat
 ) {
   const nouProducte = {
-    imatgeNom: imatge_Nom,
-    producteCategoria: producte_Categoria,
-    producteDefinicio: producte_Definicio,
-    producteNom: producte_Nom,
-    productePreu: producte_Preu,
-    producteQuantitat: producte_Quantitat,
+    imatgeNom: imatgeNom,
+    nom: nom,
+    definicio: definicio,
+    preu: preu,
+    categoria: categoria,
+    quantitat: quantitat,
   };
+
   // Inserta nou producte en la tabla de Producte
   con.query("INSERT INTO Producte SET ?", nouProducte, (error, results) => {
     if (error) {
       console.error("Error al insertar Producte:", error);
     } else {
       console.log(
-        "Producte insertado con éxito. ID del Producte:",
-        nouProducte.producteNom
+        "Producte insertado con éxito. Nom del Producte:",
+        nouProducte.nom
       );
     }
   });
@@ -86,7 +87,7 @@ function selectProducte(callback) {
 //function eliminar productes                                  (comprobada)
 function deleteProducte(idProducteEliminar) {
   con.query(
-    "DELETE FROM Producte WHERE id = " + idProducteEliminar,
+    "DELETE FROM Producte WHERE id = ?",idProducteEliminar,
     (error, results) => {
       if (error) {
         console.error("Error al insertar Producte:", error);
@@ -259,22 +260,16 @@ app.get("/api/validateLogin", async (req, res) => {
 //Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  const imatge_Nom = req.query.imatge; // Obté la imatge
-  const producte_Categoria = req.query.producteCategoria; // Obté la categoria del producte
-  const producte_Definicio = req.query.producteDefinicio; // Obté la definicio del producte
-  const producte_Nom = req.query.producteNom; // Obté el nom del producte
-  const producte_Preu = req.query.productePreu; // Obté el preu del producte
-  const producte_Quantitat = req.query.producteQuantitat; // Obté la quantitat del producte
+  console.log("hola")
+  const imatgeNom = req.query.imatgeNom; // Obté la imatge
+  const categoria = req.query.categoria; // Obté la categoria del producte
+  const definicio = req.query.definicio; // Obté la definicio del producte
+  const nom = req.query.nom; // Obté el nom del producte
+  const preu = req.query.preu; // Obté el preu del producte
+  const quantitat = req.query.quantitat; // Obté la quantitat del producte
   await crearDBConnnection(); // Creem la conexió
-  await crearProducte(
-    imatge_Nom,
-    producte_Categoria,
-    producte_Definicio,
-    producte_Nom,
-    producte_Preu,
-    producte_Quantitat
-  ); // Inserta els productes a la DB
-  await desarImatge(producte_Nom, imatge_Nom); // On imate_Nom serie el url
+  await crearProducte(imatgeNom,nom,definicio,preu,categoria,quantitat)// Inserta els productes a la DB
+  await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
   closeDBconnection(); // Tanquem la conexió
   res.send({ message: "Afegit correctament" });
 });
