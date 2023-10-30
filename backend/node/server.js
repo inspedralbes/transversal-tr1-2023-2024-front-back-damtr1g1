@@ -10,7 +10,12 @@ const PORT = 3001;
 app.use(cors());
 
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server, {
+    cors:{
+        origin:'*',
+        methods: ['GET', 'POST', 'PUT', 'DELETE']
+    }
+});
 const { desarImatge, eliminarImatge } = require('./gestio_imatges');
 
 io.on("connection", (socket) => {
@@ -205,11 +210,13 @@ function deleteCarritoProducto(idCarritoProductoEliminar) {
 }
 
 app.get("/", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     res.send("Conectat al server");
 });
 
 // Ruta per a validar el login
 app.get("/api/validacioLogin", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
     const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
@@ -257,6 +264,7 @@ app.post('/api/AddProduct', async (req, res) => {
 });
 
 app.get('/api/selectProducte', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     await crearDBConnnection(); // Creem la conexió
     await selectProducte((err, productesJSON) => {
         if (err) {
