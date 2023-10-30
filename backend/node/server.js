@@ -1,5 +1,5 @@
 const express = require("express");
-const path = require('path');
+const path = require("path");
 const http = require("http");
 const mysql = require("mysql");
 const PORT = 3001;
@@ -103,29 +103,33 @@ function deleteProducte(idProducteEliminar) {
 function updateProducte(
   idProducteUpdate,
   imatgeNom,
-  producteNom,
-  producteDefinicio,
-  productePreu,
-  producteCategoria,
-  producteQuantitat
+  nom,
+  definicio,
+  preu,
+  categoria,
+  quantitat
 ) {
   const update = {
     imatgeNom: imatgeNom,
-    producteNom: producteNom,
-    producteDefinicio: producteDefinicio,
-    productePreu: productePreu,
-    producteCategoria: producteCategoria,
-    producteQuantitat: producteQuantitat,
+    nom: nom,
+    definicio: definicio,
+    preu: preu,
+    categoria: categoria,
+    quantitat: quantitat,
   };
-  /*UPDATE Producte
-    SET imatgeNom = 'nuevo_nombre_imagen',
-    producteNom = 'nuevo_nombre_producto',
-    producteDefinicio = 'nueva_descripcion_producto',
-    productePreu = nuevo_valor_precio,
-    producteCategoria = 'nueva_categoria',
-    producteQuantitat = nueva_cantidad
-    WHERE id_producte = 1; */
-  con.query("");
+  const id = idProducteUpdate;
+
+  con.query(
+    `UPDATE Producte SET ? WHERE id = ?`,
+    [update, id],
+    (error, results) => {
+      if (error) {
+        console.error("Error al actualizar Producto:", error);
+      } else {
+        console.log("Producto actualizado con éxito");
+      }
+    }
+  );
 }
 
 //function crear carrito                                       (comprobada)
@@ -157,17 +161,13 @@ function selectCarrito(callback) {
 }
 //function delete carrito                                      (comprobada)
 function deleteCarrito(idCarrito) {
-  con.query(
-    "DELETE FROM Carret WHERE id=?",
-    idCarrito,
-    (error, results) => {
-      if (error) {
-        console.error("Error al eliminar carrito:", error);
-      } else {
-        console.log("carrito eliminado con éxito. ID del carrito:", idCarrito);
-      }
+  con.query("DELETE FROM Carret WHERE id=?", idCarrito, (error, results) => {
+    if (error) {
+      console.error("Error al eliminar carrito:", error);
+    } else {
+      console.log("carrito eliminado con éxito. ID del carrito:", idCarrito);
     }
-  );
+  });
 }
 //function crear carrito_productes                             (comprobada)
 function crearCarritoProducte(quantitat, idCarrito, idProducto) {
@@ -303,10 +303,33 @@ app.post("/api/deleteProduct", async (req, res) => {
   closeDBconnection();
   res.json({ message: "Eliminat correctament" });
 });
+
 //Ruta update producte
 app.post("/api/updateProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
+  const idProducteUpdate = req.query.idProducteUpdate; // Obté la id producte del client
+
+  (imatgeNom = req.query.imatgeNom),
+    (nom = req.query.nom),
+    (definicio = req.query.definicio),
+    (preu = req.query.preu),
+    (categoria = req.query.categoria),
+    (quantitat = req.query.quantitat),
+    console.log(idProducteUpdate);
+  await crearDBConnnection();
+  await updateProducte(
+    idProducteUpdate,
+    imatgeNom,
+    nom,
+    definicio,
+    preu,
+    categoria,
+    quantitat
+  );
+  closeDBconnection();
+  res.json({ message: " Actualitzat" });
 });
+
 //Ruta crear carrito compra                                    (comprobada)
 app.post("/api/addShoppingCart", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -408,4 +431,4 @@ app.post("/api/getShoppingCart", (req, res) => {
 // Recibir la imagen del nombre pedido
 app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
-})
+});
