@@ -94,7 +94,7 @@ function deleteProducte(idProducteEliminar) {
     }
   );
 }
-//function update productes
+//function update productes                                    (comprobada)
 function updateProducte(
   idProducteUpdate,
   imatgeNom,
@@ -126,7 +126,58 @@ function updateProducte(
     }
   );
 }
+//function crear categoria                                     (comprobada) 
+function addCategoria(nomCategoria){
+  con.query("INSERT INTO Categoria SET nom=?",nomCategoria, (error, results) => {
+    if (error) {
+      console.error("Error al insertar Categoria:", error);
+    } else {
+      console.log(
+        "Categoria insertada con éxito. Nom de la Categoria:",
+        nomCategoria
+      );
+    }
+  });
+}
+//function delete categoria                                    (comprobada)
+function deleteCategoria(idCategoria){
+    con.query("DELETE FROM Categoria WHERE id=?",idCategoria, (error, results) => {
+      if (error) {
+        console.error("Error al borrar Categoria:", error);
+      } else {
+        console.log(
+          "Categoria vorrada con éxito. ID de la Categoria:",
+          idCategoria
+        );
+      }
+    });
+}
+//function select categoria                                    (comprobada)
+function selectCategoria(callback){
+  con.query("SELECT * FROM Categoria", (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callbac
+      return;
+    }
 
+    const CategoriesJSON = JSON.stringify(results); // Convierte el objeto a JSON
+
+    callback(null, CategoriesJSON); //
+  });
+}
+//function update categoria                                    (comprobada)
+function updateCategoria(idCategoria,nomCategoria){
+  con.query("UPDATE Categoria SET nom=? WHERE id=?",[nomCategoria,idCategoria],
+  (error, results) => {
+    if (error) {
+      console.error("Error al actualizar Categoria:", error);
+    } else {
+      console.log("Categoria actualizada con éxito");
+    }
+  }
+);
+}
 //function crear carrito                                       (comprobada)
 function crearCarrito(nomUsuari) {
   const nouCarrito = {
@@ -376,6 +427,51 @@ app.post("/api/updateProduct", async (req, res) => {
   );
   closeDBconnection();
   res.json({ message: " Actualitzat" });
+});
+//Ruta afegir categoria                                        (comprobada)
+app.post("/api/addCategoria", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  const nomCategoria = req.query.nomCategoria;
+
+  await crearDBConnnection();
+  await addCategoria(nomCategoria);
+  closeDBconnection();
+  res.json({ message: "Creat correctament" });
+});
+//Ruta borrar categoria                                        (comprobada)
+app.post("/api/deleteCategoria", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  const idCategoria = req.query.idCategoria;
+
+  await crearDBConnnection();
+  await deleteCategoria(idCategoria);
+  closeDBconnection();
+  res.json({ message: "borrat correctament" });
+});
+//Ruta select categoria                                        (comprobada)
+app.get("/api/getCategoria", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  await crearDBConnnection(); // Creem la conexió
+  await selectCategoria((err, CategoriesJSON) => {
+    if (err) {
+      console.error("Error: " + err);
+    } else {
+      res.json(JSON.parse(CategoriesJSON));
+    }
+  });
+
+  await closeDBconnection(); // Tanquem la conexió
+});
+//Ruta actualizar categoria                                    (comprobada)
+app.post("/api/updateCategoria", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  const idCategoria = req.query.idCategoria;
+  const nomCategoria = req.query.nomCategoria;
+
+  await crearDBConnnection();
+  await updateCategoria(idCategoria,nomCategoria);
+  closeDBconnection();
+  res.json({ message: "actualitzat correctament" });
 });
 //Ruta crear carrito compra                                    (comprobada)
 app.post("/api/addShoppingCart", async (req, res) => {
