@@ -2,6 +2,9 @@ const express = require("express");
 const path = require("path");
 const http = require("http");
 const mysql = require("mysql");
+const fs = require('fs');
+const multer = require("multer");
+const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3001;
 const app = express();
 const server = http.createServer(app);
@@ -313,20 +316,30 @@ app.get("/api/validateLogin", async (req, res) => {
   closeDBconnection();
 });
 //Ruta afegir producte                                         (comprobada)
-app.post("/api/addProduct", async (req, res) => {
+app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  console.log("hola");
-  const imatgeNom = req.query.imatgeNom; // Obté la imatge
-  const categoria = req.query.categoria; // Obté la categoria del producte
-  const definicio = req.query.definicio; // Obté la definicio del producte
-  const nom = req.query.nom; // Obté el nom del producte
-  const preu = req.query.preu; // Obté el preu del producte
-  const quantitat = req.query.quantitat; // Obté la quantitat del producte
-  await crearDBConnnection(); // Creem la conexió
-  await crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat); // Inserta els productes a la DB
-  await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
-  closeDBconnection(); // Tanquem la conexió
-  res.send({ message: "Afegit correctament" });
+
+  let fileType = req.file.mimetype.split("/")[1];
+  let newFileName = req.query.imatgeNom + "." + fileType;
+  fs.rename(
+    `./img/productes/${req.file.filename}`,
+    `./img/productes/${newFileName}`,
+    function () {
+      res.send("200")
+    }
+    )
+
+  // const imatgeNom = req.query.imatgeNom; // Obté la imatge
+  // const categoria = req.query.categoria; // Obté la categoria del producte
+  // const definicio = req.query.definicio; // Obté la definicio del producte
+  // const nom = req.query.nom; // Obté el nom del producte
+  // const preu = req.query.preu; // Obté el preu del producte
+  // const quantitat = req.query.quantitat; // Obté la quantitat del producte
+  // await crearDBConnnection(); // Creem la conexió
+  // await crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat); // Inserta els productes a la DB
+  // await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
+  // closeDBconnection(); // Tanquem la conexió
+  // res.send({ message: "Afegit correctament" });
 });
 //Ruta select producte                                         (comprobada)
 app.get("/api/getProducts", async (req, res) => {
@@ -484,9 +497,9 @@ app.post("/api/deleteComanda", async (req, res) => {
 app.post("/api/updateComanda", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   id_comanda = req.query.id_comanda;
-  finalitzat= req.query.finalitzat;
+  finalitzat = req.query.finalitzat;
   await crearDBConnnection();
-  await updateComandes(id_comanda,finalitzat);
+  await updateComandes(id_comanda, finalitzat);
   closeDBconnection();
   res.json({ message: "afegit correctament" });
 });

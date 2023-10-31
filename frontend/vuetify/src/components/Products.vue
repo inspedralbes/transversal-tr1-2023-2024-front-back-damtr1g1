@@ -53,7 +53,7 @@ export default {
       <v-col cols="2">
         <v-sheet style="background-color: transparent">
           <v-btn
-            class="bg-light-green-lighten-2 text-md-body-2 text-lg-h6"
+            class="bg-light-green-lighten-2 text-h6"
             height="63px"
             rounded="xl"
             v-text="addProductText"
@@ -72,6 +72,8 @@ export default {
             rounded="xl"
           >
             <v-text-field
+              class="mt-1 ml-5"
+              variant="plain"
               style="font-weight: 700"
               placeholder="Busca..."
               v-model="busqueda"
