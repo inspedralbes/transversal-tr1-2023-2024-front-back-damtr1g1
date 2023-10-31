@@ -260,7 +260,6 @@ app.get("/api/validateLogin", async (req, res) => {
 //Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  console.log("hola")
   const imatgeNom = req.query.imatgeNom; // Obté la imatge
   const categoria = req.query.categoria; // Obté la categoria del producte
   const definicio = req.query.definicio; // Obté la definicio del producte
@@ -394,6 +393,7 @@ app.post("/api/deleteShoppingCartProduct", async (req, res) => {
   closeDBconnection();
   res.json({ message: "Eliminat correctament" });
 });
+
 //Ruta guardar imatges
 app.post("/api/addImage", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
