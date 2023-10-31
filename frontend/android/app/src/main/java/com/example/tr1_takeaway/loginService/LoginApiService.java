@@ -1,4 +1,4 @@
-package com.example.tr1_takeaway;
+package com.example.tr1_takeaway.loginService;
 
 import com.example.tr1_takeaway.loginService.LoginResponse;
 import com.example.tr1_takeaway.ui.shop.ProductDataModel;
