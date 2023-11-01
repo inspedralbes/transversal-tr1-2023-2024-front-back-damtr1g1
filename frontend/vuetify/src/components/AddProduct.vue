@@ -4,7 +4,8 @@
 export default {
   data: function () {
     return {
-      llistat_categories: ["Fruita", "Verdures"],
+      llistat_categories: [],
+      ids_categories: [],
       dialog: false,
       imgPreview: null,
       data: {
@@ -17,6 +18,16 @@ export default {
       },
     };
   },
+  mounted() {
+    fetch("http://localhost:3001/api/getCategoria")
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          this.llistat_categories.push(data[i].nom);
+          this.ids_categories.push(data[i].id);
+        }
+      });
+  },
   methods: {
     afegirPregunta() {
       if (
@@ -27,16 +38,16 @@ export default {
         this.data.quantitat !== "" &&
         this.data.img !== null
       ) {
-        let formData = new FormData()
-        formData.append("img", this.data.img)
+        for (let i = 0; i < this.llistat_categories.length; i++) {
+          if (this.llistat_categories[i] == this.data.categoria) {
+            this.data.categoria = this.ids_categories[i];
+          }
+        }
+
+        let formData = new FormData();
+        formData.append("img", this.data.img);
         fetch(
-          `http://localhost:3001/api/addProduct?imatgeNom=${
-            this.data.img.name
-          }&categoria=${this.data.categoria}&definicio=${
-            this.data.definicio
-          }&nom=${this.data.nom}&preu=${
-            this.data.preu
-          }&quantitat=${this.data.quantitat}`,
+          `http://localhost:3001/api/addProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}`,
           {
             method: "POST",
             mode: "cors",
@@ -151,7 +162,7 @@ export default {
                 variant="outlined"
                 v-model="data.categoria"
                 :rules="[() => !!data.categoria || 'Camp obligatori!']"
-                :items="llistat_categories"
+                :items="this.llistat_categories"
                 label="Categoria"
                 placeholder="Escull..."
               ></v-autocomplete>
@@ -188,13 +199,9 @@ export default {
 
       <v-dialog persistent v-model="dialog" width="auto">
         <v-card>
-          <v-card-text>
-            Tots els camps son obligatoris!
-          </v-card-text>
+          <v-card-text> Tots els camps son obligatoris! </v-card-text>
           <v-card-actions>
-            <v-btn color="red" block @click="dialog = false"
-              >Tanca</v-btn
-            >
+            <v-btn color="red" block @click="dialog = false">Tanca</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
