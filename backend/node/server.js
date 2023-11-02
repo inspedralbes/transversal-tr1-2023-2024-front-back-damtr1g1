@@ -8,6 +8,7 @@ const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3001;
 const app = express();
 const server = http.createServer(app);
+const { spawn } = require('child_process');
 
 const { Server } = require("socket.io");
 const io = new Server(server);
@@ -621,3 +622,34 @@ server.listen(PORT, function () {
 app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
+//Recibir la imagen de la estadistica
+app.get("/api/getImatgeEstadistiques/producteMesVenut", (req, res) => {
+  res.sendFile(path.resolve("img_estadistiques/producteMesVenut.png"));
+});
+//Ejecutar archivo python
+app.get("/api/executeStatistics", callPython);
+
+function callPython(req, res) {
+  
+
+  const pythonProcess = spawn("python", [
+    "./estadistiques.py"
+  ]);
+
+  pythonProcess.stdout.on('data', (data) => {
+    // Manejar la salida del proceso Python
+    console.log(`Salida del script Python: ${data}`);
+    res.send(`Salida del script Python: ${data}`);
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+    // Manejar errores del proceso Python
+    console.error(`Error del script Python: ${data}`);
+    res.status(500).send(`Error del script Python: ${data}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+    // Manejar el cierre del proceso Python
+    console.log(`Proceso Python finalizado con código de salida ${code}`);
+  });
+}

@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import mysql.connector
 
+
 def establecer_conexion():
     """Establece la conexión a la base de datos y devuelve el cursor."""
     conexion = mysql.connector.connect(
@@ -37,13 +38,14 @@ def crear_grafico(df,filename):
     plt.close()
 
 def main():
+    
     conexion, cursor = establecer_conexion()
     resultados = obtener_productos_ordenados_cantidad(cursor)
     print(resultados)
     conexion.close()
 
     df = pd.DataFrame(resultados, columns=['id', 'nom', 'quantitat'])
-    filename = 'backend\img_estadistiques\producteMesVenut.png'
+    filename = './img_estadistiques/producteMesVenut.png'
     crear_grafico(df,filename)
 
 main()

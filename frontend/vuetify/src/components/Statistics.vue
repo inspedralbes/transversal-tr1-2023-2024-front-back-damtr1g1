@@ -2,6 +2,39 @@
 </script>
 
 <script>
+
+
+export default {
+  data() {
+    return {
+      fotopath: 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut'
+    };
+  },
+  methods: {
+    executeStatistics() {
+      fetch('http://localhost:3001/api/executeStatistics')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Handle a successful response here
+          console.log('Response from /api/executeStatistics:', data);
+          this.fotopath=""
+          this.fotopath = 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut';
+          location.reload()
+          // You can update your UI or perform other actions with the response data.
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error('Error executing statistics:', error);
+          // You can show an error message or perform error handling.
+        });
+    },
+  },
+};
 </script>
 
 <template>
@@ -24,11 +57,11 @@
             class="font-weight-bold text-center text-h3 py-6 text-truncate"
             style="color: #3d3976"
           >
-            Les comandes
+            Estadístiques
           </div>
           <v-img
-            height="200"
-            src="/src/assets/img/order_icon.png"
+            height="600"
+            :src="this.fotopath"
           >
           </v-img>
           <v-container align="center" justify="center">
@@ -41,8 +74,10 @@
                 style="
                   background: linear-gradient(to left, #e8321a, #ff7a68);
                   color: white;
+                  
                 "
-                >Entra
+                @click="executeStatistics"
+                >Actualitza
               </v-btn>
             </v-sheet>
           </v-container>
