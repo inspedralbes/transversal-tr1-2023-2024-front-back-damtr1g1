@@ -1,40 +1,44 @@
 package com.example.tr1_takeaway.ui.shop;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
-
+import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private List<ProductDataModel> data;
+    private final List<ProductDataModel> data;
+    private Context context; // Agregado el contexto
 
     public Adapter(List<ProductDataModel> data) {
         this.data = data;
+
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_shop, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductDataModel item = data.get(position);
-        holder.productName.setText(item.toString());
-        holder.productCategory.setText(item.toString());
-        holder.productPrice.setText(item.toString());
-        holder.productDescription.setText(item.toString());
-        holder.productQuantity.setText(item.toString());
+        ProductDataModel currentItem = data.get(position);
+        holder.ProductID.setText(currentItem.getId());
+        holder.ProductName.setText(currentItem.getNom());
+        holder.ProductDefinition.setText(currentItem.getDefinicio());
+        holder.ProductPrice.setText(String.valueOf(currentItem.getPreu()));
+        holder.ProductCategory.setText(String.valueOf(currentItem.getCategoria_id()));
+        holder.ProductQuantity.setText(String.valueOf(currentItem.getQuantitat()));
+        Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage); // L'imatge la pasem per picasso
     }
 
     @Override
@@ -42,26 +46,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView productImage;
-        TextView productName;
-        TextView productCategory;
-        TextView productPrice;
-        TextView productDescription;
-        TextView productQuantity;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView ProductID, ProductName, ProductDefinition, ProductPrice, ProductCategory, ProductQuantity;
+        public ImageView ProductImage;
 
-        // Add other views for your grid item here
-
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            productImage = itemView.findViewById(R.id.productImage);
-            productName = itemView.findViewById(R.id.productName);
-            productCategory = itemView.findViewById(R.id.productCategory);
-            productPrice = itemView.findViewById(R.id.productPrice);
-            productDescription = itemView.findViewById(R.id.productDescription);
-            productQuantity = itemView.findViewById(R.id.productQuantity);
-            // Initialize other views here
+            ProductName = itemView.findViewById(R.id.productName);
+            ProductDefinition = itemView.findViewById(R.id.productDescription);
+            ProductPrice = itemView.findViewById(R.id.productPrice);
+            ProductCategory = itemView.findViewById(R.id.productCategory);
+            ProductQuantity = itemView.findViewById(R.id.productQuantity);
+            ProductImage = itemView.findViewById(R.id.productImage);
         }
-    }
-}
-
+    }}

@@ -5,4 +5,120 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#9094E9"
-    tools:context=".ui.profile.ProfileFragment"/>
+    tools:context=".ui.profile.ProfileFragment"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="50dp">
+
+    <ImageView
+        android:id="@+id/profileicon"
+        android:layout_width="129dp"
+        android:layout_height="144dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_profile_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/expirydateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="4dp"
+        android:text="dataCaducitatTargeta"
+        app:layout_constraintStart_toEndOf="@+id/ccnumberText"
+        app:layout_constraintTop_toBottomOf="@+id/creditcard" />
+
+    <TextView
+        android:id="@+id/namesurname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="96dp"
+        android:text="Nom i cognoms"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileicon" />
+
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="4dp"
+        android:text="nomcognoms"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/namesurname" />
+
+    <TextView
+        android:id="@+id/creditcard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="240dp"
+        android:text="Detalls de la targeta bancària:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileicon" />
+
+    <TextView
+        android:id="@+id/ccnumberText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="4dp"
+        android:text="numeroTargeta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/creditcard" />
+
+    <TextView
+        android:id="@+id/emailtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="4dp"
+        android:text="email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <TextView
+        android:id="@+id/ccvText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="4dp"
+        android:text="ccvTargeta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ccnumberText" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="168dp"
+        android:text="Correu Electronic:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileicon" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="24dp"
+        android:text="usuario"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileicon" />
+
+    <Button
+        android:id="@+id/modifyData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="352dp"
+        android:backgroundTint="#FF7A68"
+        android:text="Modificar Dades d'Usuari"
+        android:textAllCaps="false"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileicon" />
+</androidx.constraintlayout.widget.ConstraintLayout>
