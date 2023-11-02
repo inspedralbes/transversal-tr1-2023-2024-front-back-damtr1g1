@@ -582,7 +582,6 @@ app.post("/api/deleteShoppingCartProduct", async (req, res) => {
   res.json({ message: "Eliminat correctament" });
 });
 
-
 // Ruta afegir comanda                                          (comprobada)
 app.post("/api/addComanda", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -635,4 +634,48 @@ server.listen(PORT, function () {
 // Recibir la imagen del nombre pedido
 app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
+});
+
+// Comandes:
+const ComandaStatus = ["Enviada", "Aceptada", "En curs", "Ready"];
+
+// Rebem quan algun user es conecta 
+io.on('connection', (socket) => {
+  console.log('Un cliente se ha conectado.');
+  // Si el client ens envia una comanda amb el seu status
+  socket.on('comandaStatus', (status) => {
+    // Mirem si aquest Status existeix
+    if (ComandaStatus.includes(status)) {
+      // Si existeix fem un switch per veure quina ens ha enviat 
+      switch (status) {
+        case "Enviada":
+          console.log("La comanda ha sido enviada.");
+          socket.emit('comandaResponse', 'La comanda ha sido enviada.');
+          break;
+        case "Aceptada":
+          console.log("La comanda ha sido aceptada.");
+          socket.emit('comandaResponse', 'La comanda ha sido aceptada.');
+          break;
+        case "En curs":
+          console.log("La comanda está en curso.");
+          socket.emit('comandaResponse', 'La comanda está en curso.');
+          break;
+        case "Preparada":
+          console.log("La comanda está acabada.");
+          socket.emit('comandaResponse', 'La comanda está acabada.');
+        default:
+          console.log("Estado de comanda no reconocido.");
+          socket.emit('comandaResponse', 'Estado de comanda no reconocido.');
+      }
+    } else {
+      console.log('Estado de comanda no válido.');
+      socket.emit('comandaResponse', 'Estado de comanda no válido.');
+    }
+  });
+
+
+  // Manejo de desconexión de sockets
+  socket.on('disconnect', () => {
+    console.log('Un cliente se ha desconectado.');
+  });
 });
