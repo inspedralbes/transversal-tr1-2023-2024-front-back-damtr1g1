@@ -14,7 +14,7 @@ export default {
   mounted() {
     this.carregant = true;
     window.addEventListener("resize", () => {
-      this.onResize()
+      this.onResize();
     });
     fetch("http://localhost:3001/api/getProducts")
       .then((response) => response.json())
@@ -48,13 +48,19 @@ export default {
 
 <template>
   <v-container class="order-container">
-    <h1 class="text-center text-h2 my-16 pt-10 font-weight-bold">Productes</h1>
-    <v-row>
+    <v-btn
+      variant="tonal"
+      icon="mdi-arrow-left"
+      class="mt-5"
+      @click="$router.push('/')"
+    ></v-btn>
+    <h1 class="text-center text-h2 mb-16 mt-10 font-weight-bold">Productes</h1>
+    <v-row fixed-header>
       <v-col cols="2">
         <v-sheet style="background-color: transparent">
           <v-btn
             class="bg-light-green-lighten-2 text-h6"
-            height="63px"
+            height="65px"
             rounded="xl"
             v-text="addProductText"
             block
@@ -67,7 +73,10 @@ export default {
           <v-toolbar
             dense
             floating
-            style="background: #ffaa9f"
+            style="
+              background: #ffaa9f;
+              border: 1px solid rgba(112, 112, 112, 0.5);
+            "
             class="mb-3"
             rounded="xl"
           >

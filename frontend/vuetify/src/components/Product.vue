@@ -36,15 +36,16 @@ export default {
       <v-row no-gutters>
         <v-col>
           <v-sheet
-            class="mx-2 pa-1"
-            style="border: 1px solid black; border-radius: 20px"
-            >{{ data.preu.toFixed(2) }} €
+            class="mx-3 pa-1"
+            style="border: 1px solid black; border-radius: 5px"
+            >{{ data.preu.toFixed(2) }}
+            <v-icon size="x-small" class="mb-1">mdi-currency-eur</v-icon>
           </v-sheet>
         </v-col>
         <v-col>
           <v-sheet
-            class="mx-2 pa-1"
-            style="border: 1px solid black; border-radius: 20px"
+            class="mx-3 pa-1"
+            style="border: 1px solid black; border-radius: 5px"
             >{{ data.quantitat }} unitat/s</v-sheet
           >
         </v-col>
@@ -55,8 +56,9 @@ export default {
           <v-sheet class="mx-2">
             <v-btn
               block
+              rounded="xl"
               class="bg-light-blue-lighten-3"
-              @click="$router.push({ path: '/editar-pregunta/' + data.id })"
+              @click="$router.push({ path: '/editar-producte/' + data.id })"
               >Editar</v-btn
             >
           </v-sheet>
