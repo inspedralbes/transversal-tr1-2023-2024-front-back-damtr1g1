@@ -379,7 +379,7 @@ app.get("/api/validateLogin", async (req, res) => {
 // Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-<<<<<<< HEAD
+
   const imatgeNom = req.query.imatgeNom; // Obté la imatge
   const categoria = req.query.categoria; // Obté la categoria del producte
   const definicio = req.query.definicio; // Obté la definicio del producte
@@ -391,7 +391,6 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
   closeDBconnection(); // Tanquem la conexió
   res.send({ message: "Afegit correctament" });
-=======
 
   let newFileName = req.query.imatgeNom;
   fs.rename(
@@ -417,7 +416,7 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
       res.send({ message: "Afegit correctament" });
     }
   );
->>>>>>> e3be296ccb647daf9936b614895f96f7d324ff19
+
 });
 // Ruta select producte                                         (comprobada)
 app.get("/api/getProducts", async (req, res) => {
@@ -582,14 +581,10 @@ app.post("/api/deleteShoppingCartProduct", async (req, res) => {
   closeDBconnection();
   res.json({ message: "Eliminat correctament" });
 });
-<<<<<<< HEAD
 
-//Ruta guardar imatges
-app.post("/api/addImage", async (req, res) => {
-=======
+
 // Ruta afegir comanda                                          (comprobada)
 app.post("/api/addComanda", async (req, res) => {
->>>>>>> e3be296ccb647daf9936b614895f96f7d324ff19
   res.header("Access-Control-Allow-Origin", "*");
   id_carret = req.query.id_carret;
   usuari = req.query.usuari;
