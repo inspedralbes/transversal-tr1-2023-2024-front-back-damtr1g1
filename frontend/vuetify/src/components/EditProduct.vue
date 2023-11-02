@@ -65,7 +65,7 @@ export default {
         // let formData = new FormData();
         // formData.append("img", this.data.img);
         // fetch(
-        //   `http://localhost:3001/api/addProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}`,
+        //   `http://localhost:3001/api/updateProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}`,
         //   {
         //     method: "POST",
         //     mode: "cors",

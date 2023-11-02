@@ -12,6 +12,13 @@ export default {
     addProductText: window.innerWidth < 1100 ? "+" : "NOU PRODUCTE",
   }),
   mounted() {
+    window.onscroll = function () {
+      if(window.scrollY > 327) {
+        document.getElementById("search-bar").style.backgroundColor = "#9094e9"
+      }else {
+        document.getElementById("search-bar").style.backgroundColor = "transparent"
+      }
+    };
     this.carregant = true;
     window.addEventListener("resize", () => {
       this.onResize();
@@ -54,8 +61,8 @@ export default {
       class="mt-5"
       @click="$router.push('/')"
     ></v-btn>
-    <h1 class="text-center text-h2 mb-16 mt-10 font-weight-bold">Productes</h1>
-    <v-row fixed-header>
+    <h1 class="text-center text-h2 mt-10 font-weight-bold">Productes</h1>
+    <v-row id="search-bar" class="mt-16 mx-0" style="position: sticky; top: 0; z-index: 100; border-radius: 20px;">
       <v-col cols="2">
         <v-sheet style="background-color: transparent">
           <v-btn
