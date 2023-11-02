@@ -5,6 +5,7 @@ import LandingPage from "@/components/LandingPage.vue";
 import Orders from "@/components/Orders.vue";
 import Products from "@/components/Products.vue";
 import AddProduct from "@/components/AddProduct.vue";
+import EditProduct from "@/components/EditProduct.vue";
 import Statistics from "@/components/Statistics.vue";
 import App from "./App.vue";
 
@@ -18,6 +19,7 @@ const router = createRouter({
     { path: "/comandes", component: Orders },
     { path: "/productes", component: Products },
     { path: "/afegir-producte", component: AddProduct },
+    { path: "/editar-producte/:id", component: EditProduct },
     { path: "/estadistiques", component: Statistics },
   ],
 });

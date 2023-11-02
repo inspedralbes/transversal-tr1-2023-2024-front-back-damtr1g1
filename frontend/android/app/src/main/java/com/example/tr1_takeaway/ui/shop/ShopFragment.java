@@ -1,6 +1,7 @@
 package com.example.tr1_takeaway.ui.shop;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tr1_takeaway.ApiService;
+import com.example.tr1_takeaway.loginService.LoginApiService;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
+import com.example.tr1_takeaway.shopService.ShopApiService;
 
 import java.util.List;
 
@@ -35,26 +37,26 @@ public class ShopFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_shop, container, false);
+            Log.e("TAG", "what the fuck is a kilometer");
 
             recyclerView = view.findViewById(R.id.productDisplay);
             recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
 
-            // Call the method to fetch data from Retrofit
-            fetchDataFromApi();
-
-            return view;
-        }
-
-        private void fetchDataFromApi() {
-            // Retrofit initialization
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://192.168.56.1:3001")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            ApiService apiService = retrofit.create(ApiService.class);
+            ShopApiService apiService = retrofit.create(ShopApiService.class);
+            // Call the method to fetch data from Retrofit
+            fetchDataFromApi(apiService, recyclerView);
 
-            Call<List<ProductDataModel>> call = apiService.getProducts();
+            return view;
+        }
+
+        private void fetchDataFromApi(ShopApiService ShopApiService, RecyclerView recyclerView) {
+
+            Call<List<ProductDataModel>> call = ShopApiService.getProducts();
 
             call.enqueue(new Callback<List<ProductDataModel>>() {
                 @Override
@@ -64,13 +66,13 @@ public class ShopFragment extends Fragment {
                         adapter = new Adapter(data);
                         recyclerView.setAdapter(adapter);
                     } else {
-                        // Handle API error
+                        Log.e("TAG", "what the fuck is a kilometer");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<ProductDataModel>> call, Throwable t) {
-                    // Handle network failure
+                    Log.e("TAG", "what the fuck is a kilometer");
                 }
             });
         }

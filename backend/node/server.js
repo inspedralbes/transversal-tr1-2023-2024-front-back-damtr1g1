@@ -83,6 +83,21 @@ function selectProducte(callback) {
     callback(null, ProductesJSON); //
   });
 }
+
+// function select producte per id
+function selectProducteById(id, callback) {
+  con.query(`SELECT * FROM Producte WHERE id = ${id}`, (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
+    }
+    const ProducteJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
+
+    callback(null, ProducteJSON); //
+  });
+}
+
 // function eliminar productes                                  (comprobada)
 function deleteProducte(idProducteEliminar) {
   con.query(
@@ -398,7 +413,7 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   let newFileName = req.query.imatgeNom;
   fs.rename(
     `./img/productes/${req.file.filename}`,
-    `./img/productes/${newFileName}`,
+    `./img/productes/${req.query.imatgeNom}`,
     async function () {
       const imatgeNom = req.query.imatgeNom; // Obté la imatge
       const categoria = req.query.categoria; // Obté la categoria del producte
@@ -421,11 +436,26 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   );
 
 });
-// Ruta select producte                                         (comprobada)
+// Ruta select productes                                        (comprobada)
 app.get("/api/getProducts", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   await crearDBConnnection(); // Creem la conexió
   await selectProducte((err, productesJSON) => {
+    if (err) {
+      console.error("Error: " + err);
+    } else {
+      res.json(JSON.parse(productesJSON));
+    }
+  });
+
+  await closeDBconnection(); // Tanquem la conexió
+});
+
+// Ruta select producte
+app.get("/api/getProducteById", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  await crearDBConnnection(); // Creem la conexió
+  await selectProducteById(req.query.id, (err, productesJSON) => {
     if (err) {
       console.error("Error: " + err);
     } else {
