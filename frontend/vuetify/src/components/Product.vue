@@ -35,7 +35,24 @@ export default {
     <v-container>
       <v-row no-gutters>
         <v-col>
-          <v-sheet class="ma-2">
+          <v-sheet
+            class="mx-2 pa-1"
+            style="border: 1px solid black; border-radius: 20px"
+            >{{ data.preu.toFixed(2) }} €
+          </v-sheet>
+        </v-col>
+        <v-col>
+          <v-sheet
+            class="mx-2 pa-1"
+            style="border: 1px solid black; border-radius: 20px"
+            >{{ data.quantitat }} unitat/s</v-sheet
+          >
+        </v-col>
+      </v-row>
+      <div style="border-bottom: 1px solid #ccc; margin: 15px 0"></div>
+      <v-row no-gutters>
+        <v-col>
+          <v-sheet class="mx-2">
             <v-btn
               block
               class="bg-light-blue-lighten-3"
@@ -45,7 +62,7 @@ export default {
           </v-sheet>
         </v-col>
         <v-col>
-          <v-sheet class="ma-2">
+          <v-sheet class="mx-2">
             <ModalBorrar :data="data" />
           </v-sheet>
         </v-col>

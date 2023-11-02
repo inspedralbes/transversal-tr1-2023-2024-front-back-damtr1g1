@@ -9,9 +9,13 @@ export default {
     productes_originals: "",
     busqueda: "",
     carregant: false,
+    addProductText: window.innerWidth < 1100 ? "+" : "NOU PRODUCTE",
   }),
   mounted() {
     this.carregant = true;
+    window.addEventListener("resize", () => {
+      this.onResize()
+    });
     fetch("http://localhost:3001/api/getProducts")
       .then((response) => response.json())
       .then((data) => {
@@ -20,6 +24,15 @@ export default {
         this.carregant = false;
         console.log(data);
       });
+  },
+  methods: {
+    onResize() {
+      if (window.innerWidth < 1100) {
+        this.addProductText = "+";
+      } else {
+        this.addProductText = "NOU PRODUCTE";
+      }
+    },
   },
   watch: {
     busqueda: function () {
@@ -40,10 +53,10 @@ export default {
       <v-col cols="2">
         <v-sheet style="background-color: transparent">
           <v-btn
-            class="bg-light-green-lighten-2"
+            class="bg-light-green-lighten-2 text-h6"
             height="63px"
             rounded="xl"
-            text="NOU PRODUCTE"
+            v-text="addProductText"
             block
             @click="$router.push('/afegir-producte')"
           ></v-btn>
@@ -59,6 +72,8 @@ export default {
             rounded="xl"
           >
             <v-text-field
+              class="mt-1 ml-5"
+              variant="plain"
               style="font-weight: 700"
               placeholder="Busca..."
               v-model="busqueda"
@@ -88,7 +103,14 @@ export default {
           >
             <h1>No hi han productes amb aquest nom</h1>
           </div>
-          <v-col v-for="producte in productes" :key="producte.id" sm="6" md="4" lg="3" cols="12">
+          <v-col
+            v-for="producte in productes"
+            :key="producte.id"
+            sm="6"
+            md="4"
+            lg="3"
+            cols="12"
+          >
             <Product :data="producte" />
           </v-col>
         </v-row>

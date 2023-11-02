@@ -4,38 +4,75 @@
 export default {
   data: function () {
     return {
+      llistat_categories: [],
+      ids_categories: [],
+      dialog: false,
+      imgPreview: null,
       data: {
-        producte_Categoria: "",
-        producte_Nom: "",
-        producte_Definicio: "",
-        producte_Preu: 0,
-        producte_Quantitat: 0,
-        imageNom: "",
+        categoria: null,
+        nom: "",
+        definicio: "",
+        preu: "",
+        quantitat: "",
+        img: null,
       },
     };
   },
-  methods: {
-    cancelar() {
-      this.$router.push("/productes");
-    },
-    afegirPregunta() {
-      fetch(
-        `http://localhost:3001/addProduct?imatge=${
-          this.data.imageNom
-        }&producteCategoria=${this.data.poster}&producteDefinicio=${
-          this.data.answers
-        }&producteNom=${this.data.correctIndex - 1}&productePreu=${
-          this.data.producte_Preu
-        }&producteQuantitat=${this.data.producte_Quantitat}`,
-        {
-          method: "POST",
-          mode: "cors",
+  mounted() {
+    fetch("http://localhost:3001/api/getCategoria")
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          this.llistat_categories.push(data[i].nom);
+          this.ids_categories.push(data[i].id);
         }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          this.$router.push("/");
-        });
+      });
+  },
+  methods: {
+    afegirPregunta() {
+      if (
+        this.data.categoria !== null &&
+        this.data.nom !== "" &&
+        this.data.definicio !== "" &&
+        this.data.preu !== "" &&
+        this.data.quantitat !== "" &&
+        this.data.img !== null
+      ) {
+        for (let i = 0; i < this.llistat_categories.length; i++) {
+          if (this.llistat_categories[i] == this.data.categoria) {
+            this.data.categoria = this.ids_categories[i];
+          }
+        }
+
+        let formData = new FormData();
+        formData.append("img", this.data.img);
+        fetch(
+          `http://localhost:3001/api/addProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}`,
+          {
+            method: "POST",
+            mode: "cors",
+            body: formData,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.$router.push("/productes");
+          });
+      } else {
+        console.log(this.data);
+        this.dialog = true;
+      }
+    },
+    onFileChange(e) {
+      const file = e.target.files[0];
+      if (file != undefined) {
+        console.log(file);
+        this.data.img = file;
+        this.imgPreview = URL.createObjectURL(file);
+      } else {
+        this.imgPreview = null;
+        this.data.img = null;
+      }
     },
   },
 };
@@ -44,7 +81,7 @@ export default {
 <template>
   <div>
     <h1 class="text-center text-h2 my-16 pt-10 font-weight-bold">
-      Agregar producte
+      Afegir Producte
     </h1>
     <v-sheet class="grid" align="center" style="background-color: transparent">
       <v-card
@@ -60,9 +97,10 @@ export default {
             variant="outlined"
             type="text"
             width="100px"
-            class="font-weight-bold text-center"
-            placeholder="Nom del producte"
-            v-model="data.title"
+            class="font-weight-bold text-center agregarNomProducte"
+            label="Nom del producte"
+            v-model="data.nom"
+            :rules="[() => !!data.nom || 'Camp obligatori!']"
           />
         </v-container>
         <v-card
@@ -73,8 +111,9 @@ export default {
           justify="center"
           rounded="l"
         >
-          <v-img :width="400" aspect-ratio="1/1" cover :src="data.poster">
+          <v-img :width="400" :src="imgPreview">
             <input
+              @change="onFileChange"
               type="file"
               class="mt-10"
               placeholder="Afegir enllaç de la imatge"
@@ -85,17 +124,61 @@ export default {
           <v-textarea
             rows="2"
             variant="outlined"
-            placeholder="Descipció del producte"
-            v-model="data.correctIndex"
+            label="Descipció del producte"
+            v-model="data.definicio"
+            :rules="[() => !!data.definicio || 'Camp obligatori!']"
             auto-grow
           />
+          <v-row gutters>
+            <v-col cols="4">
+              <v-text-field
+                label="Preu"
+                suffix="€"
+                variant="outlined"
+                type="number"
+                width="100px"
+                class="font-weight-bold text-center agregarNomProducte"
+                v-model="data.preu"
+                placeholder="10,00"
+                :rules="[() => !!data.preu || 'Camp obligatori!']"
+              />
+            </v-col>
+
+            <v-col cols="4">
+              <v-text-field
+                label="Quantitat"
+                suffix="unitats"
+                variant="outlined"
+                type="number"
+                width="100px"
+                class="font-weight-bold text-center agregarNomProducte"
+                :rules="[() => !!data.quantitat || 'Camp obligatori!']"
+                placeholder="20"
+                v-model="data.quantitat"
+              />
+            </v-col>
+            <v-col cols="4">
+              <v-autocomplete
+                variant="outlined"
+                v-model="data.categoria"
+                :rules="[() => !!data.categoria || 'Camp obligatori!']"
+                :items="this.llistat_categories"
+                label="Categoria"
+                placeholder="Escull..."
+              ></v-autocomplete>
+            </v-col>
+          </v-row>
         </v-container>
       </v-card>
       <v-sheet width="500" style="background-color: transparent">
         <v-row no-gutters>
           <v-col>
             <v-sheet class="mr-2 mt-4" style="background-color: transparent">
-              <v-btn block class="bg-white" height="60" @click="cancelar()"
+              <v-btn
+                block
+                class="bg-white"
+                height="60"
+                @click="this.$router.push('/productes')"
                 >Cancelar</v-btn
               >
             </v-sheet>
@@ -104,15 +187,24 @@ export default {
             <v-sheet class="ml-2 mt-4" style="background-color: transparent">
               <v-btn
                 block
-                class="bg-black"
+                class="bg-light-green-lighten-2"
                 height="60"
                 @click="afegirPregunta()"
-                >Afegir pregunta</v-btn
+                >Afegir producte</v-btn
               >
             </v-sheet>
           </v-col>
         </v-row>
       </v-sheet>
+
+      <v-dialog persistent v-model="dialog" width="auto">
+        <v-card>
+          <v-card-text> Tots els camps son obligatoris! </v-card-text>
+          <v-card-actions>
+            <v-btn color="red" block @click="dialog = false">Tanca</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-sheet>
   </div>
 </template>
