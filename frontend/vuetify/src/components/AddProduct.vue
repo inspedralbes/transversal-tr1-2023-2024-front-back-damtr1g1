@@ -56,7 +56,7 @@ export default {
         )
           .then((response) => response.json())
           .then((data) => {
-            //this.$router.push("/productes");
+            this.$router.push("/productes");
           });
       } else {
         console.log(this.data);
