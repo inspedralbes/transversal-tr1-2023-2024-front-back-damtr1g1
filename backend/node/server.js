@@ -7,11 +7,14 @@ const multer = require("multer");
 const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3001;
 const app = express();
+const cors = require('cors');
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
 const io = new Server(server);
 const { eliminarImatge } = require("./gestio_imatges");
+
+app.use(cors());
 
 // Configuració de la conexió a la base de dades
 var con = null;
