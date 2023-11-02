@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.tr1_takeaway.loginService.LoginApiService;
 import com.example.tr1_takeaway.loginService.LoginResponse;
 
 import retrofit2.Call;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
-                ApiService service = retrofit.create(ApiService.class);
+                LoginApiService service = retrofit.create(LoginApiService.class);
                 Call<LoginResponse> call = service.validarLogin(usuario.getText().toString(), contrasenya.getText().toString());
                 call.enqueue(new Callback<LoginResponse>() {
                     @Override

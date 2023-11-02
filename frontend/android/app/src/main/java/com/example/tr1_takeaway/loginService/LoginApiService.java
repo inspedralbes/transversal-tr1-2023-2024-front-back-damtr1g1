@@ -1,16 +1,12 @@
 package com.example.tr1_takeaway.loginService;
 
-import com.example.tr1_takeaway.loginService.LoginResponse;
-import com.example.tr1_takeaway.ui.shop.ProductDataModel;
-
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 
-public interface ApiService {
+public interface LoginApiService {
 
 
     @GET("/api/validateLogin")
@@ -19,7 +15,9 @@ public interface ApiService {
             @Query("contrasenya") String contrasenya
     );
 
-    @GET("/api/getProducts")
-    Call<List<ProductDataModel>> getProducts();
+    @GET("/api/validateLogin")
+    Call<LoginResponse> getUserDataByName(
+            @Query("nom") String nom
+    );
 }
 
