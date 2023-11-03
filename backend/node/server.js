@@ -138,7 +138,7 @@ function updateProducte(
     nom: nom,
     definicio: definicio,
     preu: preu,
-    categoria: categoria,
+    categoria_id: categoria,
     quantitat: quantitat,
   };
   const id = idProducteUpdate;
