@@ -7,7 +7,7 @@
 export default {
   data() {
     return {
-      fotopath: 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut'
+      fotopath: 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad'
     };
   },
   methods: {
@@ -24,7 +24,7 @@ export default {
           var rand = Math.random(100000);
           console.log('Response from /api/executeStatistics:', data);
         
-          this.fotopath = 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut?'+rand;
+          this.fotopath = 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad?'+rand;
          //location.reload()
           // You can update your UI or perform other actions with the response data.
         })

@@ -8,7 +8,7 @@ const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3001;
 const app = express();
 const server = http.createServer(app);
-const { spawn } = require('child_process');
+const { spawn } = require("child_process");
 
 const { Server } = require("socket.io");
 const io = new Server(server);
@@ -623,42 +623,38 @@ app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
 //Recibir la imagen de la estadistica
-app.get("/api/getImatgeEstadistiques/producteMesVenut", (req, res) => {
+app.get("/api/getImatgeEstadistiques/producteCantidad", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.sendFile(path.resolve("img_estadistiques/producteMesVenut.png"));
+  res.sendFile(path.resolve("img_estadistiques/producteCantidad.png"));
 });
 //Ejecutar archivo python
 app.get("/api/executeStatistics", callPython);
 
 function callPython(req, res) {
-  
+  const pythonProcess = spawn("python", ["./estadistiques.py"]);
 
-  const pythonProcess = spawn("python", [
-    "./estadistiques.py"
-  ]);
-
-  pythonProcess.stdout.on('data', (data) => {
+  pythonProcess.stdout.on("data", (data) => {
     // Manejar la salida del proceso Python
-    
+
     res.header("Access-Control-Allow-Origin", "*");
     //res.send(`Salida del script Python: ${data}`);
     var obj = {};
-    obj.value = data ;
+    obj.value = data;
     res.send(JSON.stringify(obj));
     console.log(`Salida del script Python: ${JSON.stringify(obj)}`);
   });
 
-  pythonProcess.stderr.on('data', (data) => {
+  pythonProcess.stderr.on("data", (data) => {
     // Manejar errores del proceso Python
     var obj = {};
-    obj.value = data ;
-    
+    obj.value = data;
+
     console.error(`Error del script Python: ${JSON.stringify(obj)}`);
     res.header("Access-Control-Allow-Origin", "*");
     res.status(500).send(`Error del script Python: ${JSON.stringify(obj)}`);
   });
 
-  pythonProcess.on('close', (code) => {
+  pythonProcess.on("close", (code) => {
     // Manejar el cierre del proceso Python
     console.log(`Proceso Python finalizado con código de salida ${code}`);
   });
