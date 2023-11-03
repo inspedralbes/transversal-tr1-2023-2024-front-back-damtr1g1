@@ -15,7 +15,7 @@ public interface LoginApiService {
             @Query("contrasenya") String contrasenya
     );
 
-    @GET("/api/validateLogin")
+    @GET("/api/getUserDataByName")
     Call<LoginResponse> getUserDataByName(
             @Query("nom") String nom
     );
