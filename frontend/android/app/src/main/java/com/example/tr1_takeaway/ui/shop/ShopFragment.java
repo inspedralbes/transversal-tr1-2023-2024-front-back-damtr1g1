@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tr1_takeaway.loginService.LoginApiService;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
 import com.example.tr1_takeaway.shopService.ShopApiService;
@@ -38,6 +38,9 @@ public class ShopFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_shop, container, false);
             Log.e("TAG", "what the fuck is a kilometer");
+
+            ShopViewModel shopViewModel =
+                    new ViewModelProvider(this).get(ShopViewModel.class);
 
             recyclerView = view.findViewById(R.id.productDisplay);
             recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
