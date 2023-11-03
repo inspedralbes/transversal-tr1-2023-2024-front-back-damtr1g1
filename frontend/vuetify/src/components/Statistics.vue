@@ -7,7 +7,8 @@
 export default {
   data() {
     return {
-      fotopath: 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad'
+      fotoQuantitats: 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad',
+      fotoQuantitatsVenudes: 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut'
     };
   },
   methods: {
@@ -24,8 +25,9 @@ export default {
           var rand = Math.random(100000);
           console.log('Response from /api/executeStatistics:', data);
         
-          this.fotopath = 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad?'+rand;
-         //location.reload()
+          this.fotoQuantitats = 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad?'+rand;
+          this.fotoQuantitatsVenudes = 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut?'+rand;
+        
           // You can update your UI or perform other actions with the response data.
         })
         .catch(error => {
@@ -62,8 +64,16 @@ export default {
           </div>
           <v-img
             height="600"
-            :src="this.fotopath"
+            :src="this.fotoQuantitats"
           >
+          </v-img>
+          <br>
+          <br>
+          <v-img
+            height="600"
+            :src="this.fotoQuantitatsVenudes"
+          >
+          
           </v-img>
           <v-container align="center" justify="center">
             <v-sheet class="ma-2" style="background: transparent">

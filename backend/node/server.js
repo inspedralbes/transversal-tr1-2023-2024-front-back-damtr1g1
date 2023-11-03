@@ -627,6 +627,11 @@ app.get("/api/getImatgeEstadistiques/producteCantidad", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.sendFile(path.resolve("img_estadistiques/producteCantidad.png"));
 });
+
+app.get("/api/getImatgeEstadistiques/producteMesVenut", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/producteMesVenut.png"));
+});
 //Ejecutar archivo python
 app.get("/api/executeStatistics", callPython);
 
