@@ -73,14 +73,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductDataModel currentItem = data.get(position);
-        holder.getProductID().setText(currentItem.getId());
+        holder.getProductID().setText(String.valueOf(currentItem.getId())); // Convertir a String si es un ID de recurso
         holder.getProductName().setText(currentItem.getNom());
         holder.getProductDefinition().setText(currentItem.getDefinicio());
-        holder.getProductPrice().setText("preu producte");
-        holder.getProductCategory().setText("categoria producte");
-        holder.getProductQuantity().setText("quantitat producte");
+        holder.getProductPrice().setText(String.valueOf(currentItem.getPreu())); // Usar el precio real del producto
+        holder.getProductCategory().setText(String.valueOf(currentItem.getCategoria_id())); // Usar la categoría real del producto
+        holder.getProductQuantity().setText(String.valueOf(currentItem.getQuantitat())); // Usar la cantidad real del producto
         //Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage); // L'imatge la pasem per picasso
     }
+
 
     @Override
     public int getItemCount() {

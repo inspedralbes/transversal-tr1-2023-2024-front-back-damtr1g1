@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -55,7 +56,7 @@ public class ShopFragment extends Fragment {
             });
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.56.1:3001")
+                    .baseUrl("http://192.168.205.249:3001")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -72,9 +73,10 @@ public class ShopFragment extends Fragment {
 
             call.enqueue(new Callback<List<ProductDataModel>>() {
                 @Override
-                public void onResponse(Call<List<ProductDataModel>> call, Response<List<ProductDataModel>> response) {
+                public void onResponse(@NonNull Call<List<ProductDataModel>> call, @NonNull Response<List<ProductDataModel>> response) {
                     if (response.isSuccessful()) {
                         List<ProductDataModel> data = response.body();
+                        assert data != null;
                         Log.d("DATA", data.toString());
                         adapter = new Adapter(data);
                         recyclerView.setAdapter(adapter);
@@ -84,7 +86,7 @@ public class ShopFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<List<ProductDataModel>> call, Throwable t) {
+                public void onFailure(@NonNull Call<List<ProductDataModel>> call, @NonNull Throwable t) {
                     Log.e("TAG", "what the fuck is a kilometer");
                 }
             });
