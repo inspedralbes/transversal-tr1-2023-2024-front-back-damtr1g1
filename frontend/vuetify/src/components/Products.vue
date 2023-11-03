@@ -13,10 +13,13 @@ export default {
   }),
   mounted() {
     window.onscroll = function () {
-      if(window.scrollY > 327) {
-        document.getElementById("search-bar").style.backgroundColor = "#9094e9"
-      }else {
-        document.getElementById("search-bar").style.backgroundColor = "transparent"
+      if (window.scrollY > 327) {
+        document.getElementById("search-bar").style.backgroundColor = "#9094e9";
+      } else {
+        try {
+          document.getElementById("search-bar").style.backgroundColor =
+            "transparent";
+        } catch (e) {}
       }
     };
     this.carregant = true;
@@ -62,7 +65,11 @@ export default {
       @click="$router.push('/')"
     ></v-btn>
     <h1 class="text-center text-h2 mt-10 font-weight-bold">Productes</h1>
-    <v-row id="search-bar" class="mt-16 mx-0" style="position: sticky; top: 0; z-index: 100; border-radius: 20px;">
+    <v-row
+      id="search-bar"
+      class="mt-16 mx-0"
+      style="position: sticky; top: 0; z-index: 100; border-radius: 20px"
+    >
       <v-col cols="2">
         <v-sheet style="background-color: transparent">
           <v-btn

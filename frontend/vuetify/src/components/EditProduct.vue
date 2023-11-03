@@ -62,20 +62,21 @@ export default {
             this.data.categoria = this.ids_categories[i];
           }
         }
-        // let formData = new FormData();
-        // formData.append("img", this.data.img);
-        // fetch(
-        //   `http://localhost:3001/api/updateProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}`,
-        //   {
-        //     method: "POST",
-        //     mode: "cors",
-        //     body: formData,
-        //   }
-        // )
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        //     //this.$router.push("/productes");
-        //   });
+        let formData = new FormData();
+        formData.append("img", this.data.img);
+        fetch(
+          `http://localhost:3001/api/updateProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}`,
+          {
+            method: "POST",
+            mode: "cors",
+            body: formData,
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            //this.$router.push("/productes");
+          });
       } else {
         this.dialog = true;
       }

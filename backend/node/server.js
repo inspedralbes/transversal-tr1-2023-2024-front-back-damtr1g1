@@ -7,15 +7,15 @@ const multer = require("multer");
 const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3001;
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-  }
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
 });
 const { eliminarImatge } = require("./gestio_imatges");
 
@@ -91,16 +91,19 @@ function selectProducte(callback) {
 
 // function select producte per id
 function selectProducteById(id, callback) {
-  con.query(`SELECT * FROM Producte WHERE id = ${id}`, (err, results, fields) => {
-    if (err) {
-      console.error("Error al realizar la consulta: " + err.message);
-      callback(err, null); // Devuelve el error en el callback
-      return;
-    }
-    const ProducteJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
+  con.query(
+    `SELECT * FROM Producte WHERE id = ${id}`,
+    (err, results, fields) => {
+      if (err) {
+        console.error("Error al realizar la consulta: " + err.message);
+        callback(err, null); // Devuelve el error en el callback
+        return;
+      }
+      const ProducteJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
 
-    callback(null, ProducteJSON); //
-  });
+      callback(null, ProducteJSON); //
+    }
+  );
 }
 
 // function eliminar productes                                  (comprobada)
@@ -369,7 +372,7 @@ app.get("/", function (req, res) {
 
 // Ruta per a validar el login
 app.get("/api/validateLogin", async (req, res) => {
-  const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
+  const usuarioSolicitado = req.query.nom; // Obté l'usuari del client
   const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
 
   await crearDBConnnection();
@@ -385,7 +388,7 @@ app.get("/api/validateLogin", async (req, res) => {
     // Verifica si hay algún usuario que coincida con la solicitud
     const usuarioEncontrado = results.find(
       (user) =>
-        user.usuario === usuarioSolicitado &&
+        user.nom === usuarioSolicitado &&
         user.contrasenya === contrasenyaSolicitada
     );
 
@@ -426,7 +429,6 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
       res.send({ message: "Afegit correctament" });
     }
   );
-
 });
 // Ruta select productes                                        (comprobada)
 app.get("/api/getProducts", async (req, res) => {
@@ -468,29 +470,35 @@ app.post("/api/deleteProduct", async (req, res) => {
   res.json({ message: "Eliminat correctament" });
 });
 // Ruta update producte                                         (comprobada)
-app.post("/api/updateProduct", async (req, res) => {
+app.post("/api/updateProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const idProducteUpdate = req.query.idProducteUpdate; // Obté la id producte del client
 
-  (imatgeNom = req.query.imatgeNom),
-    (nom = req.query.nom),
-    (definicio = req.query.definicio),
-    (preu = req.query.preu),
-    (categoria = req.query.categoria),
-    (quantitat = req.query.quantitat),
-    console.log(idProducteUpdate);
-  await crearDBConnnection();
-  await updateProducte(
-    idProducteUpdate,
-    imatgeNom,
-    nom,
-    definicio,
-    preu,
-    categoria,
-    quantitat
+  fs.rename(
+    `./img/productes/${req.file.filename}`,
+    `./img/productes/${req.query.imatgeNom}`,
+    async function () {
+      (imatgeNom = req.query.imatgeNom),
+        (nom = req.query.nom),
+        (definicio = req.query.definicio),
+        (preu = req.query.preu),
+        (categoria = req.query.categoria),
+        (quantitat = req.query.quantitat),
+        console.log(idProducteUpdate);
+      await crearDBConnnection();
+      await updateProducte(
+        idProducteUpdate,
+        imatgeNom,
+        nom,
+        definicio,
+        preu,
+        categoria,
+        quantitat
+      );
+      closeDBconnection();
+      res.json({ message: " Actualitzat" });
+    }
   );
-  closeDBconnection();
-  res.json({ message: " Actualitzat" });
 });
 // Ruta afegir categoria                                        (comprobada)
 app.post("/api/addCategoria", async (req, res) => {
@@ -664,43 +672,42 @@ app.get("/api/getImage/:img", (req, res) => {
 // Comandes:
 const ComandaStatus = ["Enviada", "Aceptada", "En curs", "Ready"];
 
-// Rebem quan algun user es conecta 
-io.on('connection', (socket) => {
-  console.log('Un cliente se ha conectado.');
+// Rebem quan algun user es conecta
+io.on("connection", (socket) => {
+  console.log("Un cliente se ha conectado.");
   // Si el client ens envia una comanda amb el seu status
-  socket.on('comandaStatus', (status) => {
+  socket.on("comandaStatus", (status) => {
     // Mirem si aquest Status existeix
     if (ComandaStatus.includes(status)) {
-      // Si existeix fem un switch per veure quina ens ha enviat 
+      // Si existeix fem un switch per veure quina ens ha enviat
       switch (status) {
         case "Enviada":
           console.log("La comanda ha sido enviada.");
-          socket.emit('comandaResponse', 'La comanda ha sido enviada.');
+          socket.emit("comandaResponse", "La comanda ha sido enviada.");
           break;
         case "Aceptada":
           console.log("La comanda ha sido aceptada.");
-          socket.emit('comandaResponse', 'La comanda ha sido aceptada.');
+          socket.emit("comandaResponse", "La comanda ha sido aceptada.");
           break;
         case "En curs":
           console.log("La comanda está en curso.");
-          socket.emit('comandaResponse', 'La comanda está en curso.');
+          socket.emit("comandaResponse", "La comanda está en curso.");
           break;
         case "Preparada":
           console.log("La comanda está acabada.");
-          socket.emit('comandaResponse', 'La comanda está acabada.');
+          socket.emit("comandaResponse", "La comanda está acabada.");
         default:
           console.log("Estado de comanda no reconocido.");
-          socket.emit('comandaResponse', 'Estado de comanda no reconocido.');
+          socket.emit("comandaResponse", "Estado de comanda no reconocido.");
       }
     } else {
-      console.log('Estado de comanda no válido.');
-      socket.emit('comandaResponse', 'Estado de comanda no válido.');
+      console.log("Estado de comanda no válido.");
+      socket.emit("comandaResponse", "Estado de comanda no válido.");
     }
   });
 
-
   // Manejo de desconexión de sockets
-  socket.on('disconnect', () => {
-    console.log('Un cliente se ha desconectado.');
+  socket.on("disconnect", () => {
+    console.log("Un cliente se ha desconectado.");
   });
 });
