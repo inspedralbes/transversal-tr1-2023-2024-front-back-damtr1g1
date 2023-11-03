@@ -410,7 +410,7 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   const preu = req.query.preu; // Obté el preu del producte
   const quantitat = req.query.quantitat; // Obté la quantitat del producte
   await crearDBConnnection(); // Creem la conexió
-  await crearProducte(imatgeNom,nom,definicio,preu,categoria,quantitat)// Inserta els productes a la DB
+  await crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat)// Inserta els productes a la DB
   await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
   closeDBconnection(); // Tanquem la conexió
   res.send({ message: "Afegit correctament" });
@@ -675,42 +675,31 @@ app.get("/api/getImage/:img", (req, res) => {
 });
 
 // Comandes:
-const ComandaStatus = ["Enviada", "Aceptada", "En curs", "Ready"];
+const ComandaStatus = ["Enviada", "Acceptada", "En curs", "Preparada"];
 
-// Rebem quan algun user es conecta 
 io.on('connection', (socket) => {
   console.log('Un cliente se ha conectado.');
-  // Si el client ens envia una comanda amb el seu status
-  socket.on('comandaStatus', (status) => {
-    // Mirem si aquest Status existeix
-    if (ComandaStatus.includes(status)) {
-      // Si existeix fem un switch per veure quina ens ha enviat 
-      switch (status) {
-        case "Enviada":
-          console.log("La comanda ha sido enviada.");
-          socket.emit('comandaResponse', 'La comanda ha sido enviada.');
-          break;
-        case "Aceptada":
-          console.log("La comanda ha sido aceptada.");
-          socket.emit('comandaResponse', 'La comanda ha sido aceptada.');
-          break;
-        case "En curs":
-          console.log("La comanda está en curso.");
-          socket.emit('comandaResponse', 'La comanda está en curso.');
-          break;
-        case "Preparada":
-          console.log("La comanda está acabada.");
-          socket.emit('comandaResponse', 'La comanda está acabada.');
-        default:
-          console.log("Estado de comanda no reconocido.");
-          socket.emit('comandaResponse', 'Estado de comanda no reconocido.');
-      }
-    } else {
-      console.log('Estado de comanda no válido.');
-      socket.emit('comandaResponse', 'Estado de comanda no válido.');
-    }
-  });
 
+  socket.on('comandaStatus', (status) => {
+    if (status === "Enviada") {
+      console.log("Ha arribat una comanda del client"); // Resposta per al servidor
+      socket.emit('comandaResponse', "La comanda s'ha enviat"); // Resposta per al client
+      io.emit('comandaEnviada', "Ha arribat una comanda"); // Resposta per al amdin
+    } else {
+      console.log("L'Estat de la comanda no es valid.");
+      socket.emit('comandaResponse', "L'Estat de la comanda no es valid.");
+    }
+  })
+
+  socket.on('comandaAcceptada', (status) => {
+    if (status === "Acceptada") {
+    console.log('La comanda ha sigut acceptada'); // Resposta per al servidor
+    io.emit('comandaAcceptada', 'La comanda ha sigut acceptada'); // Resposta per al client
+    } else {
+      console.log("L'Estat de la comanda no es valid.");
+      socket.emit('comandaAcceptada', "L'Estat de la comanda no es valid.");
+    }
+  })
 
   // Manejo de desconexión de sockets
   socket.on('disconnect', () => {
