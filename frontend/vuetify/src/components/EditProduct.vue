@@ -83,8 +83,7 @@ export default {
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
-            //this.$router.push("/productes");
+            this.$router.push("/productes");
           });
       } else {
         this.dialog = true;
@@ -119,7 +118,7 @@ export default {
     </h1>
     <v-sheet class="grid" align="center" style="background-color: transparent">
       <v-card
-        class="bg-grey-lighten-2"
+        style="background-color: #ced4f7"
         width="500"
         height="600"
         elevation="6"
