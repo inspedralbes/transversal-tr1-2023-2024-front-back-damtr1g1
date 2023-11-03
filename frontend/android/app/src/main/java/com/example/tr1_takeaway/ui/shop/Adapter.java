@@ -24,6 +24,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ProductID = itemView.findViewById(R.id.productID);
             ProductName = itemView.findViewById(R.id.productName);
             ProductDefinition = itemView.findViewById(R.id.productDescription);
             ProductPrice = itemView.findViewById(R.id.productPrice);
@@ -72,9 +73,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductDataModel currentItem = data.get(position);
-        holder.getProductID().setText("ID producte");
-        holder.getProductName().setText("nom producte");
-        holder.getProductDefinition().setText("descripcio producte");
+        holder.getProductID().setText(currentItem.getId());
+        holder.getProductName().setText(currentItem.getNom());
+        holder.getProductDefinition().setText(currentItem.getDefinicio());
         holder.getProductPrice().setText("preu producte");
         holder.getProductCategory().setText("categoria producte");
         holder.getProductQuantity().setText("quantitat producte");

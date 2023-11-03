@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -28,22 +29,30 @@ public class ShopFragment extends Fragment {
 
     private FragmentShopBinding binding;
 
-    public class MyFragment extends Fragment {
-
-        private RecyclerView recyclerView;
+        private RecyclerView productDisplay;
         private Adapter adapter;
 
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_shop, container, false);
-            Log.e("TAG", "what the fuck is a kilometer");
+            Log.d("TAG", "what the fuck is a kilometer");
 
             ShopViewModel shopViewModel =
                     new ViewModelProvider(this).get(ShopViewModel.class);
 
-            recyclerView = view.findViewById(R.id.productDisplay);
-            recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
+            productDisplay = view.findViewById(R.id.productDisplay);
+            productDisplay.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
+
+            ViewTreeObserver vto = productDisplay.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    // The view is now ready; you can initialize your RecyclerView here.
+                    // Remove the listener if it's no longer needed.
+                    productDisplay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://192.168.56.1:3001")
@@ -52,7 +61,7 @@ public class ShopFragment extends Fragment {
 
             ShopApiService apiService = retrofit.create(ShopApiService.class);
             // Call the method to fetch data from Retrofit
-            fetchDataFromApi(apiService, recyclerView);
+            fetchDataFromApi(apiService, productDisplay);
 
             return view;
         }
@@ -66,6 +75,7 @@ public class ShopFragment extends Fragment {
                 public void onResponse(Call<List<ProductDataModel>> call, Response<List<ProductDataModel>> response) {
                     if (response.isSuccessful()) {
                         List<ProductDataModel> data = response.body();
+                        Log.d("DATA", data.toString());
                         adapter = new Adapter(data);
                         recyclerView.setAdapter(adapter);
                     } else {
@@ -79,7 +89,6 @@ public class ShopFragment extends Fragment {
                 }
             });
         }
-    }
 
 
     @Override
