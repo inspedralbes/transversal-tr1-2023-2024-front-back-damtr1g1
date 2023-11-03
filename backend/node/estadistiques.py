@@ -28,6 +28,7 @@ def obtener_productos_ordenados_cantidad(cursor):
     cursor.execute(consulta)
     #si pongo fetchone coge solo el primero
     return cursor.fetchall()
+
 def obtener_productos_vendidos(cursor):
     """Obtiene los productos vendidos"""
     consulta = """
@@ -59,6 +60,7 @@ def graficoCantidadVendida(df,filename):
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
+    
 def graficoCantidad(df, filename):
     """Crea un gráfico de barras a partir de un DataFrame."""
     plt.figure(figsize=(10, 6))
@@ -77,7 +79,30 @@ def graficoCantidad(df, filename):
     plt.savefig(filename)
     plt.close()
 
+def obtenir_HoresComanda(cursor):
+    # Consulta SQL para obtener los datos de las comandas
+    consulta = """
+    SELECT id, usuari, id_carret, data_comanda
+    FROM Comanda
+    """
+    cursor.execute(consulta)
+    return cursor.fetchall()
 
+def graficHoresComanda(df,filename,hora_mas_comun):
+    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    hora_counts = df['hora_creacion'].value_counts().sort_index()
+    plt.bar(hora_counts.index, hora_counts.values)
+    plt.title(f'Comandas por hora de creación ({fecha_actual}) ')
+    plt.xlabel(f'Hora del día mas comun ({hora_mas_comun})')
+    plt.ylabel('Número de comandas')
+    plt.xticks(range(24))  # Etiquetas para las 24 horas
+    plt.savefig(filename)
+    plt.close()
+    
+
+    
+
+    
 def CantidaRestante():
     conexion, cursor = establecer_conexion()
     resultados = obtener_productos_ordenados_cantidad(cursor)
@@ -98,10 +123,28 @@ def CantidadVendida():
     df = pd.DataFrame(resultados, columns=['producto', 'cantidad_vendida'])
     filename = './img_estadistiques/producteMesVenut.png'
     graficoCantidadVendida(df,filename)
-   
+    
+def HoraComun():
+    conexion, cursor = establecer_conexion()
+    resultados = obtenir_HoresComanda(cursor)
+    print(resultados)
+    conexion.close()
+    
+    df = pd.DataFrame(resultados, columns=['id', 'usuari', 'id_carret', 'data_comanda'])
+    df['data_comanda'] = pd.to_datetime(df['data_comanda'])
+
+    # Extraer la hora de 'data_comanda'
+    df['hora_creacion'] = df['data_comanda'].dt.hour
+
+    # Calcular la hora más común
+    hora_mas_comun = df['hora_creacion'].mode().values[0]
+    filename = './img_estadistiques/HoraMesComu.png'
+    graficHoresComanda(df,filename,hora_mas_comun)
+    
 def main():
     CantidaRestante()
     CantidadVendida()
+    HoraComun()
    
 main()
 

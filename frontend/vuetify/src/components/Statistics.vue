@@ -8,7 +8,8 @@ export default {
   data() {
     return {
       fotoQuantitats: 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad',
-      fotoQuantitatsVenudes: 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut'
+      fotoQuantitatsVenudes: 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut',
+      fotoHoraComu: 'http://localhost:3001/api/getImatgeEstadistiques/HoraMesComu?'
     };
   },
   methods: {
@@ -27,6 +28,7 @@ export default {
         
           this.fotoQuantitats = 'http://localhost:3001/api/getImatgeEstadistiques/producteCantidad?'+rand;
           this.fotoQuantitatsVenudes = 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut?'+rand;
+          this.fotoHoraComu = 'http://localhost:3001/api/getImatgeEstadistiques/HoraMesComu?'+rand;
         
           // You can update your UI or perform other actions with the response data.
         })
@@ -72,8 +74,14 @@ export default {
           <v-img
             height="600"
             :src="this.fotoQuantitatsVenudes"
-          >
-          
+          >          
+          </v-img>
+          <br>
+          <br>
+          <v-img
+            height="600"
+            :src="this.fotoHoraComu"
+          >          
           </v-img>
           <v-container align="center" justify="center">
             <v-sheet class="ma-2" style="background: transparent">
