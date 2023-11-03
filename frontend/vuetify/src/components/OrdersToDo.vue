@@ -1,5 +1,4 @@
-<script setup>
-</script>
+<script setup></script>
 
 <script>
 export default {
@@ -13,44 +12,47 @@ export default {
 </script>
 
 <template>
-  <v-col sm="6" md="4" lg="3" cols="12">
-    <v-card
-      :id="id"
-      style="background: linear-gradient(#9094e9, #b0b8f1)"
-      class="text-center"
-      elevation="4"
-      rounded="xl"
-    >
-      <v-card-title>
-        <div
-          class="font-weight-bold text-center text-h3 py-6 text-truncate"
-          style="color: #3d3976"
+  <div>
+    <v-row class="pl-3 pt-2">
+      <v-col
+        cols="2"
+        align="center"
+        class="pa-2"
+        style="
+          background-color: #b0b8f1;
+          max-height: 500px;
+          max-width: 120px;
+          overflow-y: auto;
+          border-right: solid 1px rgba(90, 90, 90, 0.466);
+        "
+      >
+        <v-list-item
+          v-for="i in 5"
+          class="mb-2"
+          style="background-color: #7875df; width: 100px; height: 100px"
+          rounded="xl"
+          link
         >
-          Awa
-        </div>
-        <v-img
-          height="200"
-          src="'/src/assets/img/order_icon.png'"
-          style="border-top: black"
-        >
-        </v-img>
-        <v-container align="center" justify="center">
-          <v-sheet class="ma-2" style="background: transparent">
-            <v-btn
-              class="my-4"
-              height="50px"
-              width="170px"
-              rounded
-              @click="animation()"
-              style="
-                background: linear-gradient(to left, #e8321a, #ff7a68);
-                color: white;
-              "
-              >Entra
-            </v-btn>
-          </v-sheet>
-        </v-container>
-      </v-card-title>
-    </v-card>
-  </v-col>
+          <v-row align="center">
+            <v-col cols="4">
+              {{ i }}
+            </v-col>
+            <v-divider vertical class="border-opacity-100"></v-divider>
+            <v-col>
+              <div>
+                <p>
+                  3
+                  <v-icon size="x-small">mdi-food-drumstick</v-icon>
+                </p>
+              </div>
+              <p>13:55</p>
+            </v-col>
+          </v-row>
+        </v-list-item>
+      </v-col>
+      <v-col cols="16">
+        <v-switch v-model="showMessages" label="Show messages"></v-switch>
+      </v-col>
+    </v-row>
+  </div>
 </template>

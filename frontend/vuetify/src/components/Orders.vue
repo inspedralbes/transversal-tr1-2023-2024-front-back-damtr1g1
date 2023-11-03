@@ -1,52 +1,43 @@
 <script setup>
+import OrdersToDo from "./OrdersToDo.vue";
 </script>
 
 <script>
+export default {
+  data: () => ({
+    tab: null,
+  }),
+};
 </script>
 
 <template>
   <v-container class="order-container">
-    <h1 class="text-center text-h2 my-16 pt-10 font-weight-bold">
-      Comandes
-    </h1>
+    <v-btn
+      variant="tonal"
+      icon="mdi-arrow-left"
+      class="mt-5"
+      @click="$router.push('/')"
+    ></v-btn>
+    <h1 class="text-center text-h2 my-10 mb-16 font-weight-bold">Comandes</h1>
     <v-container>
       <v-card
-        style="
-          background: linear-gradient(#9094e9, #b0b8f1);
-          
-        "
+        style="background: linear-gradient(#9094e9, #b0b8f1)"
         class="text-center"
         elevation="4"
         rounded="xl"
       >
-        <v-card-title>
-          <div
-            class="font-weight-bold text-center text-h3 py-6 text-truncate"
-            style="color: #3d3976"
-          >
-            Les comandes
-          </div>
-          <v-img
-            height="200"
-            src="/src/assets/img/order_icon.png"
-          >
-          </v-img>
-          <v-container align="center" justify="center">
-            <v-sheet class="ma-2" style="background: transparent">
-              <v-btn
-                class="my-4"
-                height="50px"
-                width="170px"
-                rounded
-                style="
-                  background: linear-gradient(to left, #e8321a, #ff7a68);
-                  color: white;
-                "
-                >Entra
-              </v-btn>
-            </v-sheet>
-          </v-container>
-        </v-card-title>
+        <v-tabs v-model="tab" fixed-tabs bg-color="primary">
+          <v-tab value="one" style="max-width: 100%">Comandes a fer</v-tab>
+          <v-tab value="two" style="max-width: 100%">Comandes fetes</v-tab>
+        </v-tabs>
+
+        <v-card-text class="pa-0">
+          <v-window v-model="tab">
+            <v-window-item value="one"><OrdersToDo /></v-window-item>
+
+            <v-window-item value="two"> Two </v-window-item>
+          </v-window>
+        </v-card-text>
       </v-card>
     </v-container>
   </v-container>
