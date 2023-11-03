@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import mysql.connector
+from datetime import datetime
 
 
 def establecer_conexion():
@@ -25,11 +26,17 @@ def obtener_productos_ordenados_cantidad(cursor):
     #si pongo fetchone coge solo el primero
     return cursor.fetchall()
 
-def crear_grafico(df,filename):
+def crear_grafico(df, filename):
     """Crea un gráfico de barras a partir de un DataFrame."""
     plt.figure(figsize=(10, 6))
     plt.bar(df['nom'], df['quantitat'])
-    plt.title('Cantidad de unidades restantes por producto')
+    
+    # Obtiene la fecha actual
+    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    # Utiliza la fecha actual en el título del gráfico
+    plt.title(f'Cantidad de unidades restantes por producto ({fecha_actual})')
+    
     plt.xticks(rotation=45)
     plt.xlabel('Producto')
     plt.ylabel('Cantidad')
