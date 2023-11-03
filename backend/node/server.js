@@ -43,6 +43,20 @@ function closeDBconnection() {
   });
 }
 
+//Buscar usuari per nom
+function selectUserDataByName(nom, callback) {
+    con.query(`SELECT * FROM Usuaris WHERE nom = ${nom}`, (err, results, fields) => {
+      if (err) {
+        console.error("Error al realizar la consulta: " + err.message);
+        callback(err, null); // Devuelve el error en el callback
+        return;
+      }
+      const UsuariJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
+  
+      callback(null, UsuariJSON); //
+    });
+  }
+
 // falta fer lo dels fixers d'imatges                           (comprobada)
 function crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat) {
   const nouProducte = {
@@ -391,6 +405,20 @@ app.get("/api/validateLogin", async (req, res) => {
   });
   closeDBconnection();
 });
+
+app.get("/api/getUserDataByName", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    await crearDBConnnection(); // Creem la conexió
+    await selectUserDataByName(req.query.nom, (err, UsuariJSON) => {
+      if (err) {
+        console.error("Error: " + err);
+      } else {
+        res.json(JSON.parse(UsuariJSON));
+      }
+    });
+  
+    await closeDBconnection(); // Tanquem la conexió
+  });
 // Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
