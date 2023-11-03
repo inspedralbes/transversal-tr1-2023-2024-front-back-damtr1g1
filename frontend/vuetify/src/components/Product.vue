@@ -20,7 +20,7 @@ export default {
 };
 </script>
 <template>
-  <v-card elevation="4">
+  <v-card elevation="4" rounded="xl">
     <v-card-title>
       <div class="font-weight-bold ms-1 mb-2 text-truncate">
         {{ data.nom }}
@@ -50,7 +50,7 @@ export default {
           >
         </v-col>
       </v-row>
-      <div style="border-bottom: 1px solid #ccc; margin: 15px 0"></div>
+      <v-divider class="border-opacity-25 my-4"></v-divider>
       <v-row no-gutters>
         <v-col>
           <v-sheet class="mx-2">

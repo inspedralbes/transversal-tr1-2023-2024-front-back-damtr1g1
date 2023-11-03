@@ -91,7 +91,7 @@ export default {
     </h1>
     <v-sheet class="grid" align="center" style="background-color: transparent">
       <v-card
-        class="bg-grey-lighten-2"
+        style="background-color: #ced4f7"
         width="500"
         height="600"
         elevation="6"
