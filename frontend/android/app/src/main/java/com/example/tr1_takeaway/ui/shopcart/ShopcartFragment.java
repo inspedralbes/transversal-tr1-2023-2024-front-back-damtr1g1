@@ -25,9 +25,8 @@ public class ShopcartFragment extends Fragment {
 
 
         binding = FragmentShopcartBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override

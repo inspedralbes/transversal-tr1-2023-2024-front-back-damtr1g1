@@ -22,8 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
-    EditText usuario;
-    EditText contrasenya;
+    EditText nom, contrasenya;
 
     public final static String EXTRA_USERNAME_TEXT = "USERNAME: ";
 
@@ -36,48 +35,51 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         loginButton = findViewById(R.id.loginButton);
-        usuario = findViewById(R.id.usernameText);
+        nom = findViewById(R.id.usernameText);
         contrasenya = findViewById(R.id.passwordText);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.56.1:3001")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.205.249:3001")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        LoginApiService service = retrofit.create(LoginApiService.class);
 
-                LoginApiService service = retrofit.create(LoginApiService.class);
-                Call<LoginResponse> call = service.validarLogin(usuario.getText().toString(), contrasenya.getText().toString());
-                call.enqueue(new Callback<LoginResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+        loginButton.setOnClickListener(view -> {
 
-                        if (response.isSuccessful()) {
-                            LoginResponse booleanResponse = response.body();
-                            if (booleanResponse != null) {
-                                boolean resultado = LoginResponse.isLoginBool();
-                                Log.d("TAG", "El resultado de la validación de inicio de sesión es: " + resultado);
+            String UsernameText = nom.getText().toString();
+            String UserPasswordText = contrasenya.getText().toString();
+
+            Call<LoginResponse> call = service.validarLogin(UsernameText, UserPasswordText);
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+                    if (response.isSuccessful()) {
+                        LoginResponse booleanResponse = response.body();
+                        if (booleanResponse != null) {
+                            boolean resultado = LoginResponse.isLoginBool();
+                            Log.d("TAG", "El resultado de la validación de inicio de sesión es: " + resultado);
+                            if(resultado) {
                                 Bundle extras = new Bundle();
                                 secondScreen = new Intent(MainActivity.this, ShopActivity.class);
-                                extras.putString(EXTRA_USERNAME_TEXT, usuario.getText().toString());
+                                extras.putString(EXTRA_USERNAME_TEXT, nom.getText().toString());
                                 extras.putString(EXTRA_PASSWORD_TEXT, contrasenya.getText().toString());
                                 secondScreen.putExtras(extras);
                                 startActivity(secondScreen);
-
+                            } else{
+                                Log.e("TAG", "Error al iniciar");
                             }
-                        } else {
-                            Log.e("TAG", "Error en la solicitud");
                         }
+                    } else {
+                        Log.e("TAG", "Error en la solicitud");
                     }
+                }
+                @Override
+                public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
+                    Log.e("TAG", "Error en la solicitud: " + t.getMessage());
+                    t.printStackTrace(); // Imprimir el seguimiento de la pila para obtener más detalles sobre el error
+                }
+            });
 
-                    @Override
-                    public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
-                        Log.e("TAG", "Error en la solicitud: " + t.getMessage());
-                    }
-                });
-
-            }
         });
 
 
