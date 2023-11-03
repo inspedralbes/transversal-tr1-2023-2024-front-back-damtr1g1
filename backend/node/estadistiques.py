@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import mysql.connector
+import seaborn as sns
+
 from datetime import datetime
 
 
@@ -88,14 +90,31 @@ def obtenir_HoresComanda(cursor):
     cursor.execute(consulta)
     return cursor.fetchall()
 
-def graficHoresComanda(df,filename,hora_mas_comun):
+def graficHoresComanda(df, filename, hora_mas_comun):
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     hora_counts = df['hora_creacion'].value_counts().sort_index()
-    plt.bar(hora_counts.index, hora_counts.values)
-    plt.title(f'Comandas por hora de creación ({fecha_actual}) ')
-    plt.xlabel(f'Hora del día mas comun ({hora_mas_comun})')
-    plt.ylabel('Número de comandas')
-    plt.xticks(range(24))  # Etiquetas para las 24 horas
+    
+    # Crear un gráfico de barras con puntas redondas y color personalizado
+    plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
+    
+    # Configuración de Seaborn para el color de las barras y otras características
+    sns.set(style="whitegrid", rc={'axes.facecolor': '#f3f1ff'})
+    
+    ax = sns.barplot(x=hora_counts.index, y=hora_counts.values, color='#9094e9', capstyle='round')
+    
+    plt.title(f'Comandas por hora de creación ({fecha_actual})', fontsize=16)
+    plt.xlabel(f'Hora del día más común ({hora_mas_comun})', fontsize=14)
+    plt.ylabel('Número de comandas', fontsize=14)
+    plt.xticks(range(24), fontsize=12)  # Etiquetas para las 24 horas
+    
+    # Rotar las etiquetas del eje x para mayor legibilidad
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
+    
+    # Eliminar la cuadrícula horizontal
+    sns.despine(left=True, bottom=True)
+    
+    # Guardar la figura en un archivo
+    plt.tight_layout()
     plt.savefig(filename)
     plt.close()
     
