@@ -7,11 +7,19 @@ const multer = require("multer");
 const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3001;
 const app = express();
+const cors = require('cors');
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }
+});
 const { eliminarImatge } = require("./gestio_imatges");
+
+app.use(cors());
 
 // Configuració de la conexió a la base de dades
 var con = null;
@@ -423,19 +431,6 @@ app.get("/api/getUserDataByName", async (req, res) => {
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
 
-  const imatgeNom = req.query.imatgeNom; // Obté la imatge
-  const categoria = req.query.categoria; // Obté la categoria del producte
-  const definicio = req.query.definicio; // Obté la definicio del producte
-  const nom = req.query.nom; // Obté el nom del producte
-  const preu = req.query.preu; // Obté el preu del producte
-  const quantitat = req.query.quantitat; // Obté la quantitat del producte
-  await crearDBConnnection(); // Creem la conexió
-  await crearProducte(imatgeNom,nom,definicio,preu,categoria,quantitat)// Inserta els productes a la DB
-  await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
-  closeDBconnection(); // Tanquem la conexió
-  res.send({ message: "Afegit correctament" });
-
-  let newFileName = req.query.imatgeNom;
   fs.rename(
     `./img/productes/${req.file.filename}`,
     `./img/productes/${req.query.imatgeNom}`,
