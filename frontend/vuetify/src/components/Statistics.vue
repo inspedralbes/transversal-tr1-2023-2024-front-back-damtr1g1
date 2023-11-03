@@ -21,10 +21,11 @@ export default {
         })
         .then(data => {
           // Handle a successful response here
+          var rand = Math.random(100000);
           console.log('Response from /api/executeStatistics:', data);
-          this.fotopath=""
-          this.fotopath = 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut';
-          location.reload()
+        
+          this.fotopath = 'http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut?'+rand;
+         //location.reload()
           // You can update your UI or perform other actions with the response data.
         })
         .catch(error => {

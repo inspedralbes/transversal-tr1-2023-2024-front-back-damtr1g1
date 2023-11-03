@@ -624,6 +624,7 @@ app.get("/api/getImage/:img", (req, res) => {
 });
 //Recibir la imagen de la estadistica
 app.get("/api/getImatgeEstadistiques/producteMesVenut", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
   res.sendFile(path.resolve("img_estadistiques/producteMesVenut.png"));
 });
 //Ejecutar archivo python
@@ -638,14 +639,23 @@ function callPython(req, res) {
 
   pythonProcess.stdout.on('data', (data) => {
     // Manejar la salida del proceso Python
-    console.log(`Salida del script Python: ${data}`);
-    res.send(`Salida del script Python: ${data}`);
+    
+    res.header("Access-Control-Allow-Origin", "*");
+    //res.send(`Salida del script Python: ${data}`);
+    var obj = {};
+    obj.value = data ;
+    res.send(JSON.stringify(obj));
+    console.log(`Salida del script Python: ${JSON.stringify(obj)}`);
   });
 
   pythonProcess.stderr.on('data', (data) => {
     // Manejar errores del proceso Python
-    console.error(`Error del script Python: ${data}`);
-    res.status(500).send(`Error del script Python: ${data}`);
+    var obj = {};
+    obj.value = data ;
+    
+    console.error(`Error del script Python: ${JSON.stringify(obj)}`);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(500).send(`Error del script Python: ${JSON.stringify(obj)}`);
   });
 
   pythonProcess.on('close', (code) => {
