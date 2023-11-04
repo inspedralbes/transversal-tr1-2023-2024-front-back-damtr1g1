@@ -9,6 +9,7 @@ const PORT = 3001;
 const app = express();
 const cors = require("cors");
 const server = http.createServer(app);
+const { spawn } = require("child_process");
 
 const { Server } = require("socket.io");
 const io = new Server(server, {
@@ -668,46 +669,51 @@ server.listen(PORT, function () {
 app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
-
-// Comandes:
-const ComandaStatus = ["Enviada", "Aceptada", "En curs", "Ready"];
-
-// Rebem quan algun user es conecta
-io.on("connection", (socket) => {
-  console.log("Un cliente se ha conectado.");
-  // Si el client ens envia una comanda amb el seu status
-  socket.on("comandaStatus", (status) => {
-    // Mirem si aquest Status existeix
-    if (ComandaStatus.includes(status)) {
-      // Si existeix fem un switch per veure quina ens ha enviat
-      switch (status) {
-        case "Enviada":
-          console.log("La comanda ha sido enviada.");
-          socket.emit("comandaResponse", "La comanda ha sido enviada.");
-          break;
-        case "Aceptada":
-          console.log("La comanda ha sido aceptada.");
-          socket.emit("comandaResponse", "La comanda ha sido aceptada.");
-          break;
-        case "En curs":
-          console.log("La comanda está en curso.");
-          socket.emit("comandaResponse", "La comanda está en curso.");
-          break;
-        case "Preparada":
-          console.log("La comanda está acabada.");
-          socket.emit("comandaResponse", "La comanda está acabada.");
-        default:
-          console.log("Estado de comanda no reconocido.");
-          socket.emit("comandaResponse", "Estado de comanda no reconocido.");
-      }
-    } else {
-      console.log("Estado de comanda no válido.");
-      socket.emit("comandaResponse", "Estado de comanda no válido.");
-    }
-  });
-
-  // Manejo de desconexión de sockets
-  socket.on("disconnect", () => {
-    console.log("Un cliente se ha desconectado.");
-  });
+//Recibir la imagen de la estadistica
+app.get("/api/getImatgeEstadistiques/producteCantidad", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/producteCantidad.png"));
 });
+
+app.get("/api/getImatgeEstadistiques/producteMesVenut", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/producteMesVenut.png"));
+});
+
+app.get("/api/getImatgeEstadistiques/HoraMesComu", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/HoraMesComu.png"));
+});
+
+//Ejecutar archivo python
+app.get("/api/executeStatistics", callPython);
+
+function callPython(req, res) {
+  const pythonProcess = spawn("python", ["./estadistiques.py"]);
+
+  pythonProcess.stdout.on("data", (data) => {
+    // Manejar la salida del proceso Python
+
+    res.header("Access-Control-Allow-Origin", "*");
+    //res.send(`Salida del script Python: ${data}`);
+    var obj = {};
+    obj.value = data;
+    res.send(JSON.stringify(obj));
+    console.log(`Salida del script Python: ${JSON.stringify(obj)}`);
+  });
+
+  pythonProcess.stderr.on("data", (data) => {
+    // Manejar errores del proceso Python
+    var obj = {};
+    obj.value = data;
+
+    console.error(`Error del script Python: ${JSON.stringify(obj)}`);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(500).send(`Error del script Python: ${JSON.stringify(obj)}`);
+  });
+
+  pythonProcess.on("close", (code) => {
+    // Manejar el cierre del proceso Python
+    console.log(`Proceso Python finalizado con código de salida ${code}`);
+  });
+}
