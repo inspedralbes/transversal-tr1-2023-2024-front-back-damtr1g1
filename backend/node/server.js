@@ -749,6 +749,7 @@ io.on('connection', (socket) => {
     }
   })
 
+  
   // Manejo de desconexión de sockets
   socket.on('disconnect', () => {
     console.log('Un cliente se ha desconectado.');
