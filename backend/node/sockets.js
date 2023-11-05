@@ -3,7 +3,7 @@
   io.on('connection', (socket) => {
     console.log('Un usuario se ha conectado');
 
-    const data = {
+    let data = {
       comandes: [
         {
           comanda: {
@@ -28,6 +28,12 @@
     };
 
     socket.emit('json', data); // Envia el JSON al cliente cuando se conecta
+    
+    // socket.on('enviarComanda', (comanda) => {
+    //   data.comandes.push(comanda);
+    //   console.log(data);
+    //   socket.emit('json', data);
+    // })
   });
 }
 

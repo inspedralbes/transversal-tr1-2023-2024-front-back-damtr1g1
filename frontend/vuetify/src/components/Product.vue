@@ -1,5 +1,5 @@
 <script setup>
-import ModalBorrar from "./ModalBorrar.vue";
+import DeleteDialog from "./DeleteDialog.vue";
 </script>
 
 <script>
@@ -65,7 +65,7 @@ export default {
         </v-col>
         <v-col>
           <v-sheet class="mx-2">
-            <ModalBorrar :data="data" />
+            <DeleteDialog :data="data" />
           </v-sheet>
         </v-col>
       </v-row>
