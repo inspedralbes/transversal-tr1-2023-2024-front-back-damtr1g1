@@ -10,6 +10,7 @@ const app = express();
 const cors = require("cors");
 const server = http.createServer(app);
 const { spawn } = require("child_process");
+const { funcion1, funcion2 } = require('./sockets.js');
 
 const { Server } = require("socket.io");
 const io = new Server(server, {
@@ -717,3 +718,4 @@ function callPython(req, res) {
     console.log(`Proceso Python finalizado con código de salida ${code}`);
   });
 }
+
