@@ -10,7 +10,7 @@ const app = express();
 const cors = require("cors");
 const server = http.createServer(app);
 const { spawn } = require("child_process");
-const { funcion1, funcion2 } = require('./sockets.js');
+const { EnviarJson } = require('./sockets.js');
 
 const { Server } = require("socket.io");
 const io = new Server(server, {
@@ -19,9 +19,11 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
 });
-const { eliminarImatge } = require("./gestio_imatges");
+
 
 app.use(cors());
+
+EnviarJson(io);
 
 // Configuració de la conexió a la base de dades
 var con = null;
@@ -52,6 +54,8 @@ function closeDBconnection() {
     console.log("Conexión cerrada exitosamente.");
   });
 }
+
+
 
 // falta fer lo dels fixers d'imatges                           (comprobada)
 function crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat) {
