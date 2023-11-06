@@ -78,7 +78,7 @@ export default {
                 >
                   Productes Restants
                 </div>
-                <v-dialog v-model="dialog1" width="800">
+                <v-dialog v-model="dialog1" width="1200">
                   <template v-slot:activator="{ props }">
                     <v-card
                       class="image-card"
@@ -96,7 +96,7 @@ export default {
                     </v-card>
                   </template>
                   <v-card>
-                    <v-img height="480" :src="this.fotoQuantitats"></v-img>
+                    <v-img height="auto" :src="this.fotoQuantitats"></v-img>
                   </v-card>
                 </v-dialog>
               </v-col>
@@ -107,7 +107,7 @@ export default {
                 >
                 Unitats Venudes
                 </div>
-                <v-dialog v-model="dialog2" width="800">
+                <v-dialog v-model="dialog2" width="1200">
                   <template v-slot:activator="{ props }">
                     <v-card
                       class="image-card"
@@ -129,7 +129,7 @@ export default {
                   </template>
                   <v-card>
                     <v-img
-                      height="480"
+                      height="auto"
                       :src="this.fotoQuantitatsVenudes"
                     ></v-img>
                   </v-card>
@@ -142,7 +142,7 @@ export default {
                 >
                   Hores Comunes
                 </div>
-                <v-dialog v-model="dialog3" width="800">
+                <v-dialog v-model="dialog3" width="1200">
                   <template v-slot:activator="{ props }">
                     <v-card
                       class="image-card"
@@ -160,7 +160,7 @@ export default {
                     </v-card>
                   </template>
                   <v-card>
-                    <v-img height="480" :src="this.fotoHoraComu"></v-img>
+                    <v-img height="auto" :src="this.fotoHoraComu"></v-img>
                   </v-card>
                 </v-dialog>
               </v-col>
