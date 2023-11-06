@@ -1,6 +1,5 @@
-package com.example.tr1_takeaway.ui.shop;
+package com.example.tr1_takeaway.ui.shopcart;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,46 +10,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private final List<ProductDataModel> data;
+public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHolder> {
+    private final List<ShopcartProductDataModel> data;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView ProductID, ProductName, ProductDefinition, ProductPrice, ProductCategory, ProductQuantity;
+        public TextView ProductName, ProductPrice, ProductQuantity;
         public ImageView ProductImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ProductID = itemView.findViewById(R.id.productID);
-            ProductName = itemView.findViewById(R.id.productName);
-            ProductDefinition = itemView.findViewById(R.id.productDescription);
-            ProductPrice = itemView.findViewById(R.id.productPrice);
-            ProductCategory = itemView.findViewById(R.id.productCategory);
-            ProductQuantity = itemView.findViewById(R.id.productQuantity);
-            ProductImage = itemView.findViewById(R.id.productImage);
+            ProductName = itemView.findViewById(R.id.shopcartProductName);
+            ProductPrice = itemView.findViewById(R.id.shopcartProductPrice);
+            ProductQuantity = itemView.findViewById(R.id.shopcartProductQuantity);
+            ProductImage = itemView.findViewById(R.id.shopcartProductImage);
         }
 
-        public TextView getProductID() {
-            return ProductID;
-        }
 
         public TextView getProductName() {
             return ProductName;
         }
 
-        public TextView getProductDefinition() {
-            return ProductDefinition;
-        }
-
         public TextView getProductPrice() {
             return ProductPrice;
-        }
-
-        public TextView getProductCategory() {
-            return ProductCategory;
         }
 
         public TextView getProductQuantity() {
@@ -58,7 +42,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         }
     }
 
-    public Adapter(List<ProductDataModel> data) {
+    public ShopcartAdapter(List<ShopcartProductDataModel> data) {
         this.data = data;
 
     }
@@ -72,12 +56,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductDataModel currentItem = data.get(position);
-        holder.getProductID().setText(String.valueOf(currentItem.getId())); // Convertir a String si es un ID de recurso
+        ShopcartProductDataModel currentItem = data.get(position);
         holder.getProductName().setText(currentItem.getNom());
-        holder.getProductDefinition().setText(currentItem.getDefinicio());
         holder.getProductPrice().setText(String.valueOf(currentItem.getPreu())); // Usar el precio real del producto
-        holder.getProductCategory().setText(String.valueOf(currentItem.getCategoria_id())); // Usar la categoría real del producto
         holder.getProductQuantity().setText(String.valueOf(currentItem.getQuantitat())); // Usar la cantidad real del producto
         //Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage); // L'imatge la pasem per picasso
     }
