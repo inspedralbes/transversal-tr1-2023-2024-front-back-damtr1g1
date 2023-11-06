@@ -58,6 +58,7 @@ export default {
 </style>
 <template>
   <v-container class="order-container">
+
     <h1 class="text-center text-h2 my-16 pt-10 font-weight-bold">
       Estadístiques
     </h1>
@@ -95,7 +96,8 @@ export default {
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
-                  <v-card>
+                  <v-card rounded="xl">
+                    <!-- Agregamos border-radius para hacer las esquinas redondas -->
                     <v-img height="auto" :src="this.fotoQuantitats"></v-img>
                   </v-card>
                 </v-dialog>
@@ -105,7 +107,7 @@ export default {
                   class="font-weight-bold text-center text-h4 py-4 text-truncate"
                   style="color: #3d3976"
                 >
-                Unitats Venudes
+                  Unitats Venudes
                 </div>
                 <v-dialog v-model="dialog2" width="1200">
                   <template v-slot:activator="{ props }">
@@ -127,7 +129,7 @@ export default {
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
-                  <v-card>
+                  <v-card rounded="xl">
                     <v-img
                       height="auto"
                       :src="this.fotoQuantitatsVenudes"
@@ -159,7 +161,7 @@ export default {
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
-                  <v-card>
+                  <v-card rounded="xl">
                     <v-img height="auto" :src="this.fotoHoraComu"></v-img>
                   </v-card>
                 </v-dialog>
