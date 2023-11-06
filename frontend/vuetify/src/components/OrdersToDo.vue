@@ -10,13 +10,20 @@ export default {
     switchsNotSelected: true,
     responseData: null,
     comandaActual: null,
-    json: {},
+    jsonComandes: {},
   }),
   mounted() {
-    this.socket = io(import.meta.env.VITE_SOCKETS);
+    this.socket = io(import.meta.env.VITE_SOCKETS, {
+      cors: {
+        origin: "*",
+      },
+      path: "/node/",
+      transports: ["websocket"],
+    });
 
     this.socket.on("json", (data) => {
-      this.json = data;
+      this.jsonComandes = data;
+      console.log(this.jsonComandes);
     });
   },
   methods: {
@@ -69,7 +76,7 @@ export default {
       >
         <v-list-item
           :key="comandes"
-          v-for="(comandes, index) in this.json.comandes"
+          v-for="(comandes, index) in this.jsonComandes.comandes"
           class="mb-2"
           style="
             background-color: #7875df;
@@ -133,7 +140,7 @@ export default {
           </thead>
           <tbody>
             <tr
-              v-for="producte in this.json.comandes[comandaActual].comanda
+              v-for="producte in this.jsonComandes.comandes[comandaActual].comanda
                 .productes"
               :key="producte"
               align="left"
@@ -157,7 +164,7 @@ export default {
                 <v-switch
                   @click="
                     switchSelected(
-                      this.json.comandes[comandaActual].comanda.productes.length
+                      this.jsonComandes.comandes[comandaActual].comanda.productes.length
                     )
                   "
                   class="mt-5"

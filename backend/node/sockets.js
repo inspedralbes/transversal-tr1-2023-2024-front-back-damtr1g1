@@ -65,7 +65,7 @@ function EnviarJson(io) {
     //   socket.emit('json', data);
     // })
     socket.on('eliminaComanda', (index) => {
-      delete data.comandes[index];
+      data.comandes.splice(index, 1);
       socket.emit('json', data);
     })
   });
