@@ -18,6 +18,7 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
+  path: "/node/"
 });
 
 
