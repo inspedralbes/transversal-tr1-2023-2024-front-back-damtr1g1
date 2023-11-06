@@ -6,6 +6,9 @@ import DeleteDialog from "./DeleteDialog.vue";
 export default {
   props: ["data"],
   methods: {
+    deleteProduct() {
+      this.$emit('deleteProduct')
+    },
     editQuestion: function (id) {
       fetch("http://localhost:4000/updatePreguntes", {
         method: "POST",
@@ -65,7 +68,7 @@ export default {
         </v-col>
         <v-col>
           <v-sheet class="mx-2">
-            <DeleteDialog :data="data" />
+            <DeleteDialog @deleteProduct="deleteProduct()" :data="data" />
           </v-sheet>
         </v-col>
       </v-row>

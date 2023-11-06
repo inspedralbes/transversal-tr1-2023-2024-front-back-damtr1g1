@@ -8,7 +8,9 @@ export default {
         mode: "cors",
       })
         .then((response) => response.json())
-        .then(() => {});
+        .then(() => {
+          this.$emit("deleteProduct");
+        });
     },
   },
 };

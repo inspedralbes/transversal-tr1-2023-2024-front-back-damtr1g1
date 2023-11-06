@@ -26,16 +26,23 @@ export default {
     window.addEventListener("resize", () => {
       this.onResize();
     });
-    fetch("http://localhost:3001/api/getProducts")
-      .then((response) => response.json())
-      .then((data) => {
-        this.productes_originals = data;
-        this.productes = data;
-        this.carregant = false;
-        console.log(data);
-      });
+    this.getProductes();
   },
   methods: {
+    getProductes() {
+      
+      fetch("http://localhost:3001/api/getProducts")
+        .then((response) => response.json())
+        .then((data) => {
+          this.productes_originals = data;
+          this.productes = data;
+          this.carregant = false;
+          console.log(data);
+        });
+    },
+    deleteProduct() {
+      this.getProductes()
+    },
     onResize() {
       if (window.innerWidth < 1550) {
         this.addProductText = "+";
@@ -134,7 +141,7 @@ export default {
             lg="3"
             cols="12"
           >
-            <Product :data="producte" />
+            <Product v-on:deleteProduct="deleteProduct" :data="producte" />
           </v-col>
         </v-row>
       </v-sheet>

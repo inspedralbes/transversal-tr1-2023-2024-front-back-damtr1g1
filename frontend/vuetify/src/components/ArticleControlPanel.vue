@@ -27,7 +27,7 @@ export default {
         >
           {{ title }}
         </div>
-        <v-img height="200" :src="'/src/assets/img/' + img"> </v-img>
+        <v-img height="200" :src='"../img/" + img'> </v-img>
         <v-container align="center" justify="center">
           <v-sheet class="ma-2" style="background: transparent">
             <transition>
