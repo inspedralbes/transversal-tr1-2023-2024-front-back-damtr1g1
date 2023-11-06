@@ -704,7 +704,6 @@ function callPython(req, res) {
     var obj = {};
     obj.value = data;
     res.send(JSON.stringify(obj));
-    console.log(`Salida del script Python: ${JSON.stringify(obj)}`);
   });
 
   pythonProcess.stderr.on("data", (data) => {
@@ -712,14 +711,12 @@ function callPython(req, res) {
     var obj = {};
     obj.value = data;
 
-    console.error(`Error del script Python: ${JSON.stringify(obj)}`);
     res.header("Access-Control-Allow-Origin", "*");
     res.status(500).send(`Error del script Python: ${JSON.stringify(obj)}`);
   });
 
   pythonProcess.on("close", (code) => {
     // Manejar el cierre del proceso Python
-    console.log(`Proceso Python finalizado con código de salida ${code}`);
   });
 }
 

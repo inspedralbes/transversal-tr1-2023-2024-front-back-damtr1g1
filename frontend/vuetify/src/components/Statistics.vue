@@ -57,7 +57,6 @@ export default {
 }
 </style>
 <template>
-  
   <v-container class="order-container">
     <v-btn
       variant="tonal"
@@ -98,7 +97,11 @@ export default {
                       rounded="xl"
                       @click="dialog1 = true"
                     >
-                      <v-img height="238" :src="this.fotoQuantitats"></v-img>
+                      <v-img
+                        height="238"
+                        cover
+                        :src="this.fotoQuantitats"
+                      ></v-img>
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
@@ -129,6 +132,7 @@ export default {
                       @click="dialog2 = true"
                     >
                       <v-img
+                        cover
                         height="238"
                         :src="this.fotoQuantitatsVenudes"
                       ></v-img>
@@ -163,7 +167,11 @@ export default {
                       rounded="xl"
                       @click="dialog3 = true"
                     >
-                      <v-img height="238" :src="this.fotoHoraComu"></v-img>
+                      <v-img
+                        height="238"
+                        cover
+                        :src="this.fotoHoraComu"
+                      ></v-img>
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
