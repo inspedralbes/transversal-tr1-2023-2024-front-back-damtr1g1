@@ -17,7 +17,7 @@ public interface LoginApiService {
 
     @GET("/api/getUserDataByName")
     Call<LoginResponse> getUserDataByName(
-            @Query("nom") String nom
+            @Query("nom_real") String nom
     );
 }
 

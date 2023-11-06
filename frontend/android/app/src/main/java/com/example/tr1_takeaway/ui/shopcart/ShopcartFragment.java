@@ -11,22 +11,37 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopcartBinding;
+import com.example.tr1_takeaway.ui.shop.Adapter;
+import com.example.tr1_takeaway.ui.shop.ShopViewModel;
 
 
 public class ShopcartFragment extends Fragment {
 
     private FragmentShopcartBinding binding;
-    Button buyCart;
+    private RecyclerView productDisplay;
+    private Adapter adapter;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        View view = inflater.inflate(R.layout.fragment_shopcart, container, false);
+        Log.d("TAG", "what the fuck is a kilometer");
 
         binding = FragmentShopcartBinding.inflate(inflater, container, false);
+        ShopcartViewModel shopcartViewModel = new ViewModelProvider(this).get(ShopcartViewModel.class);
 
-        return binding.getRoot();
+        productDisplay = getView().findViewById(R.id.productDisplay);
+        productDisplay.setLayoutManager(new LinearLayoutManager(requireContext())); // 2 columns grid
+
+
+        return view;
     }
 
     @Override

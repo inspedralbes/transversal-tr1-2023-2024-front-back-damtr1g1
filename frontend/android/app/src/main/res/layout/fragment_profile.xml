@@ -70,7 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/creditcard" />
 
     <TextView
-        android:id="@+id/emailtext"
+        android:id="@+id/emailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
@@ -109,16 +109,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
-    <Button
-        android:id="@+id/modifyData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="352dp"
-        android:backgroundTint="#FF7A68"
-        android:text="Modificar Dades d'Usuari"
-        android:textAllCaps="false"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

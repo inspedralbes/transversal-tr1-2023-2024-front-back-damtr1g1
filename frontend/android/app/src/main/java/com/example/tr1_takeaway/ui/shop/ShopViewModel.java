@@ -24,7 +24,7 @@ public class ShopViewModel extends ViewModel {
     public void fetchDataFromApi() {
         // Retrofit initialization
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001") // URL Ramon http://192.168.205.249:3001
+                .baseUrl("http://192.168.205.249:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
