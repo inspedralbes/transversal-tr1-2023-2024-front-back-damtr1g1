@@ -57,8 +57,14 @@ export default {
 }
 </style>
 <template>
+  
   <v-container class="order-container">
-
+    <v-btn
+      variant="tonal"
+      icon="mdi-arrow-left"
+      class="mt-5"
+      @click="$router.push('/')"
+    ></v-btn>
     <h1 class="text-center text-h2 my-16 pt-10 font-weight-bold">
       Estadístiques
     </h1>
