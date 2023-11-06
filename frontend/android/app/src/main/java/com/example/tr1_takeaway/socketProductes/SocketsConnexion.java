@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tr1_takeaway.R;
+import com.example.tr1_takeaway.ui.shop.ProductDataModel;
 
 import java.net.URISyntaxException;
 
@@ -16,32 +17,34 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 
 public class SocketsConnexion extends AppCompatActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_shopcart);
 
-        /*
-        private String imgURL;
-        private String nom;
-        private double preu;
-        private int quantitat;
-        */
+        ProductDataModel PD = new ProductDataModel();
+        int idProducte = PD.getId();
+        String nomProducte = PD.getNom();
+        Double preuProducte = PD.getPreu();
+        int quantitatProducte = 1;
+        String imatgeURL = PD.getImageUrl();
 
-        //buyShopcartButton.setOnClickListener(v->{
-            // Al enviar la comanda inicializa el socket
-            try {
-                Socket socket = IO.socket("http://192.168.205.249:3001"); // Reemplaza con la URL de tu servidor
-                socket.connect();
+        
+        // Al enviar la comanda inicializa el socket
+        try {
+            Socket socket = IO.socket("http://192.168.205.249:3001"); // Reemplaza con la URL de tu servidor
+            socket.connect();
 
-                socket.emit();
+            socket.emit("CrearCarrito", idProducte, nomProducte, preuProducte, quantitatProducte, imatgeURL);
 
 
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        });
-
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
+    ;
+
 }
+
