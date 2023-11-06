@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,10 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
-import com.example.tr1_takeaway.databinding.FragmentShopcartBinding;
 import com.example.tr1_takeaway.shopService.ShopApiService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,10 +30,6 @@ public class ShopFragment extends Fragment {
 
     private FragmentShopBinding binding;
 
-    public class MyFragment extends Fragment {
-
-        ArrayList<ProductDataModel> shopcart;
-        Button addToCart;
         private RecyclerView productDisplay;
         private Adapter adapter;
 
@@ -45,11 +38,13 @@ public class ShopFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_shop, container, false);
             Log.d("TAG", "what the fuck is a kilometer");
-            binding = FragmentShopBinding.inflate(inflater, container, false);
-            ShopViewModel shopViewModel = new ViewModelProvider(this).get(ShopViewModel.class);
+
+            ShopViewModel shopViewModel =
+                    new ViewModelProvider(this).get(ShopViewModel.class);
+
             productDisplay = view.findViewById(R.id.productDisplay);
             productDisplay.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
-            addToCart = getView().findViewById(R.id.addProductToCart);
+
             ViewTreeObserver vto = productDisplay.getViewTreeObserver();
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -59,18 +54,23 @@ public class ShopFragment extends Fragment {
                     productDisplay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
             });
+
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.205.99:3001")
+                    .baseUrl("http://192.168.205.249:3001")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
+
             ShopApiService apiService = retrofit.create(ShopApiService.class);
             // Call the method to fetch data from Retrofit
             fetchDataFromApi(apiService, productDisplay);
+
             return view;
         }
 
         private void fetchDataFromApi(ShopApiService ShopApiService, RecyclerView recyclerView) {
+
             Call<List<ProductDataModel>> call = ShopApiService.getProducts();
+
             call.enqueue(new Callback<List<ProductDataModel>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<ProductDataModel>> call, @NonNull Response<List<ProductDataModel>> response) {
@@ -80,9 +80,6 @@ public class ShopFragment extends Fragment {
                         Log.d("DATA", data.toString());
                         adapter = new Adapter(data);
                         recyclerView.setAdapter(adapter);
-                        addToCart.setOnClickListener(v -> {
-
-                        });
                     } else {
                         Log.e("TAG", "what the fuck is a kilometer");
                     }
@@ -94,7 +91,6 @@ public class ShopFragment extends Fragment {
                 }
             });
         }
-    }
 
 
     @Override
