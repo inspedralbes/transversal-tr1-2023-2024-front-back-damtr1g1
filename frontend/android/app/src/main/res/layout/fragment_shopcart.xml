@@ -8,7 +8,7 @@
     tools:context=".ui.shopcart.ShopcartFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/shopcartDisplay"
         android:layout_width="410dp"
         android:layout_height="606dp"
 

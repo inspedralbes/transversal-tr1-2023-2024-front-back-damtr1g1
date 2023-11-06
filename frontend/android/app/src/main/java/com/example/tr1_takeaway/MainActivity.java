@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         contrasenya = findViewById(R.id.passwordText);
 
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.99:3001") // URL Wilson
-                .baseUrl("http://192.168.205.249:3001") // URL Ramon
+                .baseUrl("http://192.168.205.99:3001") // URL Wilson
+                //.baseUrl("http://192.168.205.249:3001") // URL Ramon
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         LoginApiService service = retrofit.create(LoginApiService.class);

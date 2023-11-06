@@ -2,8 +2,6 @@ package com.example.tr1_takeaway.socketProductes;
 
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +31,7 @@ public class SocketsConnexion extends AppCompatActivity {
         
         // Al enviar la comanda inicializa el socket
         try {
-            Socket socket = IO.socket("http://192.168.205.249:3001"); // Reemplaza con la URL de tu servidor
+            Socket socket = IO.socket("http://192.168.205.99:3001"); // Reemplaza con la URL de tu servidor
             socket.connect();
 
             socket.emit("CrearCarrito", idProducte, nomProducte, preuProducte, quantitatProducte, imatgeURL);

@@ -37,7 +37,7 @@ public class ShopcartFragment extends Fragment {
         binding = FragmentShopcartBinding.inflate(inflater, container, false);
         ShopcartViewModel shopcartViewModel = new ViewModelProvider(this).get(ShopcartViewModel.class);
 
-        productDisplay = getView().findViewById(R.id.productDisplay);
+        productDisplay = view.findViewById(R.id.shopcartDisplay);
         productDisplay.setLayoutManager(new LinearLayoutManager(requireContext())); // 2 columns grid
 
 

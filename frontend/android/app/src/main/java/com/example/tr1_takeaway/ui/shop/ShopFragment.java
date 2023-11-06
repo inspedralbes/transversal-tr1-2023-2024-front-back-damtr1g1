@@ -18,6 +18,7 @@ import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
 import com.example.tr1_takeaway.shopService.ShopApiService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,7 +57,7 @@ public class ShopFragment extends Fragment {
             });
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.205.249:3001")
+                    .baseUrl("http://192.168.205.99:3001")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
