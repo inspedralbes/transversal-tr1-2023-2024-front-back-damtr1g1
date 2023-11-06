@@ -405,8 +405,6 @@ app.get("/api/validateLogin", async (req, res) => {
       console.log(usuarioEncontrado)
 
       if (usuarioEncontrado === true) {
-        // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-        console.log("La peticio es dona")
         const loginResponse = { loginBool: true };
         return res.status(200).json(loginResponse);
       } else {
@@ -712,56 +710,23 @@ app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
 
-// Comandes:
-const ComandaState = "en curs";
-
+// Comandes Sockets:
 io.on('connection', (socket) => {
-  console.log('Un cliente se ha conectado.');
+  console.log('Un cliente se ha conectado');
 
-  socket.on('comandaStatus', (status) => {
-    if (status === "Enviada") {
-      console.log("Ha arribat una comanda del client"); // Resposta per al servidor
-      socket.emit('comandaResponse', "La comanda s'ha enviat"); // Resposta per al client
-      io.emit('comandaEnviada', "Ha arribat una comanda"); // Resposta per al amdin
-    } else {
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaResponse', "L'Estat de la comanda no es valid.");
-    }
-  })
+  socket.on('CrearCarrito', (idProducte, nomProducte, preuProducte, quantitatProducte, imatgeURL) => {
+    // Aquí puedes manejar los datos recibidos del cliente
+    console.log('Se ha recibido un evento CrearCarrito con los siguientes datos:');
+    console.log('ID del producto:', idProducte);
+    console.log('Nombre del producto:', nomProducte);
+    console.log('Precio del producto:', preuProducte);
+    console.log('Cantidad del producto:', quantitatProducte);
+    console.log('URL de la imagen del producto:', imatgeURL);
 
-  socket.on('comandaAcceptada', (status) => {
-    if (status === "Acceptada") {
-    console.log('La comanda ha sigut acceptada'); // Resposta per al servidor
-    io.emit('comandaAcceptada', 'La comanda ha sigut acceptada'); // Resposta per al client
-    } else {
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaAcceptada', "L'Estat de la comanda no es valid.");
-    }
-  })
-
-  socket.on('comandaInPogress', (status) =>{
-    if(status === "En curs"){
-      console.log('La comanda està en curs'); // Resposta per al servidor
-      io.emit('comandaInPogress', 'La teva comanda està en curs'); // Resposta per al client
-    } else{
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaInPogress', "L'estat de la comanda no es valid.");
-    }
+    // Puedes realizar más acciones con estos datos, como almacenarlos en una base de datos, procesarlos de alguna manera, etc.
   });
 
-  socket.on('comandaPreparada', (status) =>{
-    if(status === "Preparada"){
-      console.log('La comanda està preparada'); // Resposta per al servidor
-      io.emit('comandaPreparada', 'La comanda està preparada'); // Resposta per al client
-    } else{
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaPreparada', "L'estat de la comanda no es valid.");
-    }
-  })
-
-  
-  // Manejo de desconexión de sockets
   socket.on('disconnect', () => {
-    console.log('Un cliente se ha desconectado.');
+    console.log('Un cliente se ha desconectado');
   });
 });
