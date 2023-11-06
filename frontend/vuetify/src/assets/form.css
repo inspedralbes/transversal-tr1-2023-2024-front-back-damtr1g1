@@ -33,15 +33,3 @@ th {
 .v-list-item__content {
     overflow: visible !important;
 }
-
-@media screen and(max-width: 768px) {
-    .order-container {
-        width: 100% !important;
-    }
-}
-
-@media screen and(max-width: 1100px) {
-    .newProduct .v-btn__content {
-        content: "+";
-    }
-}

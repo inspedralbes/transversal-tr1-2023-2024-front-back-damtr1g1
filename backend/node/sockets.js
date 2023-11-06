@@ -1,7 +1,7 @@
 // Funciones de configuración de socket
-  function EnviarJson(io) {
-  io.on('connection', (socket) => {
-    console.log('Un usuario se ha conectado');
+function EnviarJson(io) {
+  io.on("connection", (socket) => {
+    console.log("Un usuario se ha conectado");
 
     let data = {
       comandes: [
@@ -24,16 +24,50 @@
             hora: "13:46",
           },
         },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
+            ],
+            hora: "13:46",
+          },
+        },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
+            ],
+            hora: "13:46",
+          },
+        },
       ],
     };
 
-    socket.emit('json', data); // Envia el JSON al cliente cuando se conecta
-    
+    socket.emit("json", data); // Envia el JSON al cliente cuando se conecta
+
     // socket.on('enviarComanda', (comanda) => {
     //   data.comandes.push(comanda);
     //   console.log(data);
     //   socket.emit('json', data);
     // })
+    socket.on('eliminaComanda', (index) => {
+      delete data.comandes[index];
+      socket.emit('json', data);
+    })
   });
 }
 

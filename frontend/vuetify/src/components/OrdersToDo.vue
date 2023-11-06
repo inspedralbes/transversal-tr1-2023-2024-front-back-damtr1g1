@@ -7,6 +7,7 @@ export default {
   props: ["title", "img", "id"],
   data: () => ({
     socket: null,
+    switchsNotSelected: true,
     responseData: null,
     comandaActual: null,
     json: {},
@@ -24,29 +25,28 @@ export default {
     },
     canviComanda(index) {
       this.comandaActual = index;
+      this.switchsNotSelected = true;
       document.querySelectorAll(".v-list-item").forEach((item) => {
         item.style =
           "background-color: #7875df; width: 100%; height: 100px; border: 2px solid #473f94;";
       });
       document.getElementById("comanda-" + index).style =
-        "background-color: #b0b8f1; width: 100%; height: 100px; border: 4px solid #473f94;";
+        "background-color: #9094e9; width: 100%; height: 100px; border: 4px solid #473f94;";
+    },
+    switchSelected(nProductes) {
+      setTimeout(() => {
+        document.querySelectorAll(".text-success").forEach((item, index) => {
+          if (index + 1 == nProductes) {
+            this.switchsNotSelected = false;
+          } else {
+            this.switchsNotSelected = true;
+          }
+        });
+      }, 1);
     },
     acabarComanda() {
-      this.socket.emit("enviarComanda", {
-        comanda: {
-          productes: [
-            {
-              nom: "poma vermella",
-              unitats: 1,
-            },
-            {
-              nom: "tronja",
-              unitats: 4,
-            },
-          ],
-          hora: "13:50",
-        },
-      });
+      this.socket.emit("eliminaComanda", this.comandaActual);
+      this.canviComanda(this.comandaActual + 1);
     },
   },
 };
@@ -110,7 +110,7 @@ export default {
             <v-icon
               class="mt-5 text-h3"
               style="
-                background: linear-gradient(to left, #e8321a, #ff7a68);
+                color: linear-gradient(to left, #e8321a, #ff7a68);
                 border-radius: 15px;
               "
               >mdi-arrow-left</v-icon
@@ -138,10 +138,33 @@ export default {
               :key="producte"
               align="left"
             >
-              <td>{{ producte.unitats }}</td>
-              <td>{{ producte.nom }}</td>
+              <td class="pl-8">
+                <div
+                  class="text-center pt-1"
+                  style="
+                    background-color: #7472de;
+                    border: 1px solid #3d3976;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 15px;
+                  "
+                >
+                  {{ producte.unitats }}
+                </div>
+              </td>
+              <td class="pl-8">{{ producte.nom }}</td>
               <td>
-                <v-switch v-model="show"></v-switch>
+                <v-switch
+                  @click="
+                    switchSelected(
+                      this.json.comandes[comandaActual].comanda.productes.length
+                    )
+                  "
+                  class="mt-5"
+                  color="success"
+                  true-value="true"
+                  false-value="false"
+                ></v-switch>
               </td>
             </tr>
           </tbody>
@@ -152,7 +175,8 @@ export default {
           height="50px"
           width="170px"
           rounded
-          @click="acabarComanda"
+          :disabled="switchsNotSelected"
+          @click="acabarComanda(comandaActual)"
           style="
             background: linear-gradient(to left, #e8321a, #ff7a68);
             color: white;

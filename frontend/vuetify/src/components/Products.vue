@@ -9,7 +9,7 @@ export default {
     productes_originals: "",
     busqueda: "",
     carregant: false,
-    addProductText: window.innerWidth < 1100 ? "+" : "NOU PRODUCTE",
+    addProductText: window.innerWidth < 1550 ? "+" : "NOU PRODUCTE",
   }),
   mounted() {
     window.onscroll = function () {
