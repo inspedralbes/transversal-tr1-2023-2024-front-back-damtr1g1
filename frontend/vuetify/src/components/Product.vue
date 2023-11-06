@@ -3,21 +3,13 @@ import DeleteDialog from "./DeleteDialog.vue";
 </script>
 
 <script>
+const env = import.meta.env.VITE_NODE_ROUTE;
+
 export default {
   props: ["data"],
   methods: {
     deleteProduct() {
-      this.$emit('deleteProduct')
-    },
-    editQuestion: function (id) {
-      fetch("http://localhost:4000/updatePreguntes", {
-        method: "POST",
-        mode: "cors",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        });
+      this.$emit("deleteProduct");
     },
   },
 };
@@ -31,7 +23,7 @@ export default {
     </v-card-title>
     <v-img
       height="200"
-      :src="'http://localhost:3001/api/getImage/' + data.imatgeNom"
+      :src="`${env}getImage/${data.imatgeNom}`"
       style="border-top: black"
     >
     </v-img>

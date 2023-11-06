@@ -13,7 +13,7 @@ export default {
     json: {},
   }),
   mounted() {
-    this.socket = io("http://localhost:3001"); // Reemplaza con la URL de tu servidor de sockets
+    this.socket = io(import.meta.env.VITE_SOCKETS); // Reemplaza con la URL de tu servidor de sockets
 
     this.socket.on("json", (data) => {
       this.json = data;

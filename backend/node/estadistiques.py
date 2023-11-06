@@ -50,17 +50,17 @@ def graficoCantidadVendida(df, filename):
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
     
     # Crear un gráfico de barras con puntas redondas y color personalizado
-    plt.bar(df['producto'], df['cantidad_vendida'], color='#9094e9', capstyle='round')
+    plt.bar(df['cantidad_vendida'], df['producto'], color='#9094e9', capstyle='round')
     
     # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
    
     # Utilizar la fecha actual en el título del gráfico
-    plt.title(f'Unitats venudes per producte.({fecha_actual})', fontsize=16)
+    plt.title(f'Unitats venudes per producte. ({fecha_actual})', fontsize=16)
    
-    plt.xticks(rotation=90, fontsize=12)
-    plt.xlabel('Producte', fontsize=14)
-    plt.ylabel('Quantitat', fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('Producte', fontsize=14)
+    plt.xlabel('Quantitat', fontsize=14)
     
     # Eliminar la cuadrícula horizontal
     plt.grid(axis='y', linestyle='--', alpha=0.7)
@@ -75,7 +75,7 @@ def graficoCantidad(df, filename):
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
     
     # Crear un gráfico de barras con puntas redondas y color personalizado
-    plt.bar(df['nom'], df['quantitat'], color='#9094e9', capstyle='round')
+    plt.bar(df['quantitat'], df['nom'], color='#9094e9', capstyle='round')
     
     # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -83,9 +83,9 @@ def graficoCantidad(df, filename):
     # Utilizar la fecha actual en el título del gráfico
     plt.title(f'Unitats restants productes({fecha_actual})', fontsize=16)
    
-    plt.xticks(rotation=90, fontsize=12)
-    plt.xlabel('Productes', fontsize=14)
-    plt.ylabel('Quantitat', fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('Productes', fontsize=14)
+    plt.xlabel('Quantitat', fontsize=14)
     
     # Eliminar la cuadrícula horizontal
     plt.grid(axis='y', linestyle='--', alpha=0.7)
@@ -122,7 +122,7 @@ def graficHoresComanda(df, filename, hora_mas_comun):
     plt.xticks(range(24), fontsize=12)  # Etiquetas para las 24 horas
     
     # Rotar las etiquetas del eje x para mayor legibilidad
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90, horizontalalignment='right')
+    ax.set_xticklabels(ax.get_xticklabels(), horizontalalignment='right')
     
     # Guardar la figura en un archivo
     plt.tight_layout()

@@ -20,7 +20,7 @@ export default {
     };
   },
   mounted() {
-    fetch("http://localhost:3001/api/getCategoria")
+    fetch(import.meta.env.VITE_NODE_ROUTE + "getCategoria")
       .then((response) => response.json())
       .then((data) => {
         for (let i = 0; i < data.length; i++) {
@@ -30,7 +30,9 @@ export default {
       });
 
     fetch(
-      "http://localhost:3001/api/getProducteById?id=" + this.$route.params.id
+      import.meta.env.VITE_NODE_ROUTE +
+        "getProducteById?id=" +
+        this.$route.params.id
     )
       .then((response) => response.json())
       .then((data) => {
@@ -39,16 +41,16 @@ export default {
         this.data.preu = data.preu;
         this.data.quantitat = data.quantitat;
 
-        fetch("http://localhost:3001/api/getImage/" + data.imatgeNom).then(
-          async (response) => {
-            const contentType = response.headers.get("content-type");
-            const blob = await response.blob();
-            this.data.img = new File([blob], data.imatgeNom, { contentType });
-          }
-        );
+        fetch(
+          import.meta.env.VITE_NODE_ROUTE + "getImage/" + data.imatgeNom
+        ).then(async (response) => {
+          const contentType = response.headers.get("content-type");
+          const blob = await response.blob();
+          this.data.img = new File([blob], data.imatgeNom, { contentType });
+        });
 
         this.imgPreview =
-          "http://localhost:3001/api/getImage/" + data.imatgeNom;
+          import.meta.env.VITE_NODE_ROUTE + "getImage/" + data.imatgeNom;
         for (let i = 0; i < this.ids_categories.length; i++) {
           if (this.ids_categories[i] == data.categoria_id) {
             this.data.categoria = this.llistat_categories[i];
@@ -74,7 +76,7 @@ export default {
         let formData = new FormData();
         formData.append("img", this.data.img);
         fetch(
-          `http://localhost:3001/api/updateProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}&idProducteUpdate=${this.$route.params.id}`,
+          `${import.meta.env.VITE_NODE_ROUTE}updateProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}&idProducteUpdate=${this.$route.params.id}`,
           {
             method: "POST",
             mode: "cors",

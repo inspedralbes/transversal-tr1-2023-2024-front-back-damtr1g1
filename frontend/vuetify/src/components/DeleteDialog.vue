@@ -3,7 +3,7 @@ export default {
   props: ["data"],
   methods: {
     deleteProduct: function (id) {
-      fetch(`http://localhost:3001/api/deleteProduct?idproducte=${id}`, {
+      fetch(`${import.meta.env.VITE_NODE_ROUTE}deleteProduct?idproducte=${id}`, {
         method: "POST",
         mode: "cors",
       })

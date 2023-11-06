@@ -12,9 +12,21 @@ import ArticleControlPanel from "./ArticleControlPanel.vue";
     </h1>
     <v-container>
       <v-row justify="center">
-          <ArticleControlPanel :title="'Comandes'" :img="'order_icon.png'" :path="'/comandes'"/>
-          <ArticleControlPanel :title="'Productes'" :img="'product_icon.png'" :path="'/productes'"/>
-          <ArticleControlPanel :title="'Estadístiques'" :img="'stats_icon.png'" :path="'/estadistiques'"/>
+        <ArticleControlPanel
+          :title="'Comandes'"
+          :img="'order_icon.png'"
+          :path="'/comandes'"
+        />
+        <ArticleControlPanel
+          :title="'Productes'"
+          :img="'product_icon.png'"
+          :path="'/productes'"
+        />
+        <ArticleControlPanel
+          :title="'Estadístiques'"
+          :img="'stats_icon.png'"
+          :path="'/estadistiques'"
+        />
       </v-row>
     </v-container>
   </v-container>

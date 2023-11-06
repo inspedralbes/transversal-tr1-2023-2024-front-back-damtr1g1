@@ -1,15 +1,18 @@
-<script setup></script>
+<script setup>
+</script>
 
 <script>
 export default {
   data() {
     return {
       fotoQuantitats:
-        "http://localhost:3001/api/getImatgeEstadistiques/producteCantidad",
+        import.meta.env.VITE_NODE_ROUTE +
+        "getImatgeEstadistiques/producteCantidad",
       fotoQuantitatsVenudes:
-        "http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut",
+        import.meta.env.VITE_NODE_ROUTE +
+        "getImatgeEstadistiques/producteMesVenut",
       fotoHoraComu:
-        "http://localhost:3001/api/getImatgeEstadistiques/HoraMesComu?",
+        import.meta.env.VITE_NODE_ROUTE + "getImatgeEstadistiques/HoraMesComu?",
       dialog1: false,
       dialog2: false,
       dialog3: false,
@@ -17,7 +20,7 @@ export default {
   },
   methods: {
     executeStatistics() {
-      fetch("http://localhost:3001/api/executeStatistics")
+      fetch(import.meta.env.VITE_NODE_ROUTE + "hexecuteStatistics")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -25,26 +28,24 @@ export default {
           return response.json();
         })
         .then((data) => {
-          // Handle a successful response here
           var rand = Math.random(100000);
           console.log("Response from /api/executeStatistics:", data);
 
           this.fotoQuantitats =
-            "http://localhost:3001/api/getImatgeEstadistiques/producteCantidad?" +
+            import.meta.env.VITE_NODE_ROUTE +
+            "getImatgeEstadistiques/producteCantidad?" +
             rand;
           this.fotoQuantitatsVenudes =
-            "http://localhost:3001/api/getImatgeEstadistiques/producteMesVenut?" +
+            import.meta.env.VITE_NODE_ROUTE +
+            "getImatgeEstadistiques/producteMesVenut?" +
             rand;
           this.fotoHoraComu =
-            "http://localhost:3001/api/getImatgeEstadistiques/HoraMesComu?" +
+            import.meta.env.VITE_NODE_ROUTE +
+            "getImatgeEstadistiques/HoraMesComu?" +
             rand;
-
-          // You can update your UI or perform other actions with the response data.
         })
         .catch((error) => {
-          // Handle errors here
           console.error("Error executing statistics:", error);
-          // You can show an error message or perform error handling.
         });
     },
   },
@@ -64,7 +65,7 @@ export default {
       class="mt-5"
       @click="$router.push('/')"
     ></v-btn>
-    <h1 class="text-center text-h2 my-16 pt-10 font-weight-bold">
+    <h1 class="text-center text-h2 my-10 mb-16 font-weight-bold">
       Estadístiques
     </h1>
     <v-container>
@@ -85,7 +86,7 @@ export default {
                   Productes Restants
                 </div>
                 <v-dialog v-model="dialog1" width="1200">
-                  <template v-slot:activator="{ props }">
+                  <template v-slot:activator>
                     <v-card
                       class="image-card"
                       style="
@@ -119,7 +120,7 @@ export default {
                   Unitats Venudes
                 </div>
                 <v-dialog v-model="dialog2" width="1200">
-                  <template v-slot:activator="{ props }">
+                  <template v-slot:activator>
                     <v-card
                       class="image-card"
                       style="
@@ -155,7 +156,7 @@ export default {
                   Hores Comunes
                 </div>
                 <v-dialog v-model="dialog3" width="1200">
-                  <template v-slot:activator="{ props }">
+                  <template v-slot:activator>
                     <v-card
                       class="image-card"
                       style="

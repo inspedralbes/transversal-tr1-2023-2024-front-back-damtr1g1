@@ -31,7 +31,7 @@ export default {
   methods: {
     getProductes() {
       
-      fetch("http://localhost:3001/api/getProducts")
+      fetch(import.meta.env.VITE_NODE_ROUTE + "getProducts")
         .then((response) => response.json())
         .then((data) => {
           this.productes_originals = data;

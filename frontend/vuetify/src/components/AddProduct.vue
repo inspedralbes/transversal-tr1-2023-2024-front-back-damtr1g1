@@ -19,7 +19,7 @@ export default {
     };
   },
   mounted() {
-    fetch("http://localhost:3001/api/getCategoria")
+    fetch(import.meta.env.VITE_NODE_ROUTE + "getCategoria")
       .then((response) => response.json())
       .then((data) => {
         for (let i = 0; i < data.length; i++) {
@@ -47,7 +47,13 @@ export default {
         let formData = new FormData();
         formData.append("img", this.data.img);
         fetch(
-          `http://localhost:3001/api/addProduct?imatgeNom=${this.data.img.name}&categoria=${this.data.categoria}&definicio=${this.data.definicio}&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${this.data.quantitat}`,
+          import.meta.env.VITE_NODE_ROUTE + `addProduct?imatgeNom=${
+            this.data.img.name
+          }&categoria=${this.data.categoria}&definicio=${
+            this.data.definicio
+          }&nom=${this.data.nom}&preu=${this.data.preu}&quantitat=${
+            this.data.quantitat
+          }`,
           {
             method: "POST",
             mode: "cors",
