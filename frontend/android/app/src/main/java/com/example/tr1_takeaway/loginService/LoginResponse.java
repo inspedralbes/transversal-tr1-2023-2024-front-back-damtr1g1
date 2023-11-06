@@ -1,14 +1,15 @@
 package com.example.tr1_takeaway.loginService;
 
 public class LoginResponse {
-    private boolean loginBool;
+    private static boolean loginBool;
 
-    public boolean isLoginBool() {
+
+    public static boolean isLoginBool() {
         return loginBool;
     }
 
-    public void setLoginBool(boolean loginBool) {
-        this.loginBool = loginBool;
+
+    public void setBoolean(boolean bool) {
+        this.loginBool = bool;
     }
 }
-
