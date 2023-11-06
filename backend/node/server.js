@@ -402,8 +402,6 @@ app.get("/api/validateLogin", async (req, res) => {
           user.contrasenya === contrasenyaSolicitada
       );
 
-      console.log(usuarioEncontrado)
-
       if (usuarioEncontrado === true) {
         const loginResponse = { loginBool: true };
         return res.status(200).json(loginResponse);
