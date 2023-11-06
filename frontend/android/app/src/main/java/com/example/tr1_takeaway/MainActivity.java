@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                     if (response.isSuccessful()) {
-                        LoginResponse booleanResponse = response.body();
-                        if (booleanResponse != null) {
-                            boolean resultado = LoginResponse.isLoginBool();
+                        LoginResponse loginResponse = response.body();
+                        if (loginResponse != null) {
+                            boolean resultado = loginResponse.isLoginBool();
                             Log.d("TAG", "El resultado de la validación de inicio de sesión es: " + resultado);
                             if(resultado) {
                                 Bundle extras = new Bundle();
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                                 secondScreen.putExtras(extras);
                                 startActivity(secondScreen);
                             } else{
+                                Log.d("TAG", String.valueOf(loginResponse.isLoginBool()));
                                 Log.e("TAG", "Error al iniciar");
                             }
                         }
