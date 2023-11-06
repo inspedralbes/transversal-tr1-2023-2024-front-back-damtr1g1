@@ -1,33 +1,35 @@
 body {
-  height: 100vh;
-  margin: 0;
-  background: linear-gradient(to right, #d4cbf1, #f8b5b1);
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to right, #d4cbf1, #f8b5b1);
 }
 
 body::-webkit-scrollbar {
-  display: none;
+    display: none;
+}
+
+div::-webkit-scrollbar {
+    display: none;
 }
 
 .order-container {
-  width: 70.8% !important;
+    width: 70.8% !important;
 }
 
 .newProduct .v-btn__content {
-  content: "NOU PRODUCTE";
+    content: "NOU PRODUCTE";
 }
 
 .agregarNomProducte .v-input__details {
     display: none;
 }
 
-@media screen and (max-width: 768px) {
-  .order-container {
-    width: 100% !important;
-  }
+th {
+    background-color: transparent !important;
+    font-weight: 900 !important;
+    color: #242145;
 }
 
-@media screen and (max-width: 1100px) {
-  .newProduct .v-btn__content {
-    content: "+";
-  }
+.v-list-item__content {
+    overflow: visible !important;
 }

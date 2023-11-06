@@ -9,7 +9,7 @@ export default {
     productes_originals: "",
     busqueda: "",
     carregant: false,
-    addProductText: window.innerWidth < 1100 ? "+" : "NOU PRODUCTE",
+    addProductText: window.innerWidth < 1550 ? "+" : "NOU PRODUCTE",
   }),
   mounted() {
     window.onscroll = function () {
@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     onResize() {
-      if (window.innerWidth < 1100) {
+      if (window.innerWidth < 1550) {
         this.addProductText = "+";
       } else {
         this.addProductText = "NOU PRODUCTE";
@@ -76,10 +76,10 @@ export default {
             class="bg-light-green-lighten-2 text-h6"
             height="65px"
             rounded="xl"
-            v-text="addProductText"
             block
             @click="$router.push('/afegir-producte')"
-          ></v-btn>
+            >{{ addProductText }}</v-btn
+          >
         </v-sheet>
       </v-col>
       <v-col>
