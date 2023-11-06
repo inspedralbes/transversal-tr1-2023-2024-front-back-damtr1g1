@@ -45,38 +45,52 @@ def obtener_productos_vendidos(cursor):
     return cursor.fetchall()
 
 
-def graficoCantidadVendida(df,filename):
-    """Crea un grafico de barras a partir de un DataFrame"""
-    plt.figure(figsize=(10, 6))
-    plt.bar(df['producto'], df['cantidad_vendida'])
-   
-    # Obtiene la fecha actual
+def graficoCantidadVendida(df, filename):
+    """Crea un gráfico de barras a partir de un DataFrame."""
+    plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
+    
+    # Crear un gráfico de barras con puntas redondas y color personalizado
+    plt.bar(df['producto'], df['cantidad_vendida'], color='#9094e9', capstyle='round')
+    
+    # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
    
-    # Utiliza la fecha actual en el título del gráfico
-    plt.title(f'Cantidad de unidades Vendidas por producto ({fecha_actual})')
+    # Utilizar la fecha actual en el título del gráfico
+    plt.title(f'Unitats venudes per producte.({fecha_actual})', fontsize=16)
    
-    plt.xticks(rotation=45)
-    plt.xlabel('Producto')
-    plt.ylabel('Cantidad')
+    plt.xticks(rotation=90, fontsize=12)
+    plt.xlabel('Producte', fontsize=14)
+    plt.ylabel('Quantitat', fontsize=14)
+    
+    # Eliminar la cuadrícula horizontal
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    # Guardar la figura en un archivo
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
     
 def graficoCantidad(df, filename):
     """Crea un gráfico de barras a partir de un DataFrame."""
-    plt.figure(figsize=(10, 6))
-    plt.bar(df['nom'], df['quantitat'])
-   
-    # Obtiene la fecha actual
+    plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
+    
+    # Crear un gráfico de barras con puntas redondas y color personalizado
+    plt.bar(df['nom'], df['quantitat'], color='#9094e9', capstyle='round')
+    
+    # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
    
-    # Utiliza la fecha actual en el título del gráfico
-    plt.title(f'Cantidad de unidades restantes por producto ({fecha_actual})')
+    # Utilizar la fecha actual en el título del gráfico
+    plt.title(f'Unitats restants productes({fecha_actual})', fontsize=16)
    
-    plt.xticks(rotation=45)
-    plt.xlabel('Producto')
-    plt.ylabel('Cantidad')
+    plt.xticks(rotation=90, fontsize=12)
+    plt.xlabel('Productes', fontsize=14)
+    plt.ylabel('Quantitat', fontsize=14)
+    
+    # Eliminar la cuadrícula horizontal
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    # Guardar la figura en un archivo
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
@@ -102,16 +116,13 @@ def graficHoresComanda(df, filename, hora_mas_comun):
     
     ax = sns.barplot(x=hora_counts.index, y=hora_counts.values, color='#9094e9', capstyle='round')
     
-    plt.title(f'Comandas por hora de creación ({fecha_actual})', fontsize=16)
-    plt.xlabel(f'Hora del día más común ({hora_mas_comun})', fontsize=14)
-    plt.ylabel('Número de comandas', fontsize=14)
+    plt.title(f'Comandes per hora de creació({fecha_actual})', fontsize=16)
+    plt.xlabel(f'Hora del dia més comuna.({hora_mas_comun})', fontsize=14)
+    plt.ylabel('Número de comandes', fontsize=14)
     plt.xticks(range(24), fontsize=12)  # Etiquetas para las 24 horas
     
     # Rotar las etiquetas del eje x para mayor legibilidad
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
-    
-    # Eliminar la cuadrícula horizontal
-    sns.despine(left=True, bottom=True)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=90, horizontalalignment='right')
     
     # Guardar la figura en un archivo
     plt.tight_layout()
@@ -119,9 +130,6 @@ def graficHoresComanda(df, filename, hora_mas_comun):
     plt.close()
     
 
-    
-
-    
 def CantidaRestante():
     conexion, cursor = establecer_conexion()
     resultados = obtener_productos_ordenados_cantidad(cursor)
