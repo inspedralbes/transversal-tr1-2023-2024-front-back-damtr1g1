@@ -20,6 +20,67 @@ function EnviarJson(io) {
                 nom: "poma verda",
                 unitats: 5,
               },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
+            ],
+            hora: "13:46",
+          },
+        },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
+            ],
+            hora: "13:46",
+          },
+        },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
+            ],
+            hora: "13:46",
+          },
+        },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
             ],
             hora: "13:46",
           },

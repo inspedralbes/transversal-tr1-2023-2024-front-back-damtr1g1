@@ -62,6 +62,7 @@ export default {
   <div v-if="jsonComandes">
     <v-row class="pl-3 pt-2">
       <v-col
+        id="no-scroll"
         cols="2"
         align="center"
         class="pa-2"
@@ -105,7 +106,7 @@ export default {
           </v-row>
         </v-list-item>
       </v-col>
-      <v-col cols="16" class="pa-0">
+      <v-col cols="16" class="pa-0 pr-3">
         <v-container v-if="comandaActual === null" align="center">
           <v-card
             rounded="xl"
@@ -127,32 +128,32 @@ export default {
         <v-table
           v-if="comandaActual !== null"
           fixed-header
-          height="500px"
+          height="430px"
           style="background-color: transparent; color: black; font-weight: bold"
         >
-          <thead class="text-h6">
+          <thead class="text-h4" style="background-color: #9094e9;">
             <tr>
               <th>Unitats</th>
               <th>Producte</th>
               <th>Estat</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-h6">
             <tr
-              v-for="producte in jsonComandes.comandes[comandaActual]
-                .comanda.productes"
+              v-for="producte in jsonComandes.comandes[comandaActual].comanda
+                .productes"
               :key="producte"
               align="left"
             >
               <td class="pl-8">
                 <div
-                  class="text-center pt-1"
+                  class="text-center mt-1"
                   style="
                     background-color: #7472de;
                     border: 1px solid #3d3976;
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 15px;
+                    width: 35px;
+                    height: 35px;
+                    border-radius: 20px;
                   "
                 >
                   {{ producte.unitats }}
@@ -161,13 +162,14 @@ export default {
               <td class="pl-8">{{ producte.nom }}</td>
               <td>
                 <v-switch
+                  
                   @click="
                     switchSelected(
-                      jsonComandes.comandes[comandaActual].comanda
-                        .productes.length
+                      jsonComandes.comandes[comandaActual].comanda.productes
+                        .length
                     )
                   "
-                  class="mt-5"
+                  class="mt-5 ml-4"
                   color="success"
                   true-value="true"
                   false-value="false"
@@ -180,7 +182,7 @@ export default {
           v-if="comandaActual !== null"
           class="my-4"
           height="50px"
-          width="170px"
+          width="300px"
           rounded
           :disabled="switchsNotSelected"
           @click="acabarComanda(comandaActual)"
