@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.socketProductes.SocketsConnexion;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -55,16 +56,10 @@ public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shopcart_grid_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        // Encuentra el botón de compra en la vista inflada y configura un onClickListener
-        Button comprar = view.findViewById(R.id.addProductToCart);
-        Log.d("TAG", "S'ha clicat");
-        comprar.setOnClickListener(v -> {
-            // Acciones a realizar al hacer clic en el botón de compra
-            SC.GuardaProdCarrito(); // Asegúrate de que SC esté inicializado y tenga la lógica adecuada
-        });
+
 
         return viewHolder;
     }
@@ -72,10 +67,11 @@ public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShopcartProductDataModel currentItem = data.get(position);
-        holder.getProductName().setText(currentItem.getNom());
-        holder.getProductPrice().setText(String.valueOf(currentItem.getPreu())); // Usar el precio real del producto
-        holder.getProductQuantity().setText(String.valueOf(currentItem.getQuantitat())); // Usar la cantidad real del producto
-        //Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage); // L'imatge la pasem per picasso
+        Log.d("TAG", String.valueOf(currentItem.getNom()));
+        holder.getProductName().setText(String.valueOf(currentItem.getNom()));
+        holder.getProductPrice().setText(String.valueOf(currentItem.getPreu()));
+        holder.getProductQuantity().setText("1");
+        Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage);
     }
 
 
