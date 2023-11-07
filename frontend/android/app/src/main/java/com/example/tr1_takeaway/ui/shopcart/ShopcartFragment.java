@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,9 +36,10 @@ public class ShopcartFragment extends Fragment {
 
     private FragmentShopcartBinding binding;
     public RecyclerView shopcartDisplay;
-    private Adapter adapter;
+    private ShopcartAdapter adapter;
     Button buyCart;
     ImageButton removeFromCart;
+    ShopcartDialog confirmPurchase;
 
 
     public View onCreateView(LayoutInflater inflater,
@@ -69,7 +72,7 @@ public class ShopcartFragment extends Fragment {
                         List<ShopcartProductDataModel> data = response.body();
                         assert data != null;
                         Log.d("DATA", data.toString());
-                        ShopcartAdapter adapter = new ShopcartAdapter(data);
+                        adapter = new ShopcartAdapter(data);
                         shopcartDisplay.setAdapter(adapter);
                     } else {
                         Log.e("TAG", "what the fuck is a kilometer");
@@ -90,7 +93,8 @@ public class ShopcartFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ShopResponse> call, Response<ShopResponse> response) {
                     if (response.isSuccessful()) {
-                        //DIALOG HERE
+                        confirmPurchase = new ShopcartDialog();
+                        confirmPurchase.show(getParentFragmentManager(), "Confirm Date of Purchase");
                     }
                 }
 
@@ -138,4 +142,5 @@ public class ShopcartFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }
