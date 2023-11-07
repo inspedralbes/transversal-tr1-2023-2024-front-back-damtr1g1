@@ -31,8 +31,8 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="124dp"
+        android:layout_height="21dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="96dp"
         android:text="Nom i cognoms"
@@ -41,8 +41,8 @@
 
     <TextView
         android:id="@+id/cognoms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="126dp"
+        android:layout_height="20dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="4dp"
         android:text="nomcognoms"
@@ -53,16 +53,15 @@
         android:id="@+id/creditcard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="240dp"
-        android:text="Detalls de la targeta bancària:"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="248dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
     <TextView
         android:id="@+id/creditCardNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="20dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="4dp"
         android:text="numeroTargeta"
@@ -71,8 +70,8 @@
 
     <TextView
         android:id="@+id/emailText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="20dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="4dp"
         android:text="email"
@@ -83,7 +82,7 @@
         android:id="@+id/ccvText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
+        android:layout_marginStart="72dp"
         android:layout_marginTop="4dp"
         android:text="ccvTargeta"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +94,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
         android:layout_marginTop="168dp"
-        android:text="Correu Electronic:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
@@ -111,82 +109,99 @@
 
     <EditText
         android:id="@+id/EditTextexpirydateText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="169dp"
+        android:layout_height="37dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="20dp"
+        android:hint="Data de caducitat de la targeta"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/creditCardNumber"
         app:layout_constraintTop_toBottomOf="@+id/creditcard" />
 
     <EditText
         android:id="@+id/EditTextname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="96dp"
+        android:layout_width="173dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
+        android:hint="Nom"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
     <EditText
         android:id="@+id/EditTextcognoms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="172dp"
+        android:layout_height="54dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="4dp"
+        android:hint="Cognoms"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
         android:id="@+id/EditTextcreditcard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="55dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="240dp"
+        android:layout_marginTop="264dp"
+        android:hint="Numero de la targeta"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
     <EditText
         android:id="@+id/EditTextcreditCardNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="20dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        android:hint="Numero secret (CVV)"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/creditcard" />
 
     <EditText
         android:id="@+id/EditTextemailText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="171dp"
+        android:layout_height="57dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="4dp"
+        android:hint="Email"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <EditText
         android:id="@+id/EditTextccvText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="52dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="24dp"
+        android:hint="Numero secret (CVV)"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/creditCardNumber" />
 
     <EditText
         android:id="@+id/EditTextemail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="5dp"
+        android:layout_height="23dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="168dp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
     <EditText
         android:id="@+id/EditTextusername"
-        android:layout_width="47dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="180dp"
+        android:layout_width="119dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="144dp"
         android:layout_marginTop="16dp"
+        android:hint="Username"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
@@ -200,6 +215,19 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.739" />
+        app:layout_constraintVertical_bias="0.759" />
+
+    <Button
+        android:id="@+id/GuardarProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.874" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
