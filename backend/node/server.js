@@ -402,8 +402,6 @@ app.get("/api/validateLogin", async (req, res) => {
           user.contrasenya === contrasenyaSolicitada
       );
 
-      console.log(usuarioEncontrado)
-
       if (usuarioEncontrado === true) {
         const loginResponse = { loginBool: true };
         return res.status(200).json(loginResponse);
@@ -713,18 +711,6 @@ app.get("/api/getImage/:img", (req, res) => {
 // Comandes Sockets:
 io.on('connection', (socket) => {
   console.log('Un cliente se ha conectado');
-
-  socket.on('CrearCarrito', (idProducte, nomProducte, preuProducte, quantitatProducte, imatgeURL) => {
-    // Aquí puedes manejar los datos recibidos del cliente
-    console.log('Se ha recibido un evento CrearCarrito con los siguientes datos:');
-    console.log('ID del producto:', idProducte);
-    console.log('Nombre del producto:', nomProducte);
-    console.log('Precio del producto:', preuProducte);
-    console.log('Cantidad del producto:', quantitatProducte);
-    console.log('URL de la imagen del producto:', imatgeURL);
-
-    // Puedes realizar más acciones con estos datos, como almacenarlos en una base de datos, procesarlos de alguna manera, etc.
-  });
 
   socket.on('disconnect', () => {
     console.log('Un cliente se ha desconectado');

@@ -1,8 +1,10 @@
 package com.example.tr1_takeaway.ui.shopcart;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,10 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
+import com.example.tr1_takeaway.socketProductes.SocketsConnexion;
 
 import java.util.List;
 
 public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHolder> {
+    Button Comprar;
+    SocketsConnexion SC = new SocketsConnexion();
     private final List<ShopcartProductDataModel> data;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,7 +56,17 @@ public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item, parent, false);
-        return new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
+
+        // Encuentra el botón de compra en la vista inflada y configura un onClickListener
+        Button comprar = view.findViewById(R.id.addProductToCart);
+        Log.d("TAG", "S'ha clicat");
+        comprar.setOnClickListener(v -> {
+            // Acciones a realizar al hacer clic en el botón de compra
+            SC.GuardaProdCarrito(); // Asegúrate de que SC esté inicializado y tenga la lógica adecuada
+        });
+
+        return viewHolder;
     }
 
     @Override

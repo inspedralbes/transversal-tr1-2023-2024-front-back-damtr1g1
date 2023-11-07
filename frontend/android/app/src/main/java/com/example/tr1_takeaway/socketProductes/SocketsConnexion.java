@@ -15,21 +15,14 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 
 public class SocketsConnexion extends AppCompatActivity {
+    ProductDataModel PD = new ProductDataModel();
+    int idProducte = PD.getId();
+    String nomProducte = PD.getNom();
+    Double preuProducte = PD.getPreu();
+    int quantitatProducte = 1;
+    String imatgeURL = PD.getImageUrl();
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_shopcart);
-
-        ProductDataModel PD = new ProductDataModel();
-        int idProducte = PD.getId();
-        String nomProducte = PD.getNom();
-        Double preuProducte = PD.getPreu();
-        int quantitatProducte = 1;
-        String imatgeURL = PD.getImageUrl();
-
-        
-        // Al enviar la comanda inicializa el socket
+    public void GuardaProdCarrito(){
         try {
             Socket socket = IO.socket("http://192.168.205.99:3001"); // Reemplaza con la URL de tu servidor
             socket.connect();
@@ -42,6 +35,11 @@ public class SocketsConnexion extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_shopcart);
+    }
     ;
 
 }
