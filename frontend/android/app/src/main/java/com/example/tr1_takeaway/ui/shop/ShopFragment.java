@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,12 +33,15 @@ public class ShopFragment extends Fragment {
     private FragmentShopBinding binding;
 
         private RecyclerView productDisplay;
-        private Adapter adapter;
+    private Adapter adapter;
+    private Button addToCart;
 
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_shop, container, false);
+            View productview = inflater.inflate(R.layout.grid_item, container, false);
+
             Log.d("TAG", "what the fuck is a kilometer");
 
             ShopViewModel shopViewModel =
@@ -45,6 +49,7 @@ public class ShopFragment extends Fragment {
 
             productDisplay = view.findViewById(R.id.productDisplay);
             productDisplay.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
+            addToCart = productview.findViewById(R.id.addProductToCart);
 
             ViewTreeObserver vto = productDisplay.getViewTreeObserver();
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

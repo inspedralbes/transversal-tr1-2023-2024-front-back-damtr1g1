@@ -73,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:backgroundTint="#FF7A68"
         android:text="Afegir a Cistella"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
