@@ -6,11 +6,11 @@ import io from "socket.io-client";
 export default {
   props: ["title", "img", "id"],
   data: () => ({
+    jsonComandes: {},
     socket: null,
     switchsNotSelected: true,
     responseData: null,
     comandaActual: null,
-    jsonComandes: {},
   }),
   mounted() {
     this.socket = io(import.meta.env.VITE_SOCKETS, {
@@ -23,7 +23,6 @@ export default {
 
     this.socket.on("json", (data) => {
       this.jsonComandes = data;
-      console.log(this.jsonComandes);
     });
   },
   methods: {
@@ -60,7 +59,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div v-if="jsonComandes">
     <v-row class="pl-3 pt-2">
       <v-col
         cols="2"
@@ -76,7 +75,7 @@ export default {
       >
         <v-list-item
           :key="comandes"
-          v-for="(comandes, index) in this.jsonComandes.comandes"
+          v-for="(comandes, index) in jsonComandes.comandes"
           class="mb-2"
           style="
             background-color: #7875df;
@@ -140,8 +139,8 @@ export default {
           </thead>
           <tbody>
             <tr
-              v-for="producte in this.jsonComandes.comandes[comandaActual].comanda
-                .productes"
+              v-for="producte in jsonComandes.comandes[comandaActual]
+                .comanda.productes"
               :key="producte"
               align="left"
             >
@@ -164,7 +163,8 @@ export default {
                 <v-switch
                   @click="
                     switchSelected(
-                      this.jsonComandes.comandes[comandaActual].comanda.productes.length
+                      jsonComandes.comandes[comandaActual].comanda
+                        .productes.length
                     )
                   "
                   class="mt-5"
