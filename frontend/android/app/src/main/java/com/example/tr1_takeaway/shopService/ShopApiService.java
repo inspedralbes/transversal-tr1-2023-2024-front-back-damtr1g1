@@ -33,7 +33,7 @@ public interface ShopApiService {
     );
 
     @POST("/api/deleteShoppingCartProduct")
-    Call<ShopResponse> deleteShoppingCartProduct(
+    Call<List<ShopcartProductDataModel>> deleteShoppingCartProduct(
             @Query("idCarritoProductoEliminar") int deletedProductId
     );
 

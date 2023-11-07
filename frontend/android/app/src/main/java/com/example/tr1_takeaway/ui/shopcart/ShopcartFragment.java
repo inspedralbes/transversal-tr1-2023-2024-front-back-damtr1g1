@@ -61,22 +61,23 @@ public class ShopcartFragment extends Fragment {
         ShopApiService service = retrofit.create(ShopApiService.class);
 
         removeFromCart.setOnClickListener(v -> {
-            Call<ShopResponse> call = service.deleteShoppingCartProduct(1);
-            call.enqueue(new Callback<ShopResponse>() {
+            Call<List<ShopcartProductDataModel>> call = service.deleteShoppingCartProduct(1);
+            call.enqueue(new Callback<List<ShopcartProductDataModel>>() {
                 @Override
-                public void onResponse(Call<ShopResponse> call, Response<ShopResponse> response) {
+                public void onResponse(Call<List<ShopcartProductDataModel>> call, Response<List<ShopcartProductDataModel>> response) {
                     if (response.isSuccessful()) {
-                        ShopResponse shopResponse = response.body();
-                        if (shopResponse != null) {
-                            Log.e("TAG", "Wahoo");
-                        }
+                        List<ShopcartProductDataModel> data = response.body();
+                        assert data != null;
+                        Log.d("DATA", data.toString());
+                        ShopcartAdapter adapter = new ShopcartAdapter(data);
+                        shopcartDisplay.setAdapter(adapter);
                     } else {
                         Log.e("TAG", "what the fuck is a kilometer");
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ShopResponse> call, Throwable t) {
+                public void onFailure(Call<List<ShopcartProductDataModel>> call, Throwable t) {
                     Log.e("TAG", "Error en la solicitud: " + t.getMessage());
                     t.printStackTrace(); // Imprimir el seguimiento de la pila para obtener más detalles sobre el error
                 }
@@ -89,7 +90,7 @@ public class ShopcartFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ShopResponse> call, Response<ShopResponse> response) {
                     if (response.isSuccessful()) {
-
+                        //DIALOG HERE
                     }
                 }
 
