@@ -114,20 +114,45 @@ function selectProducteById(id, callback) {
 
 // function eliminar productes                                  (comprobada)
 function deleteProducte(idProducteEliminar) {
+  
   con.query(
     "DELETE FROM Producte WHERE id = ?",
     idProducteEliminar,
-    (error, results) => {
+    (error, deleteResults) => {
       if (error) {
-        console.error("Error al insertar Producte:", error);
+        console.error("Error al eliminar el producto:", error);
       } else {
-        console.log(
-          "Producte eliminado con éxito. ID del Producte:",
-          idProducteEliminar
-        );
+        console.log("Producto eliminado con éxito. ID del Producto:", idProducteEliminar);
+        // Ahora puedes eliminar la imagen asociada
+        
       }
     }
   );
+}
+//funcion delete imatge productes
+function deleteImatgeProducte(idProducteEliminar){
+  let imatgeNom = "";
+
+  con.query("SELECT imatgeNom FROM Producte WHERE id=?", [idProducteEliminar], (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      return;
+    }
+
+    if (results.length > 0) {
+      imatgeNom = results[0].imatgeNom;
+
+      fs.unlink(`./img/productes/${imatgeNom}`, (error) => {
+        if (error) {
+          console.error("Error al eliminar la imagen:", error);
+        } else {
+          console.log("Imagen eliminada con éxito.");
+        }
+      });
+    }
+  });
+
+  
 }
 // function update productes                                    (comprobada)
 function updateProducte(
@@ -471,6 +496,7 @@ app.post("/api/deleteProduct", async (req, res) => {
   const idproducte = req.query.idproducte; // Obté la id producte del client
   console.log(idproducte);
   await crearDBConnnection();
+  await deleteImatgeProducte(idproducte);
   await deleteProducte(idproducte);
   closeDBconnection();
   res.json({ message: "Eliminat correctament" });
