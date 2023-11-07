@@ -51,19 +51,30 @@ function closeDBconnection() {
   });
 }
 
-//Buscar usuari per nom
+// Buscar usuario por nombre
 function selectUserDataByName(nom, callback) {
-    con.query(`SELECT * FROM Usuaris WHERE nom = ${nom}`, (err, results, fields) => {
-      if (err) {
-        console.error("Error al realizar la consulta: " + err.message);
-        callback(err, null); // Devuelve el error en el callback
-        return;
-      }
-      const UsuariJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
-  
-      callback(null, UsuariJSON); //
-    });
-  }
+  con.query('SELECT * FROM Usuaris WHERE nom = ?', [nom], (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
+    }
+    console.log("Resultados de la consulta:", results); // Verifica los resultados de la consulta
+
+    // Procesa los datos devueltos según la estructura de los resultados
+    if (results.length > 0) {
+      const UsuariJSON = JSON.stringify(results[0]); // Obtén el primer resultado como JSON
+      console.log("Usuario encontrado:", UsuariJSON); // Verifica el usuario encontrado
+      callback(null, UsuariJSON); // Devuelve el JSON en el callback
+    } else {
+      console.log("Usuario no encontrado para el nombre proporcionado");
+      callback(null, null); // No se encontraron resultados, devuelve null en el callback
+    }
+  });
+}
+
+
+
 
 // falta fer lo dels fixers d'imatges                           (comprobada)
 function crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat) {
@@ -381,37 +392,42 @@ app.get("/", function (req, res) {
   res.send("Conectat al server");
 });
 
-// Ruta per a validar el login
+// Ruta para validar el login
 app.get("/api/validateLogin", async (req, res) => {
-  const usuarioSolicitado = req.query.usuario; // Obté l'usuari del client
-  const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
+  const usuarioSolicitado = req.query.nom; // Obtén el usuario del cliente
+  const contrasenyaSolicitada = req.query.contrasenya; // Obtén la contraseña del cliente
 
-  await crearDBConnnection();
-  // Consulta la DB para validar l'usuari i la contrasenya
-  con.query("SELECT * FROM Usuaris", (error, results, fields) => {
-    if (error) {
-      // Errors
-      return res
-        .status(500)
-        .json({ error: "Ocurrió un error al consultar la base de datos." });
-    }
+  try {
+    await crearDBConnnection();
+    // Consulta la DB para validar el usuario y la contraseña
+    con.query("SELECT nom, contrasenya FROM Usuaris", (error, results, fields) => {
+      if (error) {
+        // Manejar errores
+        return res.status(500).json({ error: "Ocurrió un error al consultar la base de datos." });
+      }
 
-    // Verifica si hay algún usuario que coincida con la solicitud
-    const usuarioEncontrado = results.find(
-      (user) =>
-        user.usuario === usuarioSolicitado &&
-        user.contrasenya === contrasenyaSolicitada
-    );
+      // Verifica si hay algún usuario que coincida con la solicitud
+      const usuarioEncontrado = results.some(
+        (user) =>
+          user.nom === usuarioSolicitado &&
+          user.contrasenya === contrasenyaSolicitada
+      );
 
-    if (usuarioEncontrado) {
-      // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-      return res.status(200).json({ Boolean: true });
-    } else {
-      // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-      return res.status(401).json({ Boolean: false });
-    }
-  });
-  closeDBconnection();
+      if (usuarioEncontrado === true) {
+        const loginResponse = { loginBool: true };
+        return res.status(200).json(loginResponse);
+      } else {
+        // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
+        const loginResponse = { loginBool: false };
+        return res.status(401).json(loginResponse);
+      }
+    });
+  } catch (error) {
+    console.error("Error: ", error);
+    return res.status(500).json({ error: "Ocurrió un error en el servidor." });
+  } finally {
+    await closeDBconnection();
+  }
 });
 
 app.get("/api/getUserDataByName", async (req, res) => {
@@ -426,7 +442,8 @@ app.get("/api/getUserDataByName", async (req, res) => {
     });
   
     await closeDBconnection(); // Tanquem la conexió
-  });
+});
+
 // Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -702,55 +719,11 @@ app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
 
-// Comandes:
-const ComandaState = "en curs";
-
+// Comandes Sockets:
 io.on('connection', (socket) => {
-  console.log('Un cliente se ha conectado.');
+  console.log('Un cliente se ha conectado');
 
-  socket.on('comandaStatus', (status) => {
-    if (status === "Enviada") {
-      console.log("Ha arribat una comanda del client"); // Resposta per al servidor
-      socket.emit('comandaResponse', "La comanda s'ha enviat"); // Resposta per al client
-      io.emit('comandaEnviada', "Ha arribat una comanda"); // Resposta per al amdin
-    } else {
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaResponse', "L'Estat de la comanda no es valid.");
-    }
-  })
-
-  socket.on('comandaAcceptada', (status) => {
-    if (status === "Acceptada") {
-    console.log('La comanda ha sigut acceptada'); // Resposta per al servidor
-    io.emit('comandaAcceptada', 'La comanda ha sigut acceptada'); // Resposta per al client
-    } else {
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaAcceptada', "L'Estat de la comanda no es valid.");
-    }
-  })
-
-  socket.on('comandaInPogress', (status) =>{
-    if(status === "En curs"){
-      console.log('La comanda està en curs'); // Resposta per al servidor
-      io.emit('comandaInPogress', 'La teva comanda està en curs'); // Resposta per al client
-    } else{
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaInPogress', "L'estat de la comanda no es valid.");
-    }
-  });
-
-  socket.on('comandaPreparada', (status) =>{
-    if(status === "Preparada"){
-      console.log('La comanda està preparada'); // Resposta per al servidor
-      io.emit('comandaPreparada', 'La comanda està preparada'); // Resposta per al client
-    } else{
-      console.log("L'estat de la comanda no es valid.");
-      socket.emit('comandaPreparada', "L'estat de la comanda no es valid.");
-    }
-  })
-
-  // Manejo de desconexión de sockets
   socket.on('disconnect', () => {
-    console.log('Un cliente se ha desconectado.');
+    console.log('Un cliente se ha desconectado');
   });
 });

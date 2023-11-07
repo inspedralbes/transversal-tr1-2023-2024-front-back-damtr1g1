@@ -10,6 +10,9 @@ public class ProductDataModel {
     private int categoria_id;
     private int quantitat;
 
+    public ProductDataModel(){
+
+    }
     public ProductDataModel(int id, String imgURL, String nom, String definicio, double preu, int categoria_id, int quantitat) {
         this.id = id;
         this.imgURL = imgURL;

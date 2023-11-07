@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         contrasenya = findViewById(R.id.passwordText);
 
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.249:3001")
-                .baseUrl("http://192.168.1.48:3001")
+                .baseUrl("http://192.168.205.249:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         LoginApiService service = retrofit.create(LoginApiService.class);
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             String UsernameText = nom.getText().toString();
             String UserPasswordText = contrasenya.getText().toString();
 
-            Call<LoginResponse> call = service.validateLogin(UsernameText, UserPasswordText);
+            Call<LoginResponse> call = service.validarLogin(UsernameText, UserPasswordText);
             call.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
