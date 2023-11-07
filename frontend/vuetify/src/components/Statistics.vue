@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     executeStatistics() {
-      fetch(import.meta.env.VITE_NODE_ROUTE + "hexecuteStatistics")
+      fetch(import.meta.env.VITE_NODE_ROUTE + "executeStatistics")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
