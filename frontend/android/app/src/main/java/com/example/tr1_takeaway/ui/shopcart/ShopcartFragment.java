@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ShopcartFragment extends Fragment {
 
     private FragmentShopcartBinding binding;
-    private RecyclerView shopcartDisplay;
+    public RecyclerView shopcartDisplay;
     private Adapter adapter;
     Button buyCart;
     ImageButton removeFromCart;

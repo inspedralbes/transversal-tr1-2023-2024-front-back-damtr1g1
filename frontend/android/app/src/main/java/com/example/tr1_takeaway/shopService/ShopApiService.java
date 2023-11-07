@@ -26,7 +26,7 @@ public interface ShopApiService {
     Call<List<ShopcartProductDataModel>> getCartProducts();
 
     @POST("/api/addShoppingCartProduct")
-    Call<ShopResponse> addShoppingCartProduct(
+    Call<List<ShopcartProductDataModel>> addShoppingCartProduct(
             @Query("quantitat") int quantity,
             @Query("id_carret") int shopcartId,
             @Query("id_producte") int productId

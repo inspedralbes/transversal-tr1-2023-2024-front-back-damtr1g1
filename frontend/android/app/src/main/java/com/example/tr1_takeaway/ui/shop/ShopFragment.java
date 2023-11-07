@@ -18,6 +18,9 @@ import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
 import com.example.tr1_takeaway.shopService.ShopApiService;
 import com.example.tr1_takeaway.shopService.ShopResponse;
+import com.example.tr1_takeaway.ui.shopcart.ShopcartAdapter;
+import com.example.tr1_takeaway.ui.shopcart.ShopcartFragment;
+import com.example.tr1_takeaway.ui.shopcart.ShopcartProductDataModel;
 
 import java.util.List;
 
@@ -72,22 +75,22 @@ public class ShopFragment extends Fragment {
 
         addToCart.setOnClickListener(v -> {
             Log.d("TAG", "S'ha clicat");
-            Call<ShopResponse> call = apiService.addShoppingCartProduct(1, 1, 2);
-            call.enqueue(new Callback<ShopResponse>() {
+            Call<List<ShopcartProductDataModel>> call = apiService.addShoppingCartProduct(1, 1, 2);
+            call.enqueue(new Callback<List<ShopcartProductDataModel>>() {
                 @Override
-                public void onResponse(Call<ShopResponse> call, Response<ShopResponse> response) {
+                public void onResponse(Call<List<ShopcartProductDataModel>> call, Response<List<ShopcartProductDataModel>> response) {
                     if (response.isSuccessful()) {
-                        ShopResponse shopResponse = response.body();
-                        if (shopResponse != null) {
-                            Log.e("TAG", "Wahoo");
-                        }
+                        List<ShopcartProductDataModel> data = response.body();
+                        assert data != null;
+                        Log.d("DATA", data.toString());
+                        ShopcartAdapter adapter = new ShopcartAdapter(data);
                     } else {
                         Log.e("TAG", "what the fuck is a kilometer");
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ShopResponse> call, Throwable t) {
+                public void onFailure(Call<List<ShopcartProductDataModel>> call, Throwable t) {
                     Log.e("TAG", "what the fuck is a kilometer");
                 }
             });
