@@ -26,11 +26,11 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="4dp"
         android:text="dataCaducitatTargeta"
-        app:layout_constraintStart_toEndOf="@+id/ccnumberText"
+        app:layout_constraintStart_toEndOf="@+id/creditCardNumber"
         app:layout_constraintTop_toBottomOf="@+id/creditcard" />
 
     <TextView
-        android:id="@+id/namesurname"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
@@ -40,14 +40,14 @@
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
     <TextView
-        android:id="@+id/nameText"
+        android:id="@+id/cognoms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
         android:layout_marginTop="4dp"
         android:text="nomcognoms"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/namesurname" />
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <TextView
         android:id="@+id/creditcard"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profileicon" />
 
     <TextView
-        android:id="@+id/ccnumberText"
+        android:id="@+id/creditCardNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
@@ -87,7 +87,7 @@
         android:layout_marginTop="4dp"
         android:text="ccvTargeta"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ccnumberText" />
+        app:layout_constraintTop_toBottomOf="@+id/creditCardNumber" />
 
     <TextView
         android:id="@+id/email"
