@@ -695,7 +695,7 @@ app.get("/api/getImatgeEstadistiques/HoraMesComu", (req, res) => {
 app.get("/api/executeStatistics", callPython);
 
 function callPython(req, res) {
-  const pythonProcess = spawn("python", ["./estadistiques.py"]);
+  const pythonProcess = spawn("python3", ["./estadistiques.py"]);
 
   pythonProcess.stdout.on("data", (data) => {
     // Manejar la salida del proceso Python
