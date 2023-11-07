@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.example.tr1_takeaway"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -29,6 +29,16 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildscript {
+        repositories {
+            google()
+            mavenCentral()
+        }
+        dependencies {
+            classpath 'com.android.tools.build:gradle:7.1.3' // Cambia a la versión más reciente disponible
+        }
+    }
+
 }
 
 dependencies {
