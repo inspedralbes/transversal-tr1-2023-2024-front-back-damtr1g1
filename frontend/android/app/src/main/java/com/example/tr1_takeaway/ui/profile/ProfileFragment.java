@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,7 +25,7 @@ public class ProfileFragment extends Fragment {
     private TextView username, name, email, creditCardNumber, creditCardExpirationDate, creditCardCCV;
     private FragmentProfileBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
@@ -48,17 +47,16 @@ public class ProfileFragment extends Fragment {
         Call<LoginResponse> call = apiService.getUserDataByName("ELADMIN");
         call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-                    // Aquí puedes manejar la respuesta
-                    // por ejemplo, actualizando las vistas con los datos recibidos
+
                 } else {
                     Log.e("TAG", "Error: " + response.message());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.e("TAG", "Error: " + t.getMessage());
             }
         });

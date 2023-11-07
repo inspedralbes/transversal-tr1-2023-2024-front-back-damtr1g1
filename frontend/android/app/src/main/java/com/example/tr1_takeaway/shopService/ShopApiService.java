@@ -1,11 +1,8 @@
 package com.example.tr1_takeaway.shopService;
 
 import android.widget.Button;
-import android.widget.ImageButton;
 
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tr1_takeaway.loginService.LoginResponse;
 import com.example.tr1_takeaway.ui.shop.ProductDataModel;
 import com.example.tr1_takeaway.ui.shopcart.ShopcartProductDataModel;
 
@@ -29,7 +26,7 @@ public interface ShopApiService {
     Call<List<ShopcartProductDataModel>> getCartProducts();
 
     @POST("/api/addShoppingCartProduct")
-    Call<Button> addShoppingCartProduct(
+    Call<ShopResponse> addShoppingCartProduct(
             @Query("quantitat") int quantity,
             @Query("id_carret") int shopcartId,
             @Query("id_producte") int productId
