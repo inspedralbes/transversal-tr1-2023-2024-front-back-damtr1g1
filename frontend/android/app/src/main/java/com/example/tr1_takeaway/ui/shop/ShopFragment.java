@@ -72,7 +72,7 @@ public class ShopFragment extends Fragment {
 
         addToCart.setOnClickListener(v -> {
             Log.d("TAG", "S'ha clicat");
-            Call<ShopResponse> call = apiService.addShoppingCartProduct(1, 1, 1);
+            Call<ShopResponse> call = apiService.addShoppingCartProduct(1, 1, 2);
             call.enqueue(new Callback<ShopResponse>() {
                 @Override
                 public void onResponse(Call<ShopResponse> call, Response<ShopResponse> response) {

@@ -89,7 +89,7 @@ public class ShopcartFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ShopResponse> call, Response<ShopResponse> response) {
                     if (response.isSuccessful()) {
-                        ;
+
                     }
                 }
 
