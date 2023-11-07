@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
 import com.example.tr1_takeaway.shopService.ShopApiService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -31,13 +35,16 @@ public class ShopFragment extends Fragment {
     private FragmentShopBinding binding;
 
         private RecyclerView productDisplay;
+        Button addtocart;
         private Adapter adapter;
+
 
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_shop, container, false);
-            Log.d("TAG", "what the fuck is a kilometer");
+
+            //addtocart.findViewById(R.id.addProductToCart);
 
             ShopViewModel shopViewModel =
                     new ViewModelProvider(this).get(ShopViewModel.class);
@@ -56,13 +63,18 @@ public class ShopFragment extends Fragment {
             });
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.205.249:3001")
+                    //.baseUrl("http://192.168.205.249:3001")
+                    .baseUrl("http://10.2.2.83:3001")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             ShopApiService apiService = retrofit.create(ShopApiService.class);
             // Call the method to fetch data from Retrofit
             fetchDataFromApi(apiService, productDisplay);
+
+            /*addtocart.setOnClickListener(v->{
+                //enviarDatosAlServidor();
+            });*/
 
             return view;
         }

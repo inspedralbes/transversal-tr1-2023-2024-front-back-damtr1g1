@@ -41,20 +41,6 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Button editarProfile = root.findViewById(R.id.EditarProfile);
-        Button guardarNewProfile = root.findViewById(R.id.GuardarProfile);
-
-        EditText EditTextexpirydateText = root.findViewById(R.id.EditTextexpirydateText);
-        EditText EditTextname = root.findViewById(R.id.EditTextname);
-        EditText EditTextcognoms = root.findViewById(R.id.EditTextcognoms);
-        EditText EditTextcreditcard = root.findViewById(R.id.EditTextcreditcard);
-        EditText EditTextcreditCardNumber = root.findViewById(R.id.EditTextcreditCardNumber);
-        EditText EditTextemailText = root.findViewById(R.id.EditTextemailText);
-        EditText EditTextccvText = root.findViewById(R.id.EditTextccvText);
-        EditText EditTextemail = root.findViewById(R.id.EditTextemail);
-        EditText EditTextusername = root.findViewById(R.id.EditTextusername);
-
-
         Context context = getActivity();
 
         // Obtén el ID del usuario de SharedPreferences en otra clase
@@ -71,7 +57,8 @@ public class ProfileFragment extends Fragment {
         this.creditCardCCV = binding.ccvText;
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
+                //.baseUrl("http://192.168.205.249:3001")
+                .baseUrl("http://10.2.2.83:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ProfileApiService apiService = retrofit.create(ProfileApiService.class);
@@ -99,75 +86,14 @@ public class ProfileFragment extends Fragment {
                 }
 
             }
-
             @Override
             public void onFailure(@NonNull Call<ProfileDataParse> call, @NonNull Throwable t) {
                 Log.e("TAG", "Error: " + t.getMessage());
             }
         });
 
-        editarProfile.setOnClickListener(v->{
-            EditTextexpirydateText.setVisibility(View.VISIBLE);
-            EditTextname.setVisibility(View.VISIBLE);
-            EditTextcognoms.setVisibility(View.VISIBLE);
-            EditTextcreditcard.setVisibility(View.VISIBLE);
-            EditTextcreditCardNumber.setVisibility(View.VISIBLE);
-            EditTextemailText.setVisibility(View.VISIBLE);
-            EditTextccvText.setVisibility(View.VISIBLE);
-            EditTextemail.setVisibility(View.VISIBLE);
-            EditTextusername.setVisibility(View.VISIBLE);
-            guardarNewProfile.setVisibility(View.VISIBLE);
-
-            this.username.setVisibility(View.INVISIBLE);
-            this.name.setVisibility(View.INVISIBLE);
-            this.cognoms.setVisibility(View.INVISIBLE);
-            this.correu_electronic.setVisibility(View.INVISIBLE);
-            this.creditCardNumber.setVisibility(View.INVISIBLE);
-            this.creditCardExpirationDate.setVisibility(View.INVISIBLE);
-            this.creditCardCCV.setVisibility(View.INVISIBLE);
-            editarProfile.setVisibility(View.INVISIBLE);
-        });
-
-        guardarNewProfile.setOnClickListener(v -> {
-            // Recopilar los datos de los EditTexts
-            String newName = EditTextname.getText().toString();
-            String newCognoms = EditTextcognoms.getText().toString();
-            String newCorreuElectronic = EditTextemailText.getText().toString();
-            String newCreditCardNumber = EditTextcreditCardNumber.getText().toString();
-            String newCreditCardExpirationDate = EditTextexpirydateText.getText().toString();
-            String newCreditCardCCV = EditTextccvText.getText().toString();
-
-            // Crear un objeto con los datos modificados
-            ProfileDataParse updatedData = new EditProfileDataParse(newName, newCognoms, newCorreuElectronic, newCreditCardNumber, newCreditCardExpirationDate, newCreditCardCCV);
-
-            // Enviar los datos modificados al servidor para actualizar la información en la base de datos
-            Call<ProfileDataParse> updateCall = apiService.updateUserData(userId, updatedData);
-            updateCall.enqueue(new Callback<ProfileDataParse>() {
-                @Override
-                public void onResponse(@NonNull Call<ProfileDataParse> call, @NonNull Response<ProfileDataParse> response) {
-                    if (response.isSuccessful()) {
-                        // Actualizar los datos en la vista con los nuevos valores
-                        username.setText(updatedData.getNom());
-                        name.setText(updatedData.getNom_real());
-                        correu_electronic.setText(updatedData.getCorreu_electronic());
-                        creditCardNumber.setText(updatedData.getNumero_targeta());
-                        creditCardExpirationDate.setText(updatedData.getData_caducitat_targeta());
-                        creditCardCCV.setText(updatedData.getCvv_targeta());
-                    } else {
-                        Log.e("TAG", "Error: " + response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ProfileDataParse> call, @NonNull Throwable t) {
-                    Log.e("TAG", "Error: " + t.getMessage());
-                }
-            });
-        });
-
         return root;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
