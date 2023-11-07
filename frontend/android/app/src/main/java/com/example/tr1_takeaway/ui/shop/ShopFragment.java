@@ -62,7 +62,8 @@ public class ShopFragment extends Fragment {
             });
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.205.99:3001")
+                    //.baseUrl("http://192.168.205.99:3001") // URL Wilson
+                    .baseUrl("http://192.168.205.249:3001") // URL Ramon
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

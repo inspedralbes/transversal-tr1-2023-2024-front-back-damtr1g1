@@ -7,17 +7,10 @@ import retrofit2.http.Query;
 
 
 public interface LoginApiService {
-
-
     @GET("/api/validateLogin")
     Call<LoginResponse> validarLogin(
             @Query("nom") String usuario,
             @Query("contrasenya") String contrasenya
-    );
-
-    @GET("/api/getUserDataByName")
-    Call<LoginResponse> getUserDataByName(
-            @Query("nom_real") String nom
     );
 }
 

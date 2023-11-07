@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
     EditText nom, contrasenya;
-
+    String UsernameText, UserPasswordText;
+    public String getUsernameText() {
+        return UsernameText;
+    }
     public final static String EXTRA_USERNAME_TEXT = "USERNAME: ";
 
     public final static String EXTRA_PASSWORD_TEXT = "PASSWORD: ";
@@ -39,16 +43,16 @@ public class MainActivity extends AppCompatActivity {
         contrasenya = findViewById(R.id.passwordText);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.99:3001") // URL Wilson
-                //.baseUrl("http://192.168.205.249:3001") // URL Ramon
+                //.baseUrl("http://192.168.205.99:3001") // URL Wilson
+                .baseUrl("http://192.168.205.249:3001") // URL Ramon
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         LoginApiService service = retrofit.create(LoginApiService.class);
 
         loginButton.setOnClickListener(view -> {
 
-            String UsernameText = nom.getText().toString();
-            String UserPasswordText = contrasenya.getText().toString();
+            UsernameText = nom.getText().toString();
+            UserPasswordText = contrasenya.getText().toString();
 
             Call<LoginResponse> call = service.validarLogin(UsernameText, UserPasswordText);
             call.enqueue(new Callback<LoginResponse>() {
@@ -60,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
                             boolean resultado = loginResponse.isLoginBool();
                             Log.d("TAG", "El resultado de la validación de inicio de sesión es: " + resultado);
                             if(resultado) {
+                                // Aquí puedes almacenar el ID del usuario en SharedPreferences
+                                String userId = nom.getText().toString(); // Supongamos que la respuesta contiene el ID del usuario
+                                SharedPreferences.Editor editor = getSharedPreferences("NombrePreferencias", MODE_PRIVATE).edit();
+                                editor.putString("IDUsuario", userId);
+                                editor.apply();
+
                                 Bundle extras = new Bundle();
                                 secondScreen = new Intent(MainActivity.this, ShopActivity.class);
                                 extras.putString(EXTRA_USERNAME_TEXT, nom.getText().toString());
@@ -83,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
         });
-
-
     }
+
 }

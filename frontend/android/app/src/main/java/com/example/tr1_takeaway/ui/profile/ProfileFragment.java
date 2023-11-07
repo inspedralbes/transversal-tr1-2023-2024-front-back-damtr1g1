@@ -1,5 +1,9 @@
 package com.example.tr1_takeaway.ui.profile;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,13 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.databinding.FragmentProfileBinding;
-import com.example.tr1_takeaway.loginService.LoginApiService;
-import com.example.tr1_takeaway.loginService.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView username, name, email, creditCardNumber, creditCardExpirationDate, creditCardCCV;
+    private TextView username, name, cognoms, email, creditCardNumber, creditCardExpirationDate, creditCardCCV;
     private FragmentProfileBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -32,10 +36,19 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        Context context = getActivity();
+
+        // Obtén el ID del usuario de SharedPreferences en otra clase
+        SharedPreferences prefs = context.getSharedPreferences("NombrePreferencias", MODE_PRIVATE);
+        String userId = prefs.getString("IDUsuario", "ValorPredeterminadoSiNoSeEncuentra");
+
+
+
         this.username = binding.username;
-        this.name = binding.nameText;
+        this.name = binding.name;
+        this.cognoms = binding.cognoms;
         this.email = binding.emailText;
-        this.creditCardNumber = binding.ccnumberText;
+        this.creditCardNumber = binding.creditCardNumber;
         this.creditCardExpirationDate = binding.expirydateText;
         this.creditCardCCV = binding.ccvText;
 
@@ -43,22 +56,34 @@ public class ProfileFragment extends Fragment {
                 .baseUrl("http://192.168.205.249:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        LoginApiService apiService = retrofit.create(LoginApiService.class);
+        ProfileApiService apiService = retrofit.create(ProfileApiService.class);
 
-        Call<LoginResponse> call = apiService.getUserDataByName("ELADMIN");
-        call.enqueue(new Callback<LoginResponse>() {
+
+        Call<ProfileDataParse> call = apiService.getUserDataByName(userId);
+        call.enqueue(new Callback<ProfileDataParse>() {
             @Override
-            public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+            public void onResponse(@NonNull Call<ProfileDataParse> call, @NonNull Response<ProfileDataParse> response) {
                 if (response.isSuccessful()) {
-                    // Aquí puedes manejar la respuesta
-                    // por ejemplo, actualizando las vistas con los datos recibidos
+                    Log.d("Profile", "response true");
+                    ProfileDataParse profileDataParse = response.body();
+                    if (profileDataParse != null) {
+                        Log.d("Porfile", "Profile is not null");
+                        username.setText(profileDataParse.getNom());
+                        name.setText(profileDataParse.getNom_real());
+                        email.setText(profileDataParse.getCorreu_electronic());
+                        creditCardNumber.setText(profileDataParse.getNumero_targeta());
+                        creditCardExpirationDate.setText(profileDataParse.getData_caducitat_targeta());
+                        String ccvTexto = String.valueOf(profileDataParse.getCvv_targeta()); // Pasem el int a String
+                        creditCardCCV.setText(ccvTexto); // L'impimim per pantalla
+                    }
                 } else {
                     Log.e("TAG", "Error: " + response.message());
                 }
+
             }
 
             @Override
-            public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ProfileDataParse> call, @NonNull Throwable t) {
                 Log.e("TAG", "Error: " + t.getMessage());
             }
         });
