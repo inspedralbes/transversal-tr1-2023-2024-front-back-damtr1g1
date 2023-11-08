@@ -5,7 +5,7 @@ const mysql = require("mysql");
 const fs = require("fs");
 const multer = require("multer");
 const imatges = multer({ dest: "./img/productes/" });
-const PORT = 3001;
+const PORT = 3003;
 const app = express();
 const cors = require("cors");
 const server = http.createServer(app);
@@ -18,6 +18,7 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
+  path: "/node/"
 });
 
 
@@ -720,7 +721,7 @@ app.get("/api/getImatgeEstadistiques/HoraMesComu", (req, res) => {
 app.get("/api/executeStatistics", callPython);
 
 function callPython(req, res) {
-  const pythonProcess = spawn("python", ["./estadistiques.py"]);
+  const pythonProcess = spawn("python3", ["./estadistiques.py"]);
 
   pythonProcess.stdout.on("data", (data) => {
     // Manejar la salida del proceso Python

@@ -1,14 +1,8 @@
-<script setup>
-</script>
+<script setup></script>
 
 <script>
 export default {
   props: ["title", "img", "path"],
-  methods: {
-    animation() {
-      document.getElementById(this.id).className = "control-panel__animation";
-    },
-  },
 };
 </script>
 
@@ -27,7 +21,7 @@ export default {
         >
           {{ title }}
         </div>
-        <v-img height="200" :src='"../img/" + img'> </v-img>
+        <v-img height="200" :src="`/img/${ img }`"> </v-img>
         <v-container align="center" justify="center">
           <v-sheet class="ma-2" style="background: transparent">
             <transition>

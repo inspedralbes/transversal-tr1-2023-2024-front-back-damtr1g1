@@ -6,17 +6,23 @@ import io from "socket.io-client";
 export default {
   props: ["title", "img", "id"],
   data: () => ({
+    jsonComandes: {},
     socket: null,
     switchsNotSelected: true,
     responseData: null,
     comandaActual: null,
-    json: {},
   }),
   mounted() {
-    this.socket = io(import.meta.env.VITE_SOCKETS); // Reemplaza con la URL de tu servidor de sockets
+    this.socket = io(import.meta.env.VITE_SOCKETS, {
+      cors: {
+        origin: "*",
+      },
+      path: "/node/",
+      transports: ["websocket"],
+    });
 
     this.socket.on("json", (data) => {
-      this.json = data;
+      this.jsonComandes = data;
     });
   },
   methods: {
@@ -53,7 +59,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div v-if="jsonComandes">
     <v-row class="pl-3 pt-2">
       <v-col
         cols="2"
@@ -69,7 +75,7 @@ export default {
       >
         <v-list-item
           :key="comandes"
-          v-for="(comandes, index) in this.json.comandes"
+          v-for="(comandes, index) in jsonComandes.comandes"
           class="mb-2"
           style="
             background-color: #7875df;
@@ -133,8 +139,8 @@ export default {
           </thead>
           <tbody>
             <tr
-              v-for="producte in this.json.comandes[comandaActual].comanda
-                .productes"
+              v-for="producte in jsonComandes.comandes[comandaActual]
+                .comanda.productes"
               :key="producte"
               align="left"
             >
@@ -157,7 +163,8 @@ export default {
                 <v-switch
                   @click="
                     switchSelected(
-                      this.json.comandes[comandaActual].comanda.productes.length
+                      jsonComandes.comandes[comandaActual].comanda
+                        .productes.length
                     )
                   "
                   class="mt-5"
