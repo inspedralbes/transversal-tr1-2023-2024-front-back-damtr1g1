@@ -57,11 +57,7 @@ public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shopcart_grid_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-
-
-
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
