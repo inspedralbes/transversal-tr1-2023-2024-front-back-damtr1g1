@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tr1_takeaway.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
 
 import java.util.List;
 
@@ -24,7 +24,8 @@ public class ShopViewModel extends ViewModel {
     public void fetchDataFromApi() {
         // Retrofit initialization
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
+                //.baseUrl("http://192.168.205.249:3001")
+                .baseUrl("http://192.168.205.63:3001") // URL Marti
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

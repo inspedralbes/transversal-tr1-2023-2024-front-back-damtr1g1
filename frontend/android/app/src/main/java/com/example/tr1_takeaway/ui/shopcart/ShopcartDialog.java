@@ -1,31 +1,80 @@
 package com.example.tr1_takeaway.ui.shopcart;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.example.tr1_takeaway.MainActivity;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopService.ShopResponse;
+import com.example.tr1_takeaway.ui.shop.ShopFragment;
+
 import java.util.Calendar;
 
-public class ShopcartDialog extends DialogFragment {
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Get the current date
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-        // Create a DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), dateSetListener, year, month, day);
+public class ShopcartDialog extends DialogFragment {
+    public class CustomAlertDialog extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Vols completar aquesta comanda?")
+                    .setPositiveButton("Completar Comanda", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            initiateRetrofitCall();
+                        }
+                    })
+                    .setNegativeButton("Cancel·lar Comanda", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            redirectToMainActivity();
+                        }
+                    });
+
+            return builder.create();
+        }
+
+        private void initiateRetrofitCall() {
+            Retrofit retrofit = new Retrofit.Builder()
+                    //.baseUrl("http://192.168.205.249:3001")
+                    .baseUrl("http://192.168.205.63:3001") // URL Marti
+                    //.baseUrl("http://10.2.2.83:3001")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            ShopApiService retrofitService = retrofit.create(ShopApiService.class);
+            Call<ShopResponse> call = retrofitService.addComanda(1, "admin");
+            // Execute the call
+            call.enqueue(new Callback<ShopResponse>() {
+                @Override
+                public void onResponse(Call<ShopResponse> call, Response<ShopResponse> response) {
+                    // Handle the response
+                }
+
+                @Override
+                public void onFailure(Call<ShopResponse> call, Throwable t) {
+                    // Handle the error
+                }
+            });
+        }
+
+        private void redirectToMainActivity() {
+            Intent intent = new Intent(getActivity(), ShopcartFragment.class);
+            startActivity(intent);
+        }
     }
 
-    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-        }
-    };
 }

@@ -1,4 +1,4 @@
-package com.example.tr1_takeaway.shopService;
+package com.example.tr1_takeaway.api.shopService;
 
 public class ShopResponse {
     private boolean shopBool;
