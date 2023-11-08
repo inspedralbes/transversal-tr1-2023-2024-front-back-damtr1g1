@@ -44,6 +44,28 @@ def obtener_productos_vendidos(cursor):
     cursor.execute(consulta)
     return cursor.fetchall()
 
+def obtenir_HoresComanda(cursor):
+    # Consulta SQL para obtener los datos de las comandas
+    consulta = """
+    SELECT id, usuari, id_carret, data_comanda
+    FROM Comanda
+    """
+    cursor.execute(consulta)
+    return cursor.fetchall()
+
+def obtener_hora_mas_dinero(cursor):
+    """Obtiene la hora en la que se hace mas dinero"""
+    consulta="""SELECT HOUR(data_comanda) AS hora, 
+    SUM(P.preu * CP.quantitat) AS total_dinero
+    FROM Comanda AS C
+    INNER JOIN Carret AS CR ON C.id_carret = CR.id
+    INNER JOIN Carret_Productes AS CP ON CR.id = CP.id_carret
+    INNER JOIN Producte AS P ON CP.id_producte = P.id
+    GROUP BY HOUR(data_comanda)
+    ORDER BY total_dinero DESC"""
+    
+    cursor.execute(consulta)
+    return cursor.fetchall()
 
 def graficoCantidadVendida(df, filename):
     """Crea un gráfico de barras horizontales a partir de un DataFrame."""
@@ -54,7 +76,9 @@ def graficoCantidadVendida(df, filename):
     
     # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-   
+    
+    sns.set(style="whitegrid", rc={'axes.facecolor': '#f3f1ff'})
+    
     # Utilizar la fecha actual en el título del gráfico
     plt.title(f'Unitats venudes per producte. ({fecha_actual})', fontsize=16)
    
@@ -80,6 +104,8 @@ def graficoCantidad(df, filename):
     # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
    
+    sns.set(style="whitegrid", rc={'axes.facecolor': '#f3f1ff'})
+   
     # Utilizar la fecha actual en el título del gráfico
     plt.title(f'Unitats restants productes ({fecha_actual})', fontsize=16)
    
@@ -94,15 +120,6 @@ def graficoCantidad(df, filename):
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
-
-def obtenir_HoresComanda(cursor):
-    # Consulta SQL para obtener los datos de las comandas
-    consulta = """
-    SELECT id, usuari, id_carret, data_comanda
-    FROM Comanda
-    """
-    cursor.execute(consulta)
-    return cursor.fetchall()
 
 def graficHoresComanda(df, filename, hora_mas_comun):
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -129,6 +146,28 @@ def graficHoresComanda(df, filename, hora_mas_comun):
     plt.savefig(filename)
     plt.close()
     
+def graficHoresDiners(df,filename):
+    """Crea un gráfico de barras horizontales a partir de un DataFrame."""
+    plt.figure(figsize=(10, 6), facecolor='#f3f1ff')
+    plt.barh(df['hora'], df['total_dinero'], color='#9094e9', capstyle='round')
+
+    # Obtener la fecha actual
+    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Utilizar la fecha actual en el título del gráfico
+    plt.title(f'Total de diners per hora ({fecha_actual})', fontsize=16)
+
+    plt.yticks(df['hora'], fontsize=12)  # Utiliza las horas como etiquetas en el eje y
+    plt.xlabel('Total de diners', fontsize=14)
+    plt.ylabel('Hora', fontsize=14)
+
+    # Eliminar la cuadrícula horizontal
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
+
+    # Guardar la figura en un archivo (reemplaza 'nombre_del_archivo' con el nombre que desees)
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
 
 def CantidaRestante():
     conexion, cursor = establecer_conexion()
@@ -168,10 +207,21 @@ def HoraComun():
     filename = './img_estadistiques/HoraMesComu.png'
     graficHoresComanda(df,filename,hora_mas_comun)
     
+def HoraDiners():
+    conexion,cursor = establecer_conexion()
+    resultados = obtener_hora_mas_dinero(cursor)
+    print(resultados)
+    conexion.close()
+    
+    df = pd.DataFrame(resultados, columns=['hora','total_dinero'])
+    filename = './img_estadistiques/HoraMesDiners.png'
+    graficHoresDiners(df,filename)
+    
 def main():
     CantidaRestante()
     CantidadVendida()
     HoraComun()
+    HoraDiners()
    
 main()
 

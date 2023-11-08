@@ -717,11 +717,17 @@ app.get("/api/getImatgeEstadistiques/HoraMesComu", (req, res) => {
   res.sendFile(path.resolve("img_estadistiques/HoraMesComu.png"));
 });
 
+app.get("/api/getImatgeEstadistiques/HoraMesDiners", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/HoraMesDiners.png"));
+});
+
+
 //Ejecutar archivo python
 app.get("/api/executeStatistics", callPython);
 
 function callPython(req, res) {
-  const pythonProcess = spawn("python3", ["./estadistiques.py"]);
+  const pythonProcess = spawn("python", ["./estadistiques.py"]);
 
   pythonProcess.stdout.on("data", (data) => {
     // Manejar la salida del proceso Python

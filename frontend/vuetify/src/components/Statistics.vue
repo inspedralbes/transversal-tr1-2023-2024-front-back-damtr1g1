@@ -1,5 +1,4 @@
-<script setup>
-</script>
+<script setup></script>
 
 <script>
 export default {
@@ -12,14 +11,19 @@ export default {
         import.meta.env.VITE_NODE_ROUTE +
         "getImatgeEstadistiques/producteMesVenut",
       fotoHoraComu:
-        import.meta.env.VITE_NODE_ROUTE + "getImatgeEstadistiques/HoraMesComu?",
+        import.meta.env.VITE_NODE_ROUTE + "getImatgeEstadistiques/HoraMesComu",
+      fotoHoraDiners:
+        import.meta.env.VITE_NODE_ROUTE +
+        "getImatgeEstadistiques/HoraMesDiners",
       dialog1: false,
       dialog2: false,
       dialog3: false,
+      dialog4: false,
     };
   },
   methods: {
     executeStatistics() {
+      //si peta es per que al server a la funcio callPython() hem de canviar la versio de python (a produccio es python3 i a localhost es python)
       fetch(import.meta.env.VITE_NODE_ROUTE + "executeStatistics")
         .then((response) => {
           if (!response.ok) {
@@ -42,6 +46,10 @@ export default {
           this.fotoHoraComu =
             import.meta.env.VITE_NODE_ROUTE +
             "getImatgeEstadistiques/HoraMesComu?" +
+            rand;
+          this.fotoHoraDiners =
+            import.meta.env.VITE_NODE_ROUTE +
+            "getImatgeEstadistiques/HoraMesDiners?" +
             rand;
         })
         .catch((error) => {
@@ -178,6 +186,40 @@ export default {
                   </template>
                   <v-card rounded="xl">
                     <v-img height="auto" :src="this.fotoHoraComu"></v-img>
+                  </v-card>
+                </v-dialog>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <div
+                  class="font-weight-bold text-center text-h4 py-4 text-truncate"
+                  style="color: #3d3976"
+                >
+                  Hora Mes Diners
+                </div>
+                <v-dialog v-model="dialog4" width="1200">
+                  <template v-slot:activator>
+                    <v-card
+                      class="image-card"
+                      style="
+                        background: linear-gradient(#b0b8f1, #ced4f7);
+                        padding: 0;
+                        width: auto;
+                      "
+                      elevation="10"
+                      rounded="xl"
+                      @click="dialog4 = true"
+                    >
+                      <v-img
+                        height="238"
+                        cover
+                        :src="this.fotoHoraDiners"
+                      ></v-img>
+                      <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
+                    </v-card>
+                  </template>
+                  <v-card rounded="xl">
+                    <!-- Agregamos border-radius para hacer las esquinas redondas -->
+                    <v-img height="auto" :src="this.fotoHoraDiners"></v-img>
                   </v-card>
                 </v-dialog>
               </v-col>
