@@ -60,9 +60,9 @@ public class ShopcartFragment extends Fragment {
 
         Retrofit retrofit = new Retrofit.Builder()
                 //.baseUrl("http://192.168.205.99:3001") // URL Wilson
-                .baseUrl("http://192.168.205.63:3001") // URL Marti
+                //.baseUrl("http://192.168.205.63:3001") // URL Marti
                 //.baseUrl("http://192.168.205.249:3001") // URL Ramon
-                //.baseUrl("http://10.2.2.83:3001")
+                .baseUrl("http://10.2.2.83:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ShopApiService service = retrofit.create(ShopApiService.class);

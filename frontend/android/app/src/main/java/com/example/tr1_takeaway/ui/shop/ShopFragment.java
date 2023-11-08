@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
-import com.example.tr1_takeaway.shopService.ShopApiService;
 
 import java.util.List;
 
@@ -33,6 +33,7 @@ public class ShopFragment extends Fragment {
     private RecyclerView productDisplay;
     private Adapter adapter;
 
+    ShopViewModel ShopViewModel = new ShopViewModel();
 
     @SuppressLint("MissingInflatedId")
     @Nullable
@@ -40,10 +41,10 @@ public class ShopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop, container, false);
 
-        Button addtocart = view.findViewById(R.id.addProductToCart); // Asigna la vista al botón aquí
+        //Button addtocart = view.findViewById(R.id.addProductToCart); // Asigna la vista al botón aquí
 
-        ShopViewModel shopViewModel =
-                new ViewModelProvider(this).get(ShopViewModel.class);
+        //ShopViewModel shopViewModel =
+        //        new ViewModelProvider(this).get(ShopViewModel.class);
 
         productDisplay = view.findViewById(R.id.productDisplay);
         productDisplay.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
@@ -65,31 +66,10 @@ public class ShopFragment extends Fragment {
                 .build();
 
         ShopApiService apiService = retrofit.create(ShopApiService.class);
-        AddtoShoppingCartApiService service = retrofit.create(AddtoShoppingCartApiService.class);
+        //AddtoShoppingCartApiService service = retrofit.create(AddtoShoppingCartApiService.class);
         // Call the method to fetch data from Retrofit
         fetchDataFromApi(apiService, productDisplay);
-
-        addtocart.setOnClickListener(v -> {
-            Call<AddtoShoppingCartResponse> call = service.addShoppingCartProduct();
-            call.enqueue(new Callback<AddtoShoppingCartResponse>() {
-                @Override
-                public void onResponse(Call<AddtoShoppingCartResponse> call, Response<AddtoShoppingCartResponse> response) {
-                    if (response.isSuccessful()) {
-                        AddtoShoppingCartResponse addtoShoppingCartResponse = response.body();
-                        String message = addtoShoppingCartResponse.getMessage();
-                        // Realiza acciones en función del mensaje recibido
-                    } else {
-                        // Manejar la respuesta no exitosa
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AddtoShoppingCartResponse> call, Throwable t) {
-                    // Manejar el error en la solicitud
-                }
-            });
-
-        });
+        ShopViewModel.addProductToCart(view);
 
         return view;
     }
@@ -107,6 +87,7 @@ public class ShopFragment extends Fragment {
                     adapter = new Adapter(data);
                     if (recyclerView != null) {
                         recyclerView.setAdapter(adapter);
+
                     }
                 } else {
                     Log.e("TAG", "Error al obtener los datos del servidor");
