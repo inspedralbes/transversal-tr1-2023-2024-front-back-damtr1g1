@@ -7,15 +7,15 @@ const multer = require("multer");
 const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3001;
 const app = express();
-const cors = require("cors");
+const cors = require('cors');
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  },
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }
 });
 const { eliminarImatge } = require("./gestio_imatges");
 
@@ -50,6 +50,31 @@ function closeDBconnection() {
     console.log("Conexión cerrada exitosamente.");
   });
 }
+
+// Buscar usuario por nombre
+function selectUserDataByName(nom, callback) {
+  con.query('SELECT * FROM Usuaris WHERE nom = ?', [nom], (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
+    }
+    console.log("Resultados de la consulta:", results); // Verifica los resultados de la consulta
+
+    // Procesa los datos devueltos según la estructura de los resultados
+    if (results.length > 0) {
+      const UsuariJSON = JSON.stringify(results[0]); // Obtén el primer resultado como JSON
+      console.log("Usuario encontrado:", UsuariJSON); // Verifica el usuario encontrado
+      callback(null, UsuariJSON); // Devuelve el JSON en el callback
+    } else {
+      console.log("Usuario no encontrado para el nombre proporcionado");
+      callback(null, null); // No se encontraron resultados, devuelve null en el callback
+    }
+  });
+}
+
+
+
 
 // falta fer lo dels fixers d'imatges                           (comprobada)
 function crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat) {
@@ -91,19 +116,16 @@ function selectProducte(callback) {
 
 // function select producte per id
 function selectProducteById(id, callback) {
-  con.query(
-    `SELECT * FROM Producte WHERE id = ${id}`,
-    (err, results, fields) => {
-      if (err) {
-        console.error("Error al realizar la consulta: " + err.message);
-        callback(err, null); // Devuelve el error en el callback
-        return;
-      }
-      const ProducteJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
-
-      callback(null, ProducteJSON); //
+  con.query(`SELECT * FROM Producte WHERE id = ${id}`, (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
     }
-  );
+    const ProducteJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
+
+    callback(null, ProducteJSON); //
+  });
 }
 
 // function eliminar productes                                  (comprobada)
@@ -138,7 +160,7 @@ function updateProducte(
     nom: nom,
     definicio: definicio,
     preu: preu,
-    categoria_id: categoria,
+    categoria: categoria,
     quantitat: quantitat,
   };
   const id = idProducteUpdate;
@@ -370,42 +392,75 @@ app.get("/", function (req, res) {
   res.send("Conectat al server");
 });
 
-// Ruta per a validar el login
+// Ruta para validar el login
 app.get("/api/validateLogin", async (req, res) => {
-  const usuarioSolicitado = req.query.nom; // Obté l'usuari del client
-  const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
+  const usuarioSolicitado = req.query.nom; // Obtén el usuario del cliente
+  const contrasenyaSolicitada = req.query.contrasenya; // Obtén la contraseña del cliente
 
-  await crearDBConnnection();
-  // Consulta la DB para validar l'usuari i la contrasenya
-  con.query("SELECT * FROM Usuaris", (error, results, fields) => {
-    if (error) {
-      // Errors
-      return res
-        .status(500)
-        .json({ error: "Ocurrió un error al consultar la base de datos." });
-    }
+  try {
+    await crearDBConnnection();
+    // Consulta la DB para validar el usuario y la contraseña
+    con.query("SELECT nom, contrasenya FROM Usuaris", (error, results, fields) => {
+      if (error) {
+        // Manejar errores
+        return res.status(500).json({ error: "Ocurrió un error al consultar la base de datos." });
+      }
 
-    // Verifica si hay algún usuario que coincida con la solicitud
-    const usuarioEncontrado = results.find(
-      (user) =>
-        user.nom === usuarioSolicitado &&
-        user.contrasenya === contrasenyaSolicitada
-    );
+      // Verifica si hay algún usuario que coincida con la solicitud
+      const usuarioEncontrado = results.some(
+        (user) =>
+          user.nom === usuarioSolicitado &&
+          user.contrasenya === contrasenyaSolicitada
+      );
 
-    if (usuarioEncontrado) {
-      // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-      return res.status(200).json({ Boolean: true });
-    } else {
-      // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-      return res.status(401).json({ Boolean: false });
-    }
-  });
-  closeDBconnection();
+      if (usuarioEncontrado === true) {
+        const loginResponse = { loginBool: true };
+        return res.status(200).json(loginResponse);
+      } else {
+        // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
+        const loginResponse = { loginBool: false };
+        return res.status(401).json(loginResponse);
+      }
+    });
+  } catch (error) {
+    console.error("Error: ", error);
+    return res.status(500).json({ error: "Ocurrió un error en el servidor." });
+  } finally {
+    await closeDBconnection();
+  }
 });
+
+app.get("/api/getUserDataByName", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    await crearDBConnnection(); // Creem la conexió
+    await selectUserDataByName(req.query.nom, (err, UsuariJSON) => {
+      if (err) {
+        console.error("Error: " + err);
+      } else {
+        res.json(JSON.parse(UsuariJSON));
+      }
+    });
+  
+    await closeDBconnection(); // Tanquem la conexió
+});
+
 // Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
 
+  const imatgeNom = req.query.imatgeNom; // Obté la imatge
+  const categoria = req.query.categoria; // Obté la categoria del producte
+  const definicio = req.query.definicio; // Obté la definicio del producte
+  const nom = req.query.nom; // Obté el nom del producte
+  const preu = req.query.preu; // Obté el preu del producte
+  const quantitat = req.query.quantitat; // Obté la quantitat del producte
+  await crearDBConnnection(); // Creem la conexió
+  await crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat)// Inserta els productes a la DB
+  await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
+  closeDBconnection(); // Tanquem la conexió
+  res.send({ message: "Afegit correctament" });
+
+  let newFileName = req.query.imatgeNom;
   fs.rename(
     `./img/productes/${req.file.filename}`,
     `./img/productes/${req.query.imatgeNom}`,
@@ -429,6 +484,7 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
       res.send({ message: "Afegit correctament" });
     }
   );
+
 });
 // Ruta select productes                                        (comprobada)
 app.get("/api/getProducts", async (req, res) => {
@@ -470,35 +526,29 @@ app.post("/api/deleteProduct", async (req, res) => {
   res.json({ message: "Eliminat correctament" });
 });
 // Ruta update producte                                         (comprobada)
-app.post("/api/updateProduct", imatges.single("img"), async (req, res) => {
+app.post("/api/updateProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const idProducteUpdate = req.query.idProducteUpdate; // Obté la id producte del client
 
-  fs.rename(
-    `./img/productes/${req.file.filename}`,
-    `./img/productes/${req.query.imatgeNom}`,
-    async function () {
-      (imatgeNom = req.query.imatgeNom),
-        (nom = req.query.nom),
-        (definicio = req.query.definicio),
-        (preu = req.query.preu),
-        (categoria = req.query.categoria),
-        (quantitat = req.query.quantitat),
-        console.log(idProducteUpdate);
-      await crearDBConnnection();
-      await updateProducte(
-        idProducteUpdate,
-        imatgeNom,
-        nom,
-        definicio,
-        preu,
-        categoria,
-        quantitat
-      );
-      closeDBconnection();
-      res.json({ message: " Actualitzat" });
-    }
+  (imatgeNom = req.query.imatgeNom),
+    (nom = req.query.nom),
+    (definicio = req.query.definicio),
+    (preu = req.query.preu),
+    (categoria = req.query.categoria),
+    (quantitat = req.query.quantitat),
+    console.log(idProducteUpdate);
+  await crearDBConnnection();
+  await updateProducte(
+    idProducteUpdate,
+    imatgeNom,
+    nom,
+    definicio,
+    preu,
+    categoria,
+    quantitat
   );
+  closeDBconnection();
+  res.json({ message: " Actualitzat" });
 });
 // Ruta afegir categoria                                        (comprobada)
 app.post("/api/addCategoria", async (req, res) => {
@@ -669,45 +719,11 @@ app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
 
-// Comandes:
-const ComandaStatus = ["Enviada", "Aceptada", "En curs", "Ready"];
+// Comandes Sockets:
+io.on('connection', (socket) => {
+  console.log('Un cliente se ha conectado');
 
-// Rebem quan algun user es conecta
-io.on("connection", (socket) => {
-  console.log("Un cliente se ha conectado.");
-  // Si el client ens envia una comanda amb el seu status
-  socket.on("comandaStatus", (status) => {
-    // Mirem si aquest Status existeix
-    if (ComandaStatus.includes(status)) {
-      // Si existeix fem un switch per veure quina ens ha enviat
-      switch (status) {
-        case "Enviada":
-          console.log("La comanda ha sido enviada.");
-          socket.emit("comandaResponse", "La comanda ha sido enviada.");
-          break;
-        case "Aceptada":
-          console.log("La comanda ha sido aceptada.");
-          socket.emit("comandaResponse", "La comanda ha sido aceptada.");
-          break;
-        case "En curs":
-          console.log("La comanda está en curso.");
-          socket.emit("comandaResponse", "La comanda está en curso.");
-          break;
-        case "Preparada":
-          console.log("La comanda está acabada.");
-          socket.emit("comandaResponse", "La comanda está acabada.");
-        default:
-          console.log("Estado de comanda no reconocido.");
-          socket.emit("comandaResponse", "Estado de comanda no reconocido.");
-      }
-    } else {
-      console.log("Estado de comanda no válido.");
-      socket.emit("comandaResponse", "Estado de comanda no válido.");
-    }
-  });
-
-  // Manejo de desconexión de sockets
-  socket.on("disconnect", () => {
-    console.log("Un cliente se ha desconectado.");
+  socket.on('disconnect', () => {
+    console.log('Un cliente se ha desconectado');
   });
 });

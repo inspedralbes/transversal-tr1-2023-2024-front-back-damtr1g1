@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 
 import com.example.tr1_takeaway.loginService.LoginApiService;
 import com.example.tr1_takeaway.loginService.LoginResponse;
+import com.example.tr1_takeaway.ui.shop.AddShoppingCartToNode;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,9 +24,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
-    EditText usuario;
-    EditText contrasenya;
-
+    EditText nom, contrasenya;
+    String UsernameText, UserPasswordText;
+    public String getUsernameText() {
+        return UsernameText;
+    }
     public final static String EXTRA_USERNAME_TEXT = "USERNAME: ";
 
     public final static String EXTRA_PASSWORD_TEXT = "PASSWORD: ";
@@ -36,50 +40,63 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         loginButton = findViewById(R.id.loginButton);
-        usuario = findViewById(R.id.usernameText);
+        nom = findViewById(R.id.usernameText);
         contrasenya = findViewById(R.id.passwordText);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://192.168.56.1:3001")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+        AddShoppingCartToNode AddCarrito = new AddShoppingCartToNode();
 
-                LoginApiService service = retrofit.create(LoginApiService.class);
-                Call<LoginResponse> call = service.validarLogin(usuario.getText().toString(), contrasenya.getText().toString());
-                call.enqueue(new Callback<LoginResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+        Retrofit retrofit = new Retrofit.Builder()
+                //.baseUrl("http://192.168.205.99:3001") // URL Wilson
+                //.baseUrl("http://192.168.205.249:3001") // URL Ramon
+                .baseUrl("http://10.2.2.83:3001")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        LoginApiService service = retrofit.create(LoginApiService.class);
 
-                        if (response.isSuccessful()) {
-                            LoginResponse booleanResponse = response.body();
-                            if (booleanResponse != null) {
-                                boolean resultado = LoginResponse.isLoginBool();
-                                Log.d("TAG", "El resultado de la validación de inicio de sesión es: " + resultado);
+        loginButton.setOnClickListener(view -> {
+
+            UsernameText = nom.getText().toString();
+            UserPasswordText = contrasenya.getText().toString();
+
+            Call<LoginResponse> call = service.validateLogin(UsernameText, UserPasswordText);
+            call.enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+                    if (response.isSuccessful()) {
+                        LoginResponse loginResponse = response.body();
+                        if (loginResponse != null) {
+                            boolean resultado = loginResponse.isLoginBool();
+                            Log.d("TAG", "El resultado de la validación de inicio de sesión es: " + resultado);
+                            if(resultado) {
+                                // Aquí puedes almacenar el ID del usuario en SharedPreferences
+                                String userId = nom.getText().toString();
+                                SharedPreferences.Editor editor = getSharedPreferences("NombrePreferencias", MODE_PRIVATE).edit();
+                                editor.putString("IDUsuario", userId);
+                                editor.apply();
+                                AddCarrito.CreateShoppingCart(userId);
                                 Bundle extras = new Bundle();
                                 secondScreen = new Intent(MainActivity.this, ShopActivity.class);
-                                extras.putString(EXTRA_USERNAME_TEXT, usuario.getText().toString());
+                                extras.putString(EXTRA_USERNAME_TEXT, nom.getText().toString());
                                 extras.putString(EXTRA_PASSWORD_TEXT, contrasenya.getText().toString());
                                 secondScreen.putExtras(extras);
                                 startActivity(secondScreen);
-
+                            } else{
+                                Log.d("TAG", String.valueOf(loginResponse.isLoginBool()));
+                                Log.e("TAG", "Error al iniciar");
                             }
-                        } else {
-                            Log.e("TAG", "Error en la solicitud");
                         }
+                    } else {
+                        Log.e("TAG", "Error en la solicitud");
                     }
+                }
+                @Override
+                public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
+                    Log.e("TAG", "Error en la solicitud: " + t.getMessage());
+                    t.printStackTrace(); // Imprimir el seguimiento de la pila para obtener más detalles sobre el error
+                }
+            });
 
-                    @Override
-                    public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
-                        Log.e("TAG", "Error en la solicitud: " + t.getMessage());
-                    }
-                });
-
-            }
         });
-
-
     }
+
 }
