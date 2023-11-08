@@ -1,5 +1,8 @@
 package com.example.tr1_takeaway.ui.shopcart;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +17,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopcartBinding;
 import com.example.tr1_takeaway.api.shopService.ShopApiService;
 import com.example.tr1_takeaway.api.shopService.ShopResponse;
+import com.example.tr1_takeaway.ui.shop.ShopFragment;
 
 import java.util.List;
 
@@ -54,9 +59,9 @@ public class ShopcartFragment extends Fragment {
         removeFromCart = productview.findViewById(R.id.deleteShopcartProduct);
 
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.99:3001") // URL Wilson
+                .baseUrl("http://192.168.205.99:3001") // URL Wilson
                 //.baseUrl("http://192.168.205.249:3001") // URL Ramon
-                .baseUrl("http://10.2.2.83:3001")
+                //.baseUrl("http://10.2.2.83:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ShopApiService service = retrofit.create(ShopApiService.class);
@@ -92,7 +97,7 @@ public class ShopcartFragment extends Fragment {
                 public void onResponse(@NonNull Call<ShopResponse> call, @NonNull Response<ShopResponse> response) {
                     if (response.isSuccessful()) {
                         confirmPurchase = new ShopcartDialog();
-                        confirmPurchase.show(getParentFragmentManager(), "Confirm Date of Purchase");
+                        confirmPurchase.show(getParentFragmentManager(), "Completar comanda");
                     }
                 }
 
