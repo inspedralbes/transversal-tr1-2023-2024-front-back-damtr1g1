@@ -30,18 +30,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView username, name, cognoms, email, creditCardNumber, creditCardExpirationDate, creditCardCCV;
+    private TextView username, name, cognoms, correu_electronic, creditCardNumber, creditCardExpirationDate, creditCardCCV;
     private FragmentProfileBinding binding;
-    private boolean isEditing = false;
-    private Button EditarProfile;
-    private EditText editName, editCognoms, editUsername, editEmail, editCreditCardNumber, editCardED, editCVV;
+    private EditText EditTextexpirydateText, EditTextname, EditTextcognoms, EditTextcreditcard, EditTextcreditCardNumber, EditTextemailText, EditTextccvText, EditTextemail, EditTextusername;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        EditarProfile = root.findViewById(R.id.EditarProfile);
+        Button editarProfile = root.findViewById(R.id.EditarProfile);
+        Button guardarNewProfile = root.findViewById(R.id.GuardarProfile);
+
+        EditText EditTextexpirydateText = root.findViewById(R.id.EditTextexpirydateText);
+        EditText EditTextname = root.findViewById(R.id.EditTextname);
+        EditText EditTextcognoms = root.findViewById(R.id.EditTextcognoms);
+        EditText EditTextcreditcard = root.findViewById(R.id.EditTextcreditcard);
+        EditText EditTextcreditCardNumber = root.findViewById(R.id.EditTextcreditCardNumber);
+        EditText EditTextemailText = root.findViewById(R.id.EditTextemailText);
+        EditText EditTextccvText = root.findViewById(R.id.EditTextccvText);
+        EditText EditTextemail = root.findViewById(R.id.EditTextemail);
+        EditText EditTextusername = root.findViewById(R.id.EditTextusername);
+
 
         Context context = getActivity();
 
@@ -53,7 +65,7 @@ public class ProfileFragment extends Fragment {
         this.username = binding.username;
         this.name = binding.name;
         this.cognoms = binding.cognoms;
-        this.email = binding.emailText;
+        this.correu_electronic = binding.emailText;
         this.creditCardNumber = binding.creditCardNumber;
         this.creditCardExpirationDate = binding.expirydateText;
         this.creditCardCCV = binding.ccvText;
@@ -76,7 +88,7 @@ public class ProfileFragment extends Fragment {
                         Log.d("Porfile", "Profile is not null");
                         username.setText(profileDataParse.getNom());
                         name.setText(profileDataParse.getNom_real());
-                        email.setText(profileDataParse.getCorreu_electronic());
+                        correu_electronic.setText(profileDataParse.getCorreu_electronic());
                         creditCardNumber.setText(profileDataParse.getNumero_targeta());
                         creditCardExpirationDate.setText(profileDataParse.getData_caducitat_targeta());
                         String ccvTexto = String.valueOf(profileDataParse.getCvv_targeta()); // Pasem el int a String
@@ -94,74 +106,64 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        editarProfile.setOnClickListener(v->{
+            EditTextexpirydateText.setVisibility(View.VISIBLE);
+            EditTextname.setVisibility(View.VISIBLE);
+            EditTextcognoms.setVisibility(View.VISIBLE);
+            EditTextcreditcard.setVisibility(View.VISIBLE);
+            EditTextcreditCardNumber.setVisibility(View.VISIBLE);
+            EditTextemailText.setVisibility(View.VISIBLE);
+            EditTextccvText.setVisibility(View.VISIBLE);
+            EditTextemail.setVisibility(View.VISIBLE);
+            EditTextusername.setVisibility(View.VISIBLE);
+            guardarNewProfile.setVisibility(View.VISIBLE);
 
-        EditarProfile.setOnClickListener(v -> {
-            if (isEditing) {
-                // Convertir los TextViews a EditTexts
-                name.setVisibility(View.GONE);
-                this.editName = new EditText(requireContext());
-                this.editName.setLayoutParams(name.getLayoutParams());
-                this.editName.setText(name.getText());
-                ((ViewGroup) name.getParent()).addView(editName);
-
-                cognoms.setVisibility(View.GONE);
-                editCognoms = new EditText(requireContext());
-                editCognoms.setLayoutParams(cognoms.getLayoutParams());
-                editCognoms.setText(cognoms.getText());
-                ((ViewGroup) cognoms.getParent()).addView(editCognoms);
-
-                username.setVisibility(View.GONE);
-                editUsername= new EditText(requireContext());
-                editUsername.setLayoutParams(username.getLayoutParams());
-                editUsername.setText(username.getText());
-                ((ViewGroup) username.getParent()).addView(editUsername);
-
-                email.setVisibility(View.GONE);
-                editEmail = new EditText(requireContext());
-                editEmail.setLayoutParams(email.getLayoutParams());
-                editEmail.setText(email.getText());
-                ((ViewGroup) email.getParent()).addView(editEmail);
-
-                creditCardNumber.setVisibility(View.GONE);
-                editCreditCardNumber = new EditText(requireContext());
-                editCreditCardNumber.setLayoutParams(creditCardNumber.getLayoutParams());
-                editCreditCardNumber.setText(creditCardNumber.getText());
-                ((ViewGroup) creditCardNumber.getParent()).addView(editCreditCardNumber);
-
-                creditCardExpirationDate.setVisibility(View.GONE);
-                editCardED = new EditText(requireContext());
-                editCardED.setLayoutParams(creditCardExpirationDate.getLayoutParams());
-                editCardED.setText(creditCardExpirationDate.getText());
-                ((ViewGroup) creditCardExpirationDate.getParent()).addView(editCardED);
-
-                creditCardCCV.setVisibility(View.GONE);
-                editCVV = new EditText(requireContext());
-                editCVV.setLayoutParams(creditCardCCV.getLayoutParams());
-                editCVV.setText(creditCardCCV.getText());
-                ((ViewGroup) creditCardCCV.getParent()).addView(editCVV);
-
-
-                EditarProfile.setText("Guardar");
-                isEditing = false;
-            } else {
-                // Guardar los cambios y convertir los EditTexts de vuelta a TextViews
-                String newName = editName.getText().toString();
-                name.setText(newName);
-                ((ViewGroup) editName.getParent()).removeView(editName);
-                name.setVisibility(View.VISIBLE);
-
-                String newCognoms = editCognoms.getText().toString();
-                cognoms.setText(newCognoms);
-                ((ViewGroup) editCognoms.getParent()).removeView(editCognoms);
-                cognoms.setVisibility(View.VISIBLE);
-
-                // Continuar con el resto de los TextViews y EditTexts según sea necesario
-
-                EditarProfile.setText("Editar");
-                isEditing = true;
-            }
+            this.username.setVisibility(View.INVISIBLE);
+            this.name.setVisibility(View.INVISIBLE);
+            this.cognoms.setVisibility(View.INVISIBLE);
+            this.correu_electronic.setVisibility(View.INVISIBLE);
+            this.creditCardNumber.setVisibility(View.INVISIBLE);
+            this.creditCardExpirationDate.setVisibility(View.INVISIBLE);
+            this.creditCardCCV.setVisibility(View.INVISIBLE);
+            editarProfile.setVisibility(View.INVISIBLE);
         });
 
+        /*guardarNewProfile.setOnClickListener(v -> {
+            // Recopilar los datos de los EditTexts
+            String newName = EditTextname.getText().toString();
+            String newCognoms = EditTextcognoms.getText().toString();
+            String newCorreuElectronic = EditTextemailText.getText().toString();
+            String newCreditCardNumber = EditTextcreditCardNumber.getText().toString();
+            String newCreditCardExpirationDate = EditTextexpirydateText.getText().toString();
+            String newCreditCardCCV = EditTextccvText.getText().toString();
+
+            // Crear un objeto con los datos modificados
+            ProfileDataParse updatedData = new EditProfileDataParse(newName, newCognoms, newCorreuElectronic, newCreditCardNumber, newCreditCardExpirationDate, newCreditCardCCV);
+
+            // Enviar los datos modificados al servidor para actualizar la información en la base de datos
+            Call<ProfileDataParse> updateCall = apiService.updateUserData(userId, updatedData);
+            updateCall.enqueue(new Callback<ProfileDataParse>() {
+                @Override
+                public void onResponse(@NonNull Call<ProfileDataParse> call, @NonNull Response<ProfileDataParse> response) {
+                    if (response.isSuccessful()) {
+                        // Actualizar los datos en la vista con los nuevos valores
+                        username.setText(updatedData.getNom());
+                        name.setText(updatedData.getNom_real());
+                        correu_electronic.setText(updatedData.getCorreu_electronic());
+                        creditCardNumber.setText(updatedData.getNumero_targeta());
+                        creditCardExpirationDate.setText(updatedData.getData_caducitat_targeta());
+                        creditCardCCV.setText(updatedData.getCvv_targeta());
+                    } else {
+                        Log.e("TAG", "Error: " + response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ProfileDataParse> call, @NonNull Throwable t) {
+                    Log.e("TAG", "Error: " + t.getMessage());
+                }
+            });
+        });*/
 
         return root;
     }

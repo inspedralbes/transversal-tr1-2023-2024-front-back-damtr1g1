@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.example.tr1_takeaway.loginService.LoginApiService;
 import com.example.tr1_takeaway.loginService.LoginResponse;
+import com.example.tr1_takeaway.ui.shop.AddShoppingCartToNode;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,9 +43,12 @@ public class MainActivity extends AppCompatActivity {
         nom = findViewById(R.id.usernameText);
         contrasenya = findViewById(R.id.passwordText);
 
+        AddShoppingCartToNode AddCarrito = new AddShoppingCartToNode();
+
         Retrofit retrofit = new Retrofit.Builder()
                 //.baseUrl("http://192.168.205.99:3001") // URL Wilson
-                .baseUrl("http://192.168.205.249:3001") // URL Ramon
+                //.baseUrl("http://192.168.205.249:3001") // URL Ramon
+                .baseUrl("http://10.2.2.83:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         LoginApiService service = retrofit.create(LoginApiService.class);
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             UsernameText = nom.getText().toString();
             UserPasswordText = contrasenya.getText().toString();
 
-            Call<LoginResponse> call = service.validarLogin(UsernameText, UserPasswordText);
+            Call<LoginResponse> call = service.validateLogin(UsernameText, UserPasswordText);
             call.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
@@ -65,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("TAG", "El resultado de la validación de inicio de sesión es: " + resultado);
                             if(resultado) {
                                 // Aquí puedes almacenar el ID del usuario en SharedPreferences
-                                String userId = nom.getText().toString(); // Supongamos que la respuesta contiene el ID del usuario
+                                String userId = nom.getText().toString();
                                 SharedPreferences.Editor editor = getSharedPreferences("NombrePreferencias", MODE_PRIVATE).edit();
                                 editor.putString("IDUsuario", userId);
                                 editor.apply();
-
+                                AddCarrito.CreateShoppingCart(userId);
                                 Bundle extras = new Bundle();
                                 secondScreen = new Intent(MainActivity.this, ShopActivity.class);
                                 extras.putString(EXTRA_USERNAME_TEXT, nom.getText().toString());

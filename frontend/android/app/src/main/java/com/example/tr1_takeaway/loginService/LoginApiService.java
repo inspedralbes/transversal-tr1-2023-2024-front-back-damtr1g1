@@ -8,8 +8,8 @@ import retrofit2.http.Query;
 
 public interface LoginApiService {
     @GET("/api/validateLogin")
-    Call<LoginResponse> validarLogin(
-            @Query("nom") String usuario,
+    Call<LoginResponse> validateLogin(
+            @Query("nom") String nom,
             @Query("contrasenya") String contrasenya
     );
 }
