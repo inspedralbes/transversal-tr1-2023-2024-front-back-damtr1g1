@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tr1_takeaway.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
 
 import java.util.List;
 

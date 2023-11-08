@@ -1,8 +1,7 @@
-package com.example.tr1_takeaway.loginService;
+package com.example.tr1_takeaway.api.loginService;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 

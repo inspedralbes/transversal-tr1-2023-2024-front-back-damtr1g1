@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,8 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.tr1_takeaway.MainActivity;
-import com.example.tr1_takeaway.R;
+import com.example.tr1_takeaway.api.profileService.ProfileApiService;
 import com.example.tr1_takeaway.databinding.FragmentProfileBinding;
 
 import retrofit2.Call;
@@ -41,7 +39,7 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Button editarProfile = root.findViewById(R.id.EditarProfile);
+        /*Button editarProfile = root.findViewById(R.id.EditarProfile);
         Button guardarNewProfile = root.findViewById(R.id.GuardarProfile);
 
         EditText EditTextexpirydateText = root.findViewById(R.id.EditTextexpirydateText);
@@ -52,7 +50,7 @@ public class ProfileFragment extends Fragment {
         EditText EditTextemailText = root.findViewById(R.id.EditTextemailText);
         EditText EditTextccvText = root.findViewById(R.id.EditTextccvText);
         EditText EditTextemail = root.findViewById(R.id.EditTextemail);
-        EditText EditTextusername = root.findViewById(R.id.EditTextusername);
+        EditText EditTextusername = root.findViewById(R.id.EditTextusername);*/
 
 
         Context context = getActivity();
@@ -106,7 +104,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        editarProfile.setOnClickListener(v->{
+        /*editarProfile.setOnClickListener(v->{
             EditTextexpirydateText.setVisibility(View.VISIBLE);
             EditTextname.setVisibility(View.VISIBLE);
             EditTextcognoms.setVisibility(View.VISIBLE);
@@ -128,7 +126,7 @@ public class ProfileFragment extends Fragment {
             editarProfile.setVisibility(View.INVISIBLE);
         });
 
-        /*guardarNewProfile.setOnClickListener(v -> {
+        guardarNewProfile.setOnClickListener(v -> {
             // Recopilar los datos de los EditTexts
             String newName = EditTextname.getText().toString();
             String newCognoms = EditTextcognoms.getText().toString();
