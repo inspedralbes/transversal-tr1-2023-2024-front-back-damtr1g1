@@ -62,17 +62,19 @@ export default {
       this.detenerContador(); // Detener el contador anterior si lo hubiera
       
       this.intervalId = setInterval(() => {
-        
+        //var ahora = new Date("December 25, 1995 23:3:0");
         var ahora = new Date();
         
         var minutosRestantes = 59 - ahora.getMinutes();
-        
-        const segundosRestantes = 59 - ahora.getSeconds();
-        if (segundosRestantes === 0) {
-          this.tiempoRestante = `00:${minutosRestantes}:59`;
-        } else {
-          this.tiempoRestante = `00:${minutosRestantes}:${segundosRestantes}`;
+
+        if(ahora.getMinutes()===0 && ahora.getSeconds()===0){
+          this.executeStatistics()
         }
+
+        const segundosRestantes = 59 - ahora.getSeconds();
+        
+        this.tiempoRestante = `00:${minutosRestantes}:${segundosRestantes}`;
+        
       }, 1000);
     },
     detenerContador() {
