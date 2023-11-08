@@ -1,4 +1,4 @@
-package com.example.tr1_takeaway.socketProductes;
+package com.example.tr1_takeaway.ui.profile.socketProductes;
 
 
 import android.os.Bundle;

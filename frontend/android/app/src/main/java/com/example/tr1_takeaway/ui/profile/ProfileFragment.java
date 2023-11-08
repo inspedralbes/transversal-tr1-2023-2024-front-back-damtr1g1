@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
+import com.example.tr1_takeaway.api.profileService.ProfileApiService;
 import com.example.tr1_takeaway.databinding.FragmentProfileBinding;
 
 import retrofit2.Call;
@@ -50,15 +51,13 @@ public class ProfileFragment extends Fragment {
 
         this.username = binding.username;
         this.name = binding.name;
-        this.cognoms = binding.cognoms;
         this.correu_electronic = binding.emailText;
         this.creditCardNumber = binding.creditCardNumber;
         this.creditCardExpirationDate = binding.expirydateText;
         this.creditCardCCV = binding.ccvText;
 
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.249:3001")
-                .baseUrl("http://10.2.2.83:3001")
+                .baseUrl("http://192.168.205.249:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ProfileApiService apiService = retrofit.create(ProfileApiService.class);
@@ -86,14 +85,15 @@ public class ProfileFragment extends Fragment {
                 }
 
             }
-            @Override
-            public void onFailure(@NonNull Call<ProfileDataParse> call, @NonNull Throwable t) {
-                Log.e("TAG", "Error: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<ProfileDataParse> call, @NonNull Throwable t) {
+                    Log.e("TAG", "Error: " + t.getMessage());
+                }
+            });
 
         return root;
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

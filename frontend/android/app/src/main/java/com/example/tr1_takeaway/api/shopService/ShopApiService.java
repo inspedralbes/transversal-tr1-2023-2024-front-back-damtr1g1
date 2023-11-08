@@ -1,4 +1,4 @@
-package com.example.tr1_takeaway.shopService;
+package com.example.tr1_takeaway.api.shopService;
 
 import android.widget.Button;
 

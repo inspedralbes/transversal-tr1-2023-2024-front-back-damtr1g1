@@ -4,20 +4,32 @@ public class ShopcartProductDataModel {
 
     private String imgURL;
     private String nom;
+
+    private int id;
     private double preu;
     private int quantitat;
 
-    public ShopcartProductDataModel(String imgURL, String nom, double preu, int quantitat) {
+
+    public ShopcartProductDataModel(String imgURL, String nom, double preu, int id, int quantitat) {
         this.imgURL = imgURL;
         this.nom = nom;
         this.preu = preu;
+        this.id = id;
         this.quantitat = quantitat;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getImageUrl() {
         return imgURL;
     }
+
     public void setImageUrl(String url_img) {
         this.imgURL = url_img;
     }

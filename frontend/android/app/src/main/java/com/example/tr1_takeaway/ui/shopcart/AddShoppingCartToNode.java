@@ -1,8 +1,10 @@
-package com.example.tr1_takeaway.ui.shop;
+package com.example.tr1_takeaway.ui.shopcart;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.example.tr1_takeaway.api.shopcartService.ShopCartApiService;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -14,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddShoppingCartToNode {
     public void CreateShoppingCart(String nomUsuari) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.2.2.83:3001/")
+                .baseUrl("http://192.168.205.249:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

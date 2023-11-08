@@ -1,6 +1,4 @@
-package com.example.tr1_takeaway.ui.shop;
-
-import org.json.JSONObject;
+package com.example.tr1_takeaway.api.shopcartService;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

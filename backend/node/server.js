@@ -330,7 +330,7 @@ function deleteCarritoProducto(idCarritoProductoEliminar) {
 function crearComanda(id_carret, usuari) {
   const fechaActual = new Date().toISOString().slice(0, 10); // Obtiene la fecha actual en formato "YYYY-MM-DD"
   const comanda = {
-    data: fechaActual,
+    data_comanda: fechaActual,
     id_carret: id_carret,
     usuari: usuari,
   };
