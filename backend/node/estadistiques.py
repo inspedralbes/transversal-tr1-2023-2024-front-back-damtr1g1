@@ -46,11 +46,11 @@ def obtener_productos_vendidos(cursor):
 
 
 def graficoCantidadVendida(df, filename):
-    """Crea un gráfico de barras a partir de un DataFrame."""
+    """Crea un gráfico de barras horizontales a partir de un DataFrame."""
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
     
-    # Crear un gráfico de barras con puntas redondas y color personalizado
-    plt.bar(df['cantidad_vendida'], df['producto'], color='#9094e9', capstyle='round')
+    # Crear un gráfico de barras horizontales con puntas redondas y color personalizado
+    plt.barh(df['producto'], df['cantidad_vendida'], color='#9094e9', capstyle='round')
     
     # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -58,12 +58,12 @@ def graficoCantidadVendida(df, filename):
     # Utilizar la fecha actual en el título del gráfico
     plt.title(f'Unitats venudes per producte. ({fecha_actual})', fontsize=16)
    
-    plt.xticks(fontsize=12)
-    plt.ylabel('Producte', fontsize=14)
+    plt.yticks(fontsize=12)
     plt.xlabel('Quantitat', fontsize=14)
+    plt.ylabel('Producte', fontsize=14)
     
     # Eliminar la cuadrícula horizontal
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
     
     # Guardar la figura en un archivo
     plt.tight_layout()
@@ -71,24 +71,24 @@ def graficoCantidadVendida(df, filename):
     plt.close()
     
 def graficoCantidad(df, filename):
-    """Crea un gráfico de barras a partir de un DataFrame."""
+    """Crea un gráfico de barras horizontales a partir de un DataFrame."""
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
     
-    # Crear un gráfico de barras con puntas redondas y color personalizado
-    plt.bar(df['quantitat'], df['nom'], color='#9094e9', capstyle='round')
+    # Crear un gráfico de barras horizontales con puntas redondas y color personalizado
+    plt.barh(df['nom'], df['quantitat'], color='#9094e9', capstyle='round')
     
     # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
    
     # Utilizar la fecha actual en el título del gráfico
-    plt.title(f'Unitats restants productes({fecha_actual})', fontsize=16)
+    plt.title(f'Unitats restants productes ({fecha_actual})', fontsize=16)
    
-    plt.xticks(fontsize=12)
-    plt.ylabel('Productes', fontsize=14)
+    plt.yticks(fontsize=12)
     plt.xlabel('Quantitat', fontsize=14)
+    plt.ylabel('Productes', fontsize=14)
     
     # Eliminar la cuadrícula horizontal
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
     
     # Guardar la figura en un archivo
     plt.tight_layout()
