@@ -19,6 +19,8 @@ export default {
       dialog2: false,
       dialog3: false,
       dialog4: false,
+      tiempoRestante: '00:00:00',
+      intervalId: null
     };
   },
   methods: {
@@ -56,7 +58,34 @@ export default {
           console.error("Error executing statistics:", error);
         });
     },
+    calcularTiempoRestante() {
+      this.detenerContador(); // Detener el contador anterior si lo hubiera
+      
+      this.intervalId = setInterval(() => {
+        
+        var ahora = new Date();
+        
+        var minutosRestantes = 59 - ahora.getMinutes();
+        
+        const segundosRestantes = 59 - ahora.getSeconds();
+        if (segundosRestantes === 0) {
+          this.tiempoRestante = `00:${minutosRestantes}:59`;
+        } else {
+          this.tiempoRestante = `00:${minutosRestantes}:${segundosRestantes}`;
+        }
+      }, 1000);
+    },
+    detenerContador() {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
   },
+  created() {
+    this.calcularTiempoRestante();
+  },
+  beforeDestroy() {
+    this.detenerContador();
+  }
 };
 </script>
 <style>
@@ -76,6 +105,9 @@ export default {
     <h1 class="text-center text-h2 my-10 mb-16 font-weight-bold">
       Estadístiques
     </h1>
+    <div>
+      <p>Tiempo restante: {{ tiempoRestante }}</p>
+    </div>
     <v-container>
       <v-card
         style="background: linear-gradient(#9094e9, #b0b8f1)"
