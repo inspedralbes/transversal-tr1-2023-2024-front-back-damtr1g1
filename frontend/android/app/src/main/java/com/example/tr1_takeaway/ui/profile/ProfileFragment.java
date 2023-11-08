@@ -69,7 +69,8 @@ public class ProfileFragment extends Fragment {
         this.creditCardCCV = binding.ccvText;
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
+                //.baseUrl("http://192.168.205.249:3001")
+                .baseUrl("http://192.168.205.63:3001") // URL Marti
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ProfileApiService apiService = retrofit.create(ProfileApiService.class);

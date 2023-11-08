@@ -59,7 +59,8 @@ public class ShopcartFragment extends Fragment {
         removeFromCart = productview.findViewById(R.id.deleteShopcartProduct);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.99:3001") // URL Wilson
+                //.baseUrl("http://192.168.205.99:3001") // URL Wilson
+                .baseUrl("http://192.168.205.63:3001") // URL Marti
                 //.baseUrl("http://192.168.205.249:3001") // URL Ramon
                 //.baseUrl("http://10.2.2.83:3001")
                 .addConverterFactory(GsonConverterFactory.create())
