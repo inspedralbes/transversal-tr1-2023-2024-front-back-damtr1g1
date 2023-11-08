@@ -724,34 +724,57 @@ app.get("/api/getImatgeEstadistiques/HoraMesDiners", (req, res) => {
 
 
 //Ejecutar archivo python
-app.get("/api/executeStatistics", callPython);
+app.get("/api/executeStatistics", async (req, res) => {
 
-function callPython(req, res) {
+   ret = await callPython();
+   res.header("Access-Control-Allow-Origin", "*");
+   //res.send(`Salida del script Python: ${data}`);
+   res.send(JSON.stringify(ret));
+} );
+
+function callPython( ) {
   const pythonProcess = spawn("python", ["./estadistiques.py"]);
+  var obj = {};
 
-  pythonProcess.stdout.on("data", (data) => {
-    // Manejar la salida del proceso Python
+  var prom = new Promise( (resolve, fail) => {
+    pythonProcess.stdout.on("data", (data) => {
+      // Manejar la salida del proceso Python
+  
+     
+      obj.value = data;
+      
+    });
+  
+    pythonProcess.stderr.on("data", (data) => {
+      // Manejar errores del proceso Python
+      obj.error = data;
+  
+      // res.header("Access-Control-Allow-Origin", "*");
+      // res.status(500).send(`Error del script Python: ${JSON.stringify(obj)}`);
+    });
+  
+    pythonProcess.on("close", (code) => {
+      // Manejar el cierre del proceso Python
+      resolve(obj);
+    });
 
-    res.header("Access-Control-Allow-Origin", "*");
-    //res.send(`Salida del script Python: ${data}`);
-    var obj = {};
-    obj.value = data;
-    res.send(JSON.stringify(obj));
+
   });
 
-  pythonProcess.stderr.on("data", (data) => {
-    // Manejar errores del proceso Python
-    var obj = {};
-    obj.value = data;
-
-    res.header("Access-Control-Allow-Origin", "*");
-    res.status(500).send(`Error del script Python: ${JSON.stringify(obj)}`);
-  });
-
-  pythonProcess.on("close", (code) => {
-    // Manejar el cierre del proceso Python
-  });
+ 
+  return prom;
 }
+function calculateTimeToNextHour() {
+  const now = new Date();
+  const currentMinute = now.getMinutes();
+  const minutesToNextHour = 60 - currentMinute;
+  const secondsToNextHour = minutesToNextHour * 60;
+  const millisecondsToNextHour = secondsToNextHour * 1000;
+  
+  return millisecondsToNextHour;
+}
+
+setInterval(callPython, calculateTimeToNextHour());
 
 
 

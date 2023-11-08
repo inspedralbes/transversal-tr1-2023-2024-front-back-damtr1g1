@@ -2,6 +2,32 @@
 
 <script>
 export default {
+  // setup() {
+  // onActivated(() => {
+  //   console.log("Tab 1 Activated");
+
+  //   this.fotoQuantitats =
+  //     import.meta.env.VITE_NODE_ROUTE +
+  //     "getImatgeEstadistiques/producteCantidad?" +
+  //     rand;
+  //   this.fotoQuantitatsVenudes =
+  //     import.meta.env.VITE_NODE_ROUTE +
+  //     "getImatgeEstadistiques/producteMesVenut?" +
+  //     rand;
+  //   this.fotoHoraComu =
+  //     import.meta.env.VITE_NODE_ROUTE +
+  //     "getImatgeEstadistiques/HoraMesComu?" +
+  //     rand;
+  //   this.fotoHoraDiners =
+  //     import.meta.env.VITE_NODE_ROUTE +
+  //     "getImatgeEstadistiques/HoraMesDiners?" +
+  //     rand;
+  // });
+
+  // onDeactivated(() => {
+  //   console.log("Tab 1 Deactivated");
+  // });
+  // },
   data() {
     return {
       fotoQuantitats:
@@ -19,9 +45,28 @@ export default {
       dialog2: false,
       dialog3: false,
       dialog4: false,
-      tiempoRestante: '00:00:00',
-      intervalId: null
+      tiempoRestante: "00:00:00",
+      intervalId: null,
     };
+  },
+  mounted() {
+    var rand = Math.random(100000);
+    this.fotoQuantitats =
+      import.meta.env.VITE_NODE_ROUTE +
+      "getImatgeEstadistiques/producteCantidad?" +
+      rand;
+    this.fotoQuantitatsVenudes =
+      import.meta.env.VITE_NODE_ROUTE +
+      "getImatgeEstadistiques/producteMesVenut?" +
+      rand;
+    this.fotoHoraComu =
+      import.meta.env.VITE_NODE_ROUTE +
+      "getImatgeEstadistiques/HoraMesComu?" +
+      rand;
+    this.fotoHoraDiners =
+      import.meta.env.VITE_NODE_ROUTE +
+      "getImatgeEstadistiques/HoraMesDiners?" +
+      rand;
   },
   methods: {
     executeStatistics() {
@@ -60,34 +105,33 @@ export default {
     },
     calcularTiempoRestante() {
       this.detenerContador(); // Detener el contador anterior si lo hubiera
-      
+
       this.intervalId = setInterval(() => {
         //var ahora = new Date("December 25, 1995 23:3:0");
         var ahora = new Date();
-        
+
         var minutosRestantes = 59 - ahora.getMinutes();
 
-        if(ahora.getMinutes()===0 && ahora.getSeconds()===0){
-          this.executeStatistics()
-        }
+        /*if (ahora.getMinutes() === 0 && ahora.getSeconds() === 0) {
+          this.executeStatistics();
+        }*/
 
         const segundosRestantes = 59 - ahora.getSeconds();
-        
+
         this.tiempoRestante = `00:${minutosRestantes}:${segundosRestantes}`;
-        
       }, 1000);
     },
     detenerContador() {
       clearInterval(this.intervalId);
       this.intervalId = null;
-    }
+    },
   },
   created() {
     this.calcularTiempoRestante();
   },
   beforeDestroy() {
     this.detenerContador();
-  }
+  },
 };
 </script>
 <style>
