@@ -128,7 +128,7 @@ public class ProfileFragment extends Fragment {
             editarProfile.setVisibility(View.INVISIBLE);
         });
 
-        guardarNewProfile.setOnClickListener(v -> {
+        /*guardarNewProfile.setOnClickListener(v -> {
             // Recopilar los datos de los EditTexts
             String newName = EditTextname.getText().toString();
             String newCognoms = EditTextcognoms.getText().toString();
@@ -163,7 +163,7 @@ public class ProfileFragment extends Fragment {
                     Log.e("TAG", "Error: " + t.getMessage());
                 }
             });
-        });
+        });*/
 
         return root;
     }
