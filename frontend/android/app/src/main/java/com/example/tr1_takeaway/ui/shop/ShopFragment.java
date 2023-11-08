@@ -57,8 +57,7 @@ public class ShopFragment extends Fragment {
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    // The view is now ready; you can initialize your RecyclerView here.
-                    // Remove the listener if it's no longer needed.
+
                     productDisplay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
             });
@@ -69,7 +68,7 @@ public class ShopFragment extends Fragment {
                 .build();
 
         ShopApiService apiService = retrofit.create(ShopApiService.class);
-        // Call the method to fetch data from Retrofit
+
         fetchDataFromApi(apiService, productDisplay);
 
 
@@ -113,6 +112,8 @@ public class ShopFragment extends Fragment {
                         Log.d("DATA", data.toString());
                         adapter = new Adapter(data);
                         recyclerView.setAdapter(adapter);
+                        ShopcartFragment fragment = new ShopcartFragment();
+                        fragment.fetchDataFromApi(ShopApiService);
                     } else {
                         Log.e("TAG", "what the fuck is a kilometer");
                     }

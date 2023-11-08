@@ -79,7 +79,7 @@ public class ShopcartFragment extends Fragment {
                 @Override
                 public void onFailure(Call<List<ShopcartProductDataModel>> call, Throwable t) {
                     Log.e("TAG", "Error en la solicitud: " + t.getMessage());
-                    t.printStackTrace(); // Imprimir el seguimiento de la pila para obtener más detalles sobre el error
+                    t.printStackTrace();
                 }
             });
         });
@@ -107,7 +107,7 @@ public class ShopcartFragment extends Fragment {
         return view;
     }
 
-    private void fetchDataFromApi(ShopApiService service) {
+    public void fetchDataFromApi(ShopApiService service) {
         Call<List<ShopcartProductDataModel>> call = service.getCartProducts();
 
         call.enqueue(new Callback<List<ShopcartProductDataModel>>() {
