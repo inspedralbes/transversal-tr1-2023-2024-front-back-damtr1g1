@@ -63,9 +63,26 @@ def obtener_hora_mas_dinero(cursor):
     INNER JOIN Carret AS CR ON C.id_carret = CR.id
     INNER JOIN Carret_Productes AS CP ON CR.id = CP.id_carret
     INNER JOIN Producte AS P ON CP.id_producte = P.id
+    WHERE C.finalitzat=1
     GROUP BY HOUR(data_comanda)
     ORDER BY total_dinero DESC"""
     
+    cursor.execute(consulta)
+    return cursor.fetchall()
+
+def obtenir_diners_comandes(cursor):
+    """Obtiene la cantidad de dinero que hay en las comandas finalizadas y las activas"""
+    consulta="""SELECT
+        CASE
+        WHEN C.finalitzat = 1 THEN 'Comanda finalitzada'
+        ELSE 'Comanda sense finalizar'
+        END AS estado_comanda,
+        SUM(P.preu * CP.quantitat) AS total_dinero
+        FROM Comanda AS C
+        INNER JOIN Carret AS CR ON C.id_carret = CR.id
+        INNER JOIN Carret_Productes AS CP ON CR.id = CP.id_carret
+        INNER JOIN Producte AS P ON CP.id_producte = P.id
+        GROUP BY C.finalitzat"""
     cursor.execute(consulta)
     return cursor.fetchall()
 
@@ -171,6 +188,29 @@ def graficHoresDiners(df,filename):
     plt.savefig(filename)
     plt.close()
 
+def graficoDinersComandas(df,filename):
+    """Crea un gráfico de barras horizontales a partir de un DataFrame."""
+    plt.figure(figsize=(10, 6), facecolor='#f3f1ff')
+    plt.barh(df['estado_comanda'], df['total_dinero'], color='#9094e9', capstyle='round')
+
+    # Obtener la fecha actual
+    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Utilizar la fecha actual en el título del gráfico
+    plt.title(f'Total de diners per estat de la comanda ({fecha_actual})', fontsize=16)
+
+    plt.yticks(df['estado_comanda'], fontsize=12)  # Utiliza las horas como etiquetas en el eje y
+    plt.xlabel('Total de diners', fontsize=14)
+    plt.ylabel('Estat Comanda', fontsize=14)
+
+    # Eliminar la cuadrícula horizontal
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
+
+    # Guardar la figura en un archivo (reemplaza 'nombre_del_archivo' con el nombre que desees)
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+
 def CantidaRestante():
     conexion, cursor = establecer_conexion()
     resultados = obtener_productos_ordenados_cantidad(cursor)
@@ -218,12 +258,23 @@ def HoraDiners():
     df = pd.DataFrame(resultados, columns=['hora','total_dinero'])
     filename = './img_estadistiques/HoraMesDiners.png'
     graficHoresDiners(df,filename)
+
+def DinersComanda():
+    conexion, cursor= establecer_conexion()
+    resultados = obtenir_diners_comandes(cursor)
+    print(resultados)
+    conexion.close()
+
+    df = pd.DataFrame(resultados, columns=['estado_comanda','total_dinero'])
+    filename = './img_estadistiques/DinersComanda.png'
+    graficoDinersComandas(df,filename)
     
 def main():
     CantidaRestante()
     CantidadVendida()
     HoraComun()
     HoraDiners()
+    DinersComanda()
    
 main()
 

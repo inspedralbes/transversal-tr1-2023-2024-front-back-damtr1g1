@@ -722,6 +722,11 @@ app.get("/api/getImatgeEstadistiques/HoraMesDiners", (req, res) => {
   res.sendFile(path.resolve("img_estadistiques/HoraMesDiners.png"));
 });
 
+app.get("/api/getImatgeEstadistiques/DinersComanda", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/DinersComanda.png"));
+});
+
 
 //Ejecutar archivo python
 app.get("/api/executeStatistics", async (req, res) => {
