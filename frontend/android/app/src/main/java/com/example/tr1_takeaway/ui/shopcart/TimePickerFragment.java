@@ -20,7 +20,7 @@ public class TimePickerFragment extends DialogFragment
     }
 
     public interface ITimeSetListener {
-        String processDatePickerResult(int year, int month, int day);
+        String processTimePickerResult(int hour, int minute);
     }
 
     @Override

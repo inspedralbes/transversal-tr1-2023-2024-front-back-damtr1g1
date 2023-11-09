@@ -41,7 +41,7 @@ public class ShopcartFragment extends Fragment implements DatePickerFragment.IDa
     ShopcartDialog confirmPurchase;
 
     int deliveryDateYear, deliveryDateMonth, deliveryDateDay;
-    int deliveryTimeHour, deliveryTimeMinute, deliveryTimeSecond;
+    int deliveryTimeHour, deliveryTimeMinute;
 
 
     public View onCreateView(LayoutInflater inflater,
@@ -109,7 +109,7 @@ public class ShopcartFragment extends Fragment implements DatePickerFragment.IDa
             buyCart.setOnClickListener(v -> {
                 Log.e("TAG", "Processing order");
 
-                Call<ShopResponse> call = service.addComanda(1, "admin",  processDatePickerResult(deliveryDateYear, deliveryDateMonth, deliveryDateDay),processTimePickerResult(deliveryTimeHour, deliveryTimeMinute, deliveryTimeSecond));
+                Call<ShopResponse> call = service.addComanda(1, "admin",  processDatePickerResult(deliveryDateYear, deliveryDateMonth, deliveryDateDay),processTimePickerResult(deliveryTimeHour, deliveryTimeMinute));
                 call.enqueue(new Callback<ShopResponse>() {
                     @Override
                     public void onResponse(@NonNull Call<ShopResponse> call, @NonNull Response<ShopResponse> response) {
@@ -169,14 +169,13 @@ public class ShopcartFragment extends Fragment implements DatePickerFragment.IDa
         String deliveryDate = (month_string + "-" + day_string + "-" + year_string);
         return deliveryDate;
     }
-    public String processTimePickerResult( int hour, int minute,int second) {
+    public String processTimePickerResult( int hour, int minute) {
 
         Log.d("TAG", "processTimePickerResult()");
 
-        String hour_string = Integer.toString(hour + 1);
+        String hour_string = Integer.toString(hour);
         String minute_string = Integer.toString(minute);
-        String second_string = Integer.toString(second);
-        String deliveryTime = (hour_string + ":" + minute_string + ":" + second_string);
+        String deliveryTime = (hour_string + ":" + minute_string);
         return deliveryTime;
     }
 
