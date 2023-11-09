@@ -95,7 +95,6 @@ function selectProducte(callback) {
     callback(null, ProductesJSON); //
   });
 }
-
 // function select producte per id
 function selectProducteById(id, callback) {
   con.query(
@@ -112,7 +111,6 @@ function selectProducteById(id, callback) {
     }
   );
 }
-
 // function eliminar productes                                  (comprobada)
 function deleteProducte(idProducteEliminar) {
   
@@ -770,16 +768,20 @@ function callPython( ) {
   return prom;
 }
 function calculateTimeToNextHour() {
+  callPython()
   const now = new Date();
   const currentMinute = now.getMinutes();
   const minutesToNextHour = 60 - currentMinute;
   const secondsToNextHour = minutesToNextHour * 60;
   const millisecondsToNextHour = secondsToNextHour * 1000;
   
-  return millisecondsToNextHour;
+  setTimeout(calculateTimeToNextHour, 30000);
 }
 
-setInterval(callPython, calculateTimeToNextHour());
+calculateTimeToNextHour()
+
+
+
 
 
 

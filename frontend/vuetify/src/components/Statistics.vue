@@ -71,7 +71,8 @@ export default {
       import.meta.env.VITE_NODE_ROUTE +
       "getImatgeEstadistiques/HoraMesDiners?" +
       rand;
-    this.fotoDinersComanda = import.meta.env.VITE_NODE_ROUTE +
+    this.fotoDinersComanda =
+      import.meta.env.VITE_NODE_ROUTE +
       "getImatgeEstadistiques/DinersComanda?" +
       rand;
   },
@@ -105,7 +106,8 @@ export default {
             import.meta.env.VITE_NODE_ROUTE +
             "getImatgeEstadistiques/HoraMesDiners?" +
             rand;
-          this.fotoDinersComanda = import.meta.env.VITE_NODE_ROUTE +
+          this.fotoDinersComanda =
+            import.meta.env.VITE_NODE_ROUTE +
             "getImatgeEstadistiques/DinersComanda?" +
             rand;
         })
@@ -152,30 +154,56 @@ export default {
 </style>
 <template>
   <v-container class="order-container">
-    <v-btn variant="tonal" icon="mdi-arrow-left" class="mt-5" @click="$router.push('/')"></v-btn>
+    <v-btn
+      variant="tonal"
+      icon="mdi-arrow-left"
+      class="mt-5"
+      @click="$router.push('/')"
+    ></v-btn>
     <h1 class="text-center text-h2 my-10 mb-16 font-weight-bold">
       Estadístiques
     </h1>
-    <div>
-      <p>Tiempo restante: {{ tiempoRestante }}</p>
-    </div>
+    
     <v-container>
-      <v-card style="background: linear-gradient(#9094e9, #b0b8f1)" class="text-center" elevation="4" rounded="xl">
+      
+      <div>
+        <p>Temps restant per a la proxima actualització: {{ tiempoRestante }}</p>
+      </div>
+    
+      <v-card
+        style="background: linear-gradient(#9094e9, #b0b8f1)"
+        class="text-center"
+        elevation="4"
+        rounded="xl"
+      >
         <v-card-title>
           <v-container>
             <v-row>
               <v-col cols="12" sm="4">
-                <div class="font-weight-bold text-center text-h4 py-4 text-truncate" style="color: #3d3976">
+                <div
+                  class="font-weight-bold text-center text-h4 py-4 text-truncate"
+                  style="color: #3d3976"
+                >
                   Productes Restants
                 </div>
                 <v-dialog v-model="dialog1" width="1200">
                   <template v-slot:activator>
-                    <v-card class="image-card" style="
+                    <v-card
+                      class="image-card"
+                      style="
                         background: linear-gradient(#b0b8f1, #ced4f7);
                         padding: 0;
                         width: auto;
-                      " elevation="10" rounded="xl" @click="dialog1 = true">
-                      <v-img height="238" cover :src="this.fotoQuantitats"></v-img>
+                      "
+                      elevation="10"
+                      rounded="xl"
+                      @click="dialog1 = true"
+                    >
+                      <v-img
+                        height="238"
+                        cover
+                        :src="this.fotoQuantitats"
+                      ></v-img>
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
@@ -186,37 +214,66 @@ export default {
                 </v-dialog>
               </v-col>
               <v-col cols="12" sm="4">
-                <div class="font-weight-bold text-center text-h4 py-4 text-truncate" style="color: #3d3976">
+                <div
+                  class="font-weight-bold text-center text-h4 py-4 text-truncate"
+                  style="color: #3d3976"
+                >
                   Unitats Venudes
                 </div>
                 <v-dialog v-model="dialog2" width="1200">
                   <template v-slot:activator>
-                    <v-card class="image-card" style="
+                    <v-card
+                      class="image-card"
+                      style="
                         background: linear-gradient(#b0b8f1, #ced4f7);
                         padding: 0;
                         width: auto;
-                      " elevation="10" rounded="xl" @click="dialog2 = true">
-                      <v-img cover height="238" :src="this.fotoQuantitatsVenudes"></v-img>
+                      "
+                      elevation="10"
+                      rounded="xl"
+                      @click="dialog2 = true"
+                    >
+                      <v-img
+                        cover
+                        height="238"
+                        :src="this.fotoQuantitatsVenudes"
+                      ></v-img>
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
                   <v-card rounded="xl">
-                    <v-img height="auto" :src="this.fotoQuantitatsVenudes"></v-img>
+                    <v-img
+                      height="auto"
+                      :src="this.fotoQuantitatsVenudes"
+                    ></v-img>
                   </v-card>
                 </v-dialog>
               </v-col>
               <v-col cols="12" sm="4">
-                <div class="font-weight-bold text-center text-h4 py-4 text-truncate" style="color: #3d3976">
+                <div
+                  class="font-weight-bold text-center text-h4 py-4 text-truncate"
+                  style="color: #3d3976"
+                >
                   Hores Comunes
                 </div>
                 <v-dialog v-model="dialog3" width="1200">
                   <template v-slot:activator>
-                    <v-card class="image-card" style="
+                    <v-card
+                      class="image-card"
+                      style="
                         background: linear-gradient(#b0b8f1, #ced4f7);
                         padding: 0;
                         width: auto;
-                      " elevation="10" rounded="xl" @click="dialog3 = true">
-                      <v-img height="238" cover :src="this.fotoHoraComu"></v-img>
+                      "
+                      elevation="10"
+                      rounded="xl"
+                      @click="dialog3 = true"
+                    >
+                      <v-img
+                        height="238"
+                        cover
+                        :src="this.fotoHoraComu"
+                      ></v-img>
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
@@ -226,17 +283,30 @@ export default {
                 </v-dialog>
               </v-col>
               <v-col cols="12" sm="4">
-                <div class="font-weight-bold text-center text-h4 py-4 text-truncate" style="color: #3d3976">
+                <div
+                  class="font-weight-bold text-center text-h4 py-4 text-truncate"
+                  style="color: #3d3976"
+                >
                   Hora Mes Diners
                 </div>
                 <v-dialog v-model="dialog4" width="1200">
                   <template v-slot:activator>
-                    <v-card class="image-card" style="
+                    <v-card
+                      class="image-card"
+                      style="
                         background: linear-gradient(#b0b8f1, #ced4f7);
                         padding: 0;
                         width: auto;
-                      " elevation="10" rounded="xl" @click="dialog4 = true">
-                      <v-img height="238" cover :src="this.fotoHoraDiners"></v-img>
+                      "
+                      elevation="10"
+                      rounded="xl"
+                      @click="dialog4 = true"
+                    >
+                      <v-img
+                        height="238"
+                        cover
+                        :src="this.fotoHoraDiners"
+                      ></v-img>
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
@@ -247,17 +317,30 @@ export default {
                 </v-dialog>
               </v-col>
               <v-col cols="12" sm="4">
-                <div class="font-weight-bold text-center text-h4 py-4 text-truncate" style="color: #3d3976">
+                <div
+                  class="font-weight-bold text-center text-h4 py-4 text-truncate"
+                  style="color: #3d3976"
+                >
                   Diners Comandes
                 </div>
                 <v-dialog v-model="dialog5" width="1200">
                   <template v-slot:activator>
-                    <v-card class="image-card" style="
+                    <v-card
+                      class="image-card"
+                      style="
                         background: linear-gradient(#b0b8f1, #ced4f7);
                         padding: 0;
                         width: auto;
-                      " elevation="10" rounded="xl" @click="dialog5 = true">
-                      <v-img height="238" cover :src="this.fotoDinersComanda"></v-img>
+                      "
+                      elevation="10"
+                      rounded="xl"
+                      @click="dialog5 = true"
+                    >
+                      <v-img
+                        height="238"
+                        cover
+                        :src="this.fotoDinersComanda"
+                      ></v-img>
                       <!-- Puedes agregar un texto o contenido adicional aquí si lo deseas -->
                     </v-card>
                   </template>
@@ -271,10 +354,17 @@ export default {
           </v-container>
           <v-container align="center" justify="center">
             <v-sheet class="ma-2" style="background: transparent">
-              <v-btn class="my-4" height="50px" width="170px" rounded style="
+              <v-btn
+                class="my-4"
+                height="50px"
+                width="170px"
+                rounded
+                style="
                   background: linear-gradient(to left, #e8321a, #ff7a68);
                   color: white;
-                " @click="executeStatistics">Actualitza
+                "
+                @click="executeStatistics"
+                >Actualitza
               </v-btn>
             </v-sheet>
           </v-container>

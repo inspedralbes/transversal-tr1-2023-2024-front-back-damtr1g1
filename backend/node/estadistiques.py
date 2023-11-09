@@ -86,6 +86,7 @@ def obtenir_diners_comandes(cursor):
     cursor.execute(consulta)
     return cursor.fetchall()
 
+def obtenir_temps_
 def graficoCantidadVendida(df, filename):
     """Crea un gráfico de barras horizontales a partir de un DataFrame."""
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
@@ -268,7 +269,10 @@ def DinersComanda():
     df = pd.DataFrame(resultados, columns=['estado_comanda','total_dinero'])
     filename = './img_estadistiques/DinersComanda.png'
     graficoDinersComandas(df,filename)
-    
+
+def mitjanaTempsPreparacio():
+    conexion,cursor = establecer_conexion()
+    resultados = o
 def main():
     CantidaRestante()
     CantidadVendida()
