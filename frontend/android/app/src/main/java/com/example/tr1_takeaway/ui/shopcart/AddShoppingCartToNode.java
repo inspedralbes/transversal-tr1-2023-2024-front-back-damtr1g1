@@ -16,7 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddShoppingCartToNode {
     public void CreateShoppingCart(String nomUsuari) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
+                //.baseUrl("http://192.168.205.249:3001")
+                .baseUrl("http://10.2.2.83:3001")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
