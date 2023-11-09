@@ -49,8 +49,7 @@ def obtener_productos_vendidos(cursor):
 def obtenir_HoresComanda(cursor):
     # Consulta SQL para obtener los datos de las comandas
     consulta = """
-    SELECT id, usuari, id_carret, data_comanda
-    FROM Comanda
+    SELECT MONTH(data_comanda) AS mes, COUNT(*) AS cantidad_comandas FROM Comanda GROUP BY mes;
     """
     cursor.execute(consulta)
     return cursor.fetchall()
@@ -148,25 +147,27 @@ def graficoCantidad(df, filename):
     plt.savefig(filename)
     plt.close()
 
-def graficHoresComanda(df, filename, hora_mas_comun):
-    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    hora_counts = df['hora_creacion'].value_counts().sort_index()
-    
-    # Crear un gráfico de barras con puntas redondas y color personalizado
+def graficHoresComanda(df, filename):
+    """Crea un gráfico de barras horizontales a partir de un DataFrame."""
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
     
-    # Configuración de Seaborn para el color de las barras y otras características
+    # Crear un gráfico de barras horizontales con puntas redondas y color personalizado
+    plt.barh(df['mes'], df['cantidad_comandas'], color='#9094e9', capstyle='round')
+    
+    # Obtener la fecha actual
+    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+   
     sns.set(style="whitegrid", rc={'axes.facecolor': '#f3f1ff'})
+   
+    # Utilizar la fecha actual en el título del gráfico
+    plt.title(f'Comandes per mes ({fecha_actual})', fontsize=16)
+   
+    plt.yticks(fontsize=12)
+    plt.xlabel('Comandes', fontsize=14)
+    plt.ylabel('Mes', fontsize=14)
     
-    ax = sns.barplot(x=hora_counts.index, y=hora_counts.values, color='#9094e9', capstyle='round')
-    
-    plt.title(f'Comandes per hora de creació({fecha_actual})', fontsize=16)
-    plt.xlabel(f'Hora del dia més comuna.({hora_mas_comun})', fontsize=14)
-    plt.ylabel('Número de comandes', fontsize=14)
-    plt.xticks(range(24), fontsize=12)  # Etiquetas para las 24 horas
-    
-    # Rotar las etiquetas del eje x para mayor legibilidad
-    ax.set_xticklabels(ax.get_xticklabels(), horizontalalignment='right')
+    # Eliminar la cuadrícula horizontal
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
     
     # Guardar la figura en un archivo
     plt.tight_layout()
@@ -273,8 +274,7 @@ def HoraComun():
     print(resultados)
     conexion.close()
     
-    df = pd.DataFrame(resultados, columns=['id', 'usuari', 'id_carret', 'data_comanda'])
-
+    df = pd.DataFrame(resultados, columns=['mes', 'cantidad_comandas'])
     filename = './img_estadistiques/HoraMesComu.png'
     graficHoresComanda(df,filename)
     
@@ -311,7 +311,7 @@ def mitjanaTempsPreparacio():
 def main():
     CantidaRestante()
     CantidadVendida()
-    #HoraComun()
+    HoraComun()
     HoraDiners()
     DinersComanda()
     mitjanaTempsPreparacio()
