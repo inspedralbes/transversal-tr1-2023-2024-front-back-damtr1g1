@@ -86,7 +86,9 @@ def obtenir_diners_comandes(cursor):
     cursor.execute(consulta)
     return cursor.fetchall()
 
-def obtenir_temps_
+def obtenir_temps_preparacio(cursor):
+    """Obtiene la media de tiempo que tarda en preparar la comanda"""
+    consulta = """"""
 def graficoCantidadVendida(df, filename):
     """Crea un gráfico de barras horizontales a partir de un DataFrame."""
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
