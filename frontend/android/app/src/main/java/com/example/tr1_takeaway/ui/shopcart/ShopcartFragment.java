@@ -1,8 +1,5 @@
 package com.example.tr1_takeaway.ui.shopcart;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +19,6 @@ import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopcartBinding;
 import com.example.tr1_takeaway.api.shopService.ShopApiService;
 import com.example.tr1_takeaway.api.shopService.ShopResponse;
-import com.example.tr1_takeaway.ui.shop.ShopFragment;
 
 import java.util.List;
 
@@ -33,18 +29,19 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class ShopcartFragment extends Fragment {
+public class ShopcartFragment extends Fragment implements DatePickerFragment.IDateSetListener, TimePickerFragment.ITimeSetListener{
 
     MainActivity main = new MainActivity();
     private FragmentShopcartBinding binding;
     public RecyclerView shopcartDisplay;
     private ShopcartAdapter adapter;
     ShopcartProductDataModel product;
-    Button buyCart;
-    Button pickDeliveryTime;
-    Button pickDeliveryDate;
+    Button buyCart, pickDeliveryTime, pickDeliveryDate;
     ImageButton removeFromCart;
     ShopcartDialog confirmPurchase;
+
+    int deliveryDateYear, deliveryDateMonth, deliveryDateDay;
+    int deliveryTimeHour, deliveryTimeMinute;
 
 
     public View onCreateView(LayoutInflater inflater,
@@ -52,6 +49,10 @@ public class ShopcartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shopcart, container, false);
         View productview = inflater.inflate(R.layout.shopcart_grid_item, container, false);
         Log.d("TAG", "what the fuck is a kilometer");
+        DatePickerFragment pickDate = new DatePickerFragment();
+        TimePickerFragment pickTime = new TimePickerFragment();
+        ((DatePickerFragment)pickDate).setIDateSetListener(this);
+        ((TimePickerFragment)pickTime).setITimeSetListener(this);
 
         binding = FragmentShopcartBinding.inflate(inflater, container, false);
         ShopcartViewModel shopcartViewModel = new ViewModelProvider(this).get(ShopcartViewModel.class);
@@ -94,34 +95,38 @@ public class ShopcartFragment extends Fragment {
         });
 
         pickDeliveryDate.setOnClickListener(v -> {
-            DatePickerFragment pickDate = new DatePickerFragment();
-            pickDate.show(getParentFragmentManager(), "datePicker");
+            Log.d("TAG", "pick delivery date");
+            pickDate.show(getActivity().getSupportFragmentManager(), "datePicker");
         });
 
         pickDeliveryTime.setOnClickListener(v -> {
-            TimePickerFragment pickTime = new TimePickerFragment();
-            pickTime.show(getParentFragmentManager(), "timePicker");
+            Log.d("TAG", "pick delivery time");
+            pickTime.show(getActivity().getSupportFragmentManager(), "timePicker");
         });
 
-        buyCart.setOnClickListener(v -> {
-            Call<ShopResponse> call = service.addComanda(1, "admin");
-            call.enqueue(new Callback<ShopResponse>() {
-                @Override
-                public void onResponse(@NonNull Call<ShopResponse> call, @NonNull Response<ShopResponse> response) {
-                    if (response.isSuccessful()) {
+        if(pickDeliveryDate.isPressed()){
+            Log.e("TAG", "the order can be processed");
+            buyCart.setOnClickListener(v -> {
+                Log.e("TAG", "Processing order");
 
-                        confirmPurchase = new ShopcartDialog();
-                        confirmPurchase.show(getParentFragmentManager(), "Completar comanda");
+                Call<ShopResponse> call = service.addComanda(1, "admin",  processDatePickerResult(deliveryDateYear, deliveryDateMonth, deliveryDateDay),processTimePickerResult(deliveryTimeHour, deliveryTimeMinute));
+                call.enqueue(new Callback<ShopResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ShopResponse> call, @NonNull Response<ShopResponse> response) {
+                        if (response.isSuccessful()) {
+                            confirmPurchase = new ShopcartDialog();
+                            confirmPurchase.show(getActivity().getSupportFragmentManager(), "Completar comanda");
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(@NonNull Call<ShopResponse> call, @NonNull Throwable t) {
-                    Log.e("TAG", "Error en la solicitud: " + t.getMessage());
-                    t.printStackTrace(); // Imprimir el seguimiento de la pila para obtener más detalles sobre el error
-                }
+                    @Override
+                    public void onFailure(@NonNull Call<ShopResponse> call, @NonNull Throwable t) {
+                        Log.e("TAG", "Error en la solicitud: " + t.getMessage());
+                        t.printStackTrace(); // Imprimir el seguimiento de la pila para obtener más detalles sobre el error
+                    }
+                });
             });
-        });
+        }
 
         fetchDataFromApi(service);
 
@@ -152,6 +157,26 @@ public class ShopcartFragment extends Fragment {
 
 
         });
+    }
+
+    public String processDatePickerResult(int year, int month, int day) {
+
+        Log.d("TAG", "processDatePickerResult()");
+
+        String month_string = Integer.toString(month + 1);
+        String day_string = Integer.toString(day);
+        String year_string = Integer.toString(year);
+        String deliveryDate = (month_string + "-" + day_string + "-" + year_string);
+        return deliveryDate;
+    }
+    public String processTimePickerResult( int hour, int minute) {
+
+        Log.d("TAG", "processTimePickerResult()");
+
+        String hour_string = Integer.toString(hour);
+        String minute_string = Integer.toString(minute);
+        String deliveryTime = (hour_string + ":" + minute_string);
+        return deliveryTime;
     }
 
     @Override

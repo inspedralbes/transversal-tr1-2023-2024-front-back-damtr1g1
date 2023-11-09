@@ -11,7 +11,14 @@ import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
+    IDateSetListener dateSetListener;
 
+    public void setIDateSetListener(IDateSetListener listener) {
+        dateSetListener = listener;
+    }
+    public interface IDateSetListener {
+        String processDatePickerResult(int year, int month, int day);
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker.
