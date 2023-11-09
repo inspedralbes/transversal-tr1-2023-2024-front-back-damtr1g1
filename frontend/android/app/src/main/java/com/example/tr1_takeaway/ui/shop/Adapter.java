@@ -116,11 +116,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     if (response.isSuccessful()) {
                         // Maneja la respuesta exitosa
                         Log.d("TAG", "Carrito Producto insertado con éxito.");
-                        Log.d("Va", shoppingCartProduct.toString());
                     } else {
                         // Maneja la respuesta de error
                         Log.e("TAG", "Error al insertar Carrito Producto: " + response.errorBody());
-                        Log.d("No va", shoppingCartProduct.toString());
                     }
                 }
 
@@ -128,7 +126,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                     // Maneja el fallo de la solicitud
                     Log.e("TAG", "Error: " + t.getMessage());
-                    Log.d("Pete", shoppingCartProduct.toString());
                 }
             });
         });
