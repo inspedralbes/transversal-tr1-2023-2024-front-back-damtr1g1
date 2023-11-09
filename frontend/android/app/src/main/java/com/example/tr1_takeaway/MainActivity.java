@@ -22,6 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    public String URL = "http://192.168.205.249:3001"; //"http://192.168.205.249:3001" URL Ramon
 
     Button loginButton;
     EditText nom, contrasenya;
@@ -46,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
         AddShoppingCartToNode AddCarrito = new AddShoppingCartToNode();
 
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.99:3001") // URL Wilson
-                //.baseUrl("http://192.168.205.249:3001") // URL Ramon
-                .baseUrl("http://10.2.2.83:3001")
+                .baseUrl(URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         LoginApiService service = retrofit.create(LoginApiService.class);

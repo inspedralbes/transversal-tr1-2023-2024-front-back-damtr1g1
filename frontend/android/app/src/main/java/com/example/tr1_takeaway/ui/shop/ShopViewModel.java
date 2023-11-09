@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.api.shopService.ShopApiService;
 import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
@@ -35,9 +36,9 @@ public class ShopViewModel extends ViewModel {
             int productIDIntContent = Integer.parseInt(productIDContent);
 
             // Retrofit initialization
+            MainActivity MA = new MainActivity();
             Retrofit retrofit = new Retrofit.Builder()
-                    //.baseUrl("http://192.168.205.249:3001")
-                    .baseUrl("http://10.2.2.83:3001")
+                    .baseUrl(MA.URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -70,11 +71,9 @@ public class ShopViewModel extends ViewModel {
 
 
     public void fetchDataFromApi() {
-        // Retrofit initialization
+        MainActivity MA = new MainActivity();
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.249:3001")
-                .baseUrl("http://10.2.2.83:3001")
-                //.baseUrl("http://192.168.205.63:3001") // URL Marti
+                .baseUrl(MA.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

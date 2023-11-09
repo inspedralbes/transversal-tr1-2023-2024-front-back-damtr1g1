@@ -31,10 +31,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView username, name, cognoms, correu_electronic, creditCardNumber, creditCardExpirationDate, creditCardCCV;
+    private TextView username, name, correu_electronic, creditCardNumber, creditCardExpirationDate, creditCardCCV;
     private FragmentProfileBinding binding;
-    private EditText EditTextexpirydateText, EditTextname, EditTextcognoms, EditTextcreditcard, EditTextcreditCardNumber, EditTextemailText, EditTextccvText, EditTextemail, EditTextusername;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,9 +54,9 @@ public class ProfileFragment extends Fragment {
         this.creditCardExpirationDate = binding.expirydateText;
         this.creditCardCCV = binding.ccvText;
 
+        MainActivity MA = new MainActivity();
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.249:3001")
-                .baseUrl("http://10.2.2.83:3001")
+                .baseUrl(MA.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ProfileApiService apiService = retrofit.create(ProfileApiService.class);
