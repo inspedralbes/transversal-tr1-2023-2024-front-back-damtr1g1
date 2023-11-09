@@ -35,11 +35,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ShopcartFragment extends Fragment {
 
+    MainActivity main = new MainActivity();
     private FragmentShopcartBinding binding;
     public RecyclerView shopcartDisplay;
     private ShopcartAdapter adapter;
     ShopcartProductDataModel product;
     Button buyCart;
+    Button pickDeliveryTime;
+    Button pickDeliveryDate;
     ImageButton removeFromCart;
     ShopcartDialog confirmPurchase;
 
@@ -56,13 +59,12 @@ public class ShopcartFragment extends Fragment {
         shopcartDisplay = view.findViewById(R.id.ShopCartDisplay);
         shopcartDisplay.setLayoutManager(new LinearLayoutManager(requireContext()));
         buyCart = view.findViewById(R.id.buyShopcartButton);
+        pickDeliveryTime = view.findViewById(R.id.timePickerButton);
+        pickDeliveryDate = view.findViewById(R.id.datePickerButton);
         removeFromCart = productview.findViewById(R.id.deleteShopcartProduct);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.99:3001") // URL Wilson
-                //.baseUrl("http://192.168.205.63:3001") // URL Marti
-                //.baseUrl("http://192.168.205.249:3001") // URL Ramon
-                //.baseUrl("http://10.2.2.83:3001")
+                .baseUrl(main.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ShopApiService service = retrofit.create(ShopApiService.class);
@@ -91,12 +93,23 @@ public class ShopcartFragment extends Fragment {
             });
         });
 
+        pickDeliveryDate.setOnClickListener(v -> {
+            DatePickerFragment pickDate = new DatePickerFragment();
+            pickDate.show(getParentFragmentManager(), "datePicker");
+        });
+
+        pickDeliveryTime.setOnClickListener(v -> {
+            TimePickerFragment pickTime = new TimePickerFragment();
+            pickTime.show(getParentFragmentManager(), "timePicker");
+        });
+
         buyCart.setOnClickListener(v -> {
             Call<ShopResponse> call = service.addComanda(1, "admin");
             call.enqueue(new Callback<ShopResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<ShopResponse> call, @NonNull Response<ShopResponse> response) {
                     if (response.isSuccessful()) {
+
                         confirmPurchase = new ShopcartDialog();
                         confirmPurchase.show(getParentFragmentManager(), "Completar comanda");
                     }
