@@ -1,12 +1,13 @@
 package com.example.tr1_takeaway.ui.shop;
 
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
 import com.example.tr1_takeaway.ui.shopcart.ShoppingCartProduct;
 import com.squareup.picasso.Picasso;
 
+import java.io.InputStream;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,21 +31,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private final List<ProductDataModel> data;
-    String ProducIDString;
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView ProductID, ProductName, ProductDefinition, ProductPrice, ProductCategory, ProductQuantity;
+        public TextView ProductID, ProductName, ProductPrice, ProductCategory, ProductQuantity;
         public ImageView ProductImage;
         public Button button;
         public ViewHolder(View itemView) {
             super(itemView);
             ProductID = itemView.findViewById(R.id.productID);
             ProductName = itemView.findViewById(R.id.productName);
-            ProductDefinition = itemView.findViewById(R.id.productDescription);
             ProductPrice = itemView.findViewById(R.id.productPrice);
             ProductCategory = itemView.findViewById(R.id.productCategory);
             ProductQuantity = itemView.findViewById(R.id.productQuantity);
             ProductImage = itemView.findViewById(R.id.productImage);
             button = itemView.findViewById(R.id.addProductToCart);
+        }
+
+        public ImageView getProductImage() {
+            return ProductImage;
+        }
+
+        public void setProductImage(ImageView productImage) {
+            ProductImage = productImage;
         }
 
         public TextView getProductID() {
@@ -52,10 +60,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         public TextView getProductName() {
             return ProductName;
-        }
-
-        public TextView getProductDefinition() {
-            return ProductDefinition;
         }
 
         public TextView getProductPrice() {
@@ -88,26 +92,25 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         ProductDataModel currentItem = data.get(position);
         holder.getProductID().setText(String.valueOf(currentItem.getId())); // Convertir a String si es un ID de recurso
         holder.getProductName().setText(currentItem.getNom());
-        holder.getProductDefinition().setText(currentItem.getDefinicio());
         holder.getProductPrice().setText(String.valueOf(currentItem.getPreu())); // Usar el precio real del producto
         holder.getProductCategory().setText(String.valueOf(currentItem.getCategoria_id())); // Usar la categoría real del producto
         holder.getProductQuantity().setText(String.valueOf(currentItem.getQuantitat())); // Usar la cantidad real del producto
-        Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage); // L'imatge la pasem per picasso
+        new DownloadImageFromInternet(holder.getProductImage()).doInBackground(currentItem.getImageUrl().toString()); // L'imatge no la passem ara ||
         holder.button.setOnClickListener(v -> {
             String productIDContent = holder.getProductID().getText().toString();
             int productIDIntContent = Integer.parseInt(productIDContent);
 
             // Retrofit initialization
-            MainActivity MA = new MainActivity();
+            MainActivity main = new MainActivity();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(MA.URL)
+                    .baseUrl(main.URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             addProductToCart service = retrofit.create(addProductToCart.class);
-            //int quantity = // aquí obtienes el valor de cantidad de alguna manera
-            int cartId = 1; // aquí obtienes el valor del ID del carrito de alguna manera
-            ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(1, cartId, productIDIntContent);
+            int quantity = 1;
+            int cartId = 1;
+            ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(quantity, cartId, productIDIntContent);
 
             Call<Void> call = service.crearCarritoProducto(shoppingCartProduct);
             call.enqueue(new Callback<Void>() {
@@ -129,6 +132,27 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 }
             });
         });
+    }
+
+    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+        public DownloadImageFromInternet(ImageView imageView) {
+            this.imageView=imageView;
+        }
+        protected Bitmap doInBackground(@NonNull String... urls) {
+            String imageURL=urls[0];
+            Bitmap bimage=null;
+            try {
+                InputStream in=new java.net.URL(imageURL).openStream();
+                bimage= BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bimage;
+        }
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
     }
 
     @Override
