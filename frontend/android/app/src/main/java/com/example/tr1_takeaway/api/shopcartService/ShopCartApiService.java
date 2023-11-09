@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 
 public interface ShopCartApiService {
     @GET("/api/getShoppingCart")
-    Call<ShoppingCart> getShoppingCart(@Query("usuari") String usuari);
+    Call<ShoppingCart > getShoppingCart(@Query("usuari") String usuari);
 }
 
 

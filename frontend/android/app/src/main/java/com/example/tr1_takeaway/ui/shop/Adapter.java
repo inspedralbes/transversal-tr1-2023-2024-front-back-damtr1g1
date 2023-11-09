@@ -17,8 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
+import com.example.tr1_takeaway.ui.shopcart.AddShoppingCartToNode;
+import com.example.tr1_takeaway.ui.shopcart.ShoppingCart;
 import com.example.tr1_takeaway.ui.shopcart.ShoppingCartProduct;
-import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.List;
@@ -35,12 +36,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         public TextView ProductID, ProductName, ProductPrice, ProductCategory, ProductQuantity;
         public ImageView ProductImage;
         public Button button;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            ProductID = itemView.findViewById(R.id.productID);
             ProductName = itemView.findViewById(R.id.productName);
             ProductPrice = itemView.findViewById(R.id.productPrice);
-            ProductCategory = itemView.findViewById(R.id.productCategory);
             ProductQuantity = itemView.findViewById(R.id.productQuantity);
             ProductImage = itemView.findViewById(R.id.productImage);
             button = itemView.findViewById(R.id.addProductToCart);
@@ -77,7 +77,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     public Adapter(List<ProductDataModel> data) {
         this.data = data;
-
     }
 
     @NonNull
@@ -90,16 +89,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductDataModel currentItem = data.get(position);
-        holder.getProductID().setText(String.valueOf(currentItem.getId())); // Convertir a String si es un ID de recurso
         holder.getProductName().setText(currentItem.getNom());
-        holder.getProductPrice().setText(String.valueOf(currentItem.getPreu())); // Usar el precio real del producto
-        holder.getProductCategory().setText(String.valueOf(currentItem.getCategoria_id())); // Usar la categoría real del producto
-        holder.getProductQuantity().setText(String.valueOf(currentItem.getQuantitat())); // Usar la cantidad real del producto
-        new DownloadImageFromInternet(holder.getProductImage()).doInBackground(currentItem.getImageUrl().toString()); // L'imatge no la passem ara ||
+        holder.getProductPrice().setText(String.valueOf(currentItem.getPreu() + "€")); // Usar el precio real del producto
+        holder.getProductQuantity().setText(String.valueOf(currentItem.getQuantitat() + " unitats")); // Usar la cantidad real del producto
+        new DownloadImageFromInternet(holder.getProductImage()).execute(currentItem.getImageUrl().toString());
         holder.button.setOnClickListener(v -> {
             String productIDContent = holder.getProductID().getText().toString();
             int productIDIntContent = Integer.parseInt(productIDContent);
-
+            ShoppingCart shoppingCart = new ShoppingCart();
             // Retrofit initialization
             MainActivity main = new MainActivity();
             Retrofit retrofit = new Retrofit.Builder()
@@ -108,8 +105,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     .build();
 
             addProductToCart service = retrofit.create(addProductToCart.class);
+            //int id = Integer.parseInt(AS.cartId);
+            //Log.d("id", String.valueOf(id));
             int quantity = 1;
-            int cartId = 1;
+            int cartId = 69;
             ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(quantity, cartId, productIDIntContent);
 
             Call<Void> call = service.crearCarritoProducto(shoppingCartProduct);
@@ -139,7 +138,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         public DownloadImageFromInternet(ImageView imageView) {
             this.imageView=imageView;
         }
-        protected Bitmap doInBackground(@NonNull String... urls) {
+        protected Bitmap doInBackground(String... urls) {
             String imageURL=urls[0];
             Bitmap bimage=null;
             try {
