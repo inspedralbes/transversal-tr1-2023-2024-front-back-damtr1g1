@@ -1,7 +1,8 @@
 package com.example.tr1_takeaway.ui.shop;
 
-public class ProductDataModel {
+import com.example.tr1_takeaway.MainActivity;
 
+public class ProductDataModel {
     private int id;
     private String imatgeNom;
     private String nom;
@@ -21,7 +22,8 @@ public class ProductDataModel {
     }
 
     public String getImageUrl() {
-        return "http://192.168.1.195:3001/api/getImage/"+imatgeNom;
+        MainActivity MA = new MainActivity();
+        return MA.URL+"/api/getImage/" +imatgeNom;
     }
 
     public void setImageUrl(String url_img) {

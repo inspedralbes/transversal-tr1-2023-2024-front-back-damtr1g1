@@ -105,8 +105,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     .build();
 
             addProductToCart service = retrofit.create(addProductToCart.class);
-            //int id = Integer.parseInt(AS.cartId);
-            //Log.d("id", String.valueOf(id));
+
             int quantity = 1;
             int cartId = 69;
             ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(quantity, cartId, productIDIntContent);
