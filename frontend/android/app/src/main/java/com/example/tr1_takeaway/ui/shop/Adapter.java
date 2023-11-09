@@ -90,7 +90,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        AddShoppingCartToNode AS = new AddShoppingCartToNode();
         ProductDataModel currentItem = data.get(position);
         holder.getProductID().setText(String.valueOf(currentItem.getId())); // Convertir a String si es un ID de recurso
         holder.getProductName().setText(currentItem.getNom());
@@ -102,7 +101,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             String productIDContent = holder.getProductID().getText().toString();
             int productIDIntContent = Integer.parseInt(productIDContent);
             ShoppingCart shoppingCart = new ShoppingCart();
-            //String id = shoppingCart.getId();
             // Retrofit initialization
             MainActivity main = new MainActivity();
             Retrofit retrofit = new Retrofit.Builder()
@@ -114,7 +112,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             //int id = Integer.parseInt(AS.cartId);
             //Log.d("id", String.valueOf(id));
             int quantity = 1;
-            int cartId = 1;
+            int cartId = 69;
             ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(quantity, cartId, productIDIntContent);
 
             Call<Void> call = service.crearCarritoProducto(shoppingCartProduct);

@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddShoppingCartToNode {
     MainActivity main = new MainActivity();
     private String cartId;
-
+    public int id;
     public void GetShoppingCart(String nomUsuari) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(main.URL)
@@ -33,6 +33,7 @@ public class AddShoppingCartToNode {
                     if (shoppingCartResponse != null) {
                         cartId = shoppingCartResponse.getId();
                         Log.d("CartId", "ID del carrito: " + cartId);
+                        id = Integer.parseInt(cartId);
                     }
                 } else {
                     Log.e("Error", "Error en la respuesta: " + response.code());

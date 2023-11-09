@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             UsernameText = nom.getText().toString();
             UserPasswordText = contrasenya.getText().toString();
+            //AS.GetShoppingCart(UsernameText);
 
             Call<LoginResponse> call = service.validateLogin(UsernameText, UserPasswordText);
             call.enqueue(new Callback<LoginResponse>() {
