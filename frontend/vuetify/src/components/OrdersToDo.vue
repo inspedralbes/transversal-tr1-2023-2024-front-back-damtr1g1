@@ -11,6 +11,7 @@ export default {
     switchsNotSelected: true,
     responseData: null,
     comandaActual: null,
+    noComandes: false,
   }),
   mounted() {
     this.socket = io(import.meta.env.VITE_SOCKETS, {
@@ -23,6 +24,9 @@ export default {
 
     this.socket.on("json", (data) => {
       this.jsonComandes = data;
+      if (Object.keys(data).length === 0) {
+        this.noComandes = true;
+      }
     });
   },
   methods: {
@@ -30,14 +34,16 @@ export default {
       this.socket.emit("mensaje", "Hola servidor, soy un cliente");
     },
     canviComanda(index) {
-      this.comandaActual = index;
-      this.switchsNotSelected = true;
-      document.querySelectorAll(".v-list-item").forEach((item) => {
-        item.style =
-          "background-color: #7875df; width: 100%; height: 100px; border: 2px solid #473f94; font-weight: bold;";
-      });
-      document.getElementById("comanda-" + index).style =
-        "background-color: #9094e9; width: 100%; height: 100px; border: 4px solid #473f94; font-weight: bold;";
+      setTimeout(() => {
+        this.comandaActual = index;
+        this.switchsNotSelected = true;
+        document.querySelectorAll(".v-list-item").forEach((item) => {
+          item.style =
+            "background-color: #7875df; width: 100%; height: 100px; border: 2px solid #473f94; font-weight: bold;";
+        });
+        document.getElementById("comanda-" + index).style =
+          "background-color: #9094e9; width: 100%; height: 100px; border: 4px solid #473f94; font-weight: bold;";
+      }, 100);
     },
     switchSelected(nProductes) {
       setTimeout(() => {
@@ -50,9 +56,16 @@ export default {
         });
       }, 1);
     },
-    acabarComanda() {
+    async acabarComanda() {
       this.socket.emit("eliminaComanda", this.comandaActual);
-      this.canviComanda(this.comandaActual + 1);
+      if (this.jsonComandes.comandes.length > this.comandaActual + 1) {
+        await this.canviComanda(this.comandaActual);
+      } else if (this.jsonComandes.comandes.length > 1) {
+        await this.canviComanda(0);
+      } else {
+        this.comandaActual = null;
+        this.noComandes = true;
+      }
     },
   },
 };
@@ -73,6 +86,13 @@ export default {
           border-right: solid 1px rgba(90, 90, 90, 0.466);
         "
       >
+        <div
+          v-if="noComandes"
+          class="mt-16"
+          style="font-weight: bold; font-size: large"
+        >
+          No hi han comandes
+        </div>
         <v-list-item
           :key="comandes"
           v-for="(comandes, index) in jsonComandes.comandes"
@@ -92,7 +112,9 @@ export default {
           <div>
             <p>
               {{ comandes.comanda.productes.length }}
-              <v-icon size="x-small" style="color: #ad4234;">mdi-food-drumstick</v-icon>
+              <v-icon size="x-small" style="color: #ad4234"
+                >mdi-food-drumstick</v-icon
+              >
             </p>
           </div>
           <p>{{ comandes.comanda.dia }}</p>
