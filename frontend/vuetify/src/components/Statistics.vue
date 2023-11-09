@@ -300,7 +300,7 @@ export default {
                   class="font-weight-bold text-center text-h4 py-4 text-truncate"
                   style="color: #3d3976"
                 >
-                  Hora Mes Diners
+                  Dia Mes Diners
                 </div>
                 <v-dialog v-model="dialog4" width="1200">
                   <template v-slot:activator>

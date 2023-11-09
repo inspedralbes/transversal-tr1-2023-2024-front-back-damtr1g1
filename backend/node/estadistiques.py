@@ -57,14 +57,14 @@ def obtenir_HoresComanda(cursor):
 
 def obtener_hora_mas_dinero(cursor):
     """Obtiene la hora en la que se hace mas dinero"""
-    consulta="""SELECT HOUR(data_comanda) AS hora, 
+    consulta="""SELECT data_comanda, 
     SUM(P.preu * CP.quantitat) AS total_dinero
     FROM Comanda AS C
     INNER JOIN Carret AS CR ON C.id_carret = CR.id
     INNER JOIN Carret_Productes AS CP ON CR.id = CP.id_carret
     INNER JOIN Producte AS P ON CP.id_producte = P.id
     WHERE C.finalitzat=1
-    GROUP BY HOUR(data_comanda)
+    GROUP BY data_comanda
     ORDER BY total_dinero DESC"""
     
     cursor.execute(consulta)
@@ -176,17 +176,17 @@ def graficHoresComanda(df, filename, hora_mas_comun):
 def graficHoresDiners(df,filename):
     """Crea un gráfico de barras horizontales a partir de un DataFrame."""
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')
-    plt.barh(df['hora'], df['total_dinero'], color='#9094e9', capstyle='round')
+    plt.barh(df['data_comanda'], df['total_dinero'], color='#9094e9', capstyle='round')
 
     # Obtener la fecha actual
     fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     # Utilizar la fecha actual en el título del gráfico
-    plt.title(f'Total de diners per hora ({fecha_actual})', fontsize=16)
+    plt.title(f'Total de diners per Dia ({fecha_actual})', fontsize=16)
 
-    plt.yticks(df['hora'], fontsize=12)  # Utiliza las horas como etiquetas en el eje y
+    plt.yticks(df['data_comanda'], fontsize=12)  # Utiliza las horas como etiquetas en el eje y
     plt.xlabel('Total de diners', fontsize=14)
-    plt.ylabel('Hora', fontsize=14)
+    plt.ylabel('Dia', fontsize=14)
 
     # Eliminar la cuadrícula horizontal
     plt.grid(axis='x', linestyle='--', alpha=0.7)
@@ -290,7 +290,7 @@ def HoraDiners():
     print(resultados)
     conexion.close()
     
-    df = pd.DataFrame(resultados, columns=['hora','total_dinero'])
+    df = pd.DataFrame(resultados, columns=['data_comanda','total_dinero'])
     filename = './img_estadistiques/HoraMesDiners.png'
     graficHoresDiners(df,filename)
 
