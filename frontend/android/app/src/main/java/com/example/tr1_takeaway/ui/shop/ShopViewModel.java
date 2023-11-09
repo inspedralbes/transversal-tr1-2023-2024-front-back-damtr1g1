@@ -1,21 +1,20 @@
 package com.example.tr1_takeaway.ui.shop;
 
-import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
-import com.example.tr1_takeaway.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
+import com.example.tr1_takeaway.ui.shopcart.ShoppingCartProduct;
 
 import java.util.List;
 
@@ -26,29 +25,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ShopViewModel extends ViewModel {
-
-    @SuppressLint("StaticFieldLeak")
     private RecyclerView recyclerView;
     private Adapter adapter;
-
-    @Nullable
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shop, container, false);
-        Log.e("TAG", "what the fuck is a kilometer");
-
-        recyclerView = view.findViewById(R.id.productDisplay);
-        recyclerView.setLayoutManager(new GridLayoutManager(recyclerView.getContext(), 2)); // 2 columns grid
-
-        // Call the method to fetch data from Retrofit
-        fetchDataFromApi();
-
-        return view;
-    }
-
-    private void fetchDataFromApi() {
-        // Retrofit initialization
+    public void fetchDataFromApi() {
+        MainActivity MA = new MainActivity();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.56.1:3001")
+                .baseUrl(MA.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -58,32 +40,20 @@ public class ShopViewModel extends ViewModel {
 
         call.enqueue(new Callback<List<ProductDataModel>>() {
             @Override
-            public void onResponse(Call<List<ProductDataModel>> call, Response<List<ProductDataModel>> response) {
+            public void onResponse(@NonNull Call<List<ProductDataModel>> call, @NonNull Response<List<ProductDataModel>> response) {
                 if (response.isSuccessful()) {
                     List<ProductDataModel> data = response.body();
                     adapter = new Adapter(data);
                     recyclerView.setAdapter(adapter);
                 } else {
-
+                    Log.e("TAG", "Response not successful");
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ProductDataModel>> call, Throwable t) {
-                Log.e("TAG", "what the fuck is a kilometer");
+            public void onFailure(@NonNull Call<List<ProductDataModel>> call, @NonNull Throwable t) {
+                Log.e("TAG", "Error fetching data from API", t);
             }
         });
     }
-
-    private LayoutInflater productInflater;
-    private ViewGroup container;
-    private Bundle savedInstanceState;
-    private View productView;
-
-    public ShopViewModel() {
-        assert productInflater != null;
-        productView = onCreateView(productInflater, container,savedInstanceState);
-    }
-
-
 }

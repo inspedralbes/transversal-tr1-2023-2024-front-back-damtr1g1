@@ -1,16 +1,19 @@
-package com.example.tr1_takeaway.ui.shop;
+package com.example.tr1_takeaway.ui.shopcart;
 
 import com.example.tr1_takeaway.MainActivity;
 
-public class ProductDataModel {
-    private int id;
+public class ShopcartProductDataModel {
+
     private String imatgeNom;
     private String nom;
+
+    private int id;
     private double preu;
-    private int categoria_id;
     private int quantitat;
 
-    public ProductDataModel(){
+
+    public ShopcartProductDataModel() {
+
     }
 
     public int getId() {
@@ -46,14 +49,6 @@ public class ProductDataModel {
         this.preu = preu;
     }
 
-    public int getCategoria_id() {
-        return categoria_id;
-    }
-
-    public void setCategoria_id(int categoria_id) {
-        this.categoria_id = categoria_id;
-    }
-
     public int getQuantitat() {
         return quantitat;
     }
@@ -61,4 +56,5 @@ public class ProductDataModel {
     public void setQuantitat(int quantitat) {
         this.quantitat = quantitat;
     }
+
 }

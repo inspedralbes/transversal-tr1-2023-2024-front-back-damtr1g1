@@ -7,7 +7,7 @@ const multer = require("multer");
 const imatges = multer({ dest: "./img/productes/" });
 const PORT = 3003;
 const app = express();
-const cors = require("cors");
+const cors = require('cors');
 const server = http.createServer(app);
 const { spawn } = require("child_process");
 const { EnviarJson } = require('./sockets.js');
@@ -56,6 +56,29 @@ function closeDBconnection() {
   });
 }
 
+// Buscar usuario por nombre
+function selectUserDataByName(nom, callback) {
+  con.query('SELECT * FROM Usuaris WHERE nom = ?', [nom], (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
+    }
+    console.log("Resultados de la consulta:", results); // Verifica los resultados de la consulta
+
+    // Procesa los datos devueltos según la estructura de los resultados
+    if (results.length > 0) {
+      const UsuariJSON = JSON.stringify(results[0]); // Obtén el primer resultado como JSON
+      console.log("Usuario encontrado:", UsuariJSON); // Verifica el usuario encontrado
+      callback(null, UsuariJSON); // Devuelve el JSON en el callback
+    } else {
+      console.log("Usuario no encontrado para el nombre proporcionado");
+      callback(null, null); // No se encontraron resultados, devuelve null en el callback
+    }
+  });
+}
+
+
 
 
 // falta fer lo dels fixers d'imatges                           (comprobada)
@@ -97,19 +120,16 @@ function selectProducte(callback) {
 }
 // function select producte per id
 function selectProducteById(id, callback) {
-  con.query(
-    `SELECT * FROM Producte WHERE id = ${id}`,
-    (err, results, fields) => {
-      if (err) {
-        console.error("Error al realizar la consulta: " + err.message);
-        callback(err, null); // Devuelve el error en el callback
-        return;
-      }
-      const ProducteJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
-
-      callback(null, ProducteJSON); //
+  con.query(`SELECT * FROM Producte WHERE id = ${id}`, (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
     }
-  );
+    const ProducteJSON = JSON.stringify(results[0]); // Convierte el objeto a JSON
+
+    callback(null, ProducteJSON); //
+  });
 }
 // function eliminar productes                                  (comprobada)
 function deleteProducte(idProducteEliminar) {
@@ -168,7 +188,7 @@ function updateProducte(
     nom: nom,
     definicio: definicio,
     preu: preu,
-    categoria_id: categoria,
+    categoria: categoria,
     quantitat: quantitat,
   };
   const id = idProducteUpdate;
@@ -274,6 +294,23 @@ function selectCarrito(callback) {
     callback(null, CarritoJSON); //
   });
 }
+function selectCarritoPorUsuario(usuari, callback) {
+  con.query("SELECT * FROM Carret WHERE usuari = ?", [usuari], (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
+    }
+
+    if (results.length > 0) {
+      const id = results[0].id; // Obtén el valor de la variable id
+      callback(null, id); // Devuelve el valor de id en el callback
+    } else {
+      callback(new Error("No se encontró un carrito para el usuario " + usuari), null);
+    }
+  });
+}
+
 // function delete carrito                                      (comprobada)
 function deleteCarrito(idCarrito) {
   con.query("DELETE FROM Carret WHERE id=?", idCarrito, (error, results) => {
@@ -338,7 +375,7 @@ function deleteCarritoProducto(idCarritoProductoEliminar) {
 function crearComanda(id_carret, usuari) {
   const fechaActual = new Date().toISOString().slice(0, 10); // Obtiene la fecha actual en formato "YYYY-MM-DD"
   const comanda = {
-    data: fechaActual,
+    data_comanda: fechaActual,
     id_carret: id_carret,
     usuari: usuari,
   };
@@ -416,42 +453,75 @@ app.get("/", function (req, res) {
   res.send("Conectat al server");
 });
 
-// Ruta per a validar el login
+// Ruta para validar el login
 app.get("/api/validateLogin", async (req, res) => {
-  const usuarioSolicitado = req.query.nom; // Obté l'usuari del client
-  const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
+  const usuarioSolicitado = req.query.nom; // Obtén el usuario del cliente
+  const contrasenyaSolicitada = req.query.contrasenya; // Obtén la contraseña del cliente
 
-  await crearDBConnnection();
-  // Consulta la DB para validar l'usuari i la contrasenya
-  con.query("SELECT * FROM Usuaris", (error, results, fields) => {
-    if (error) {
-      // Errors
-      return res
-        .status(500)
-        .json({ error: "Ocurrió un error al consultar la base de datos." });
-    }
+  try {
+    await crearDBConnnection();
+    // Consulta la DB para validar el usuario y la contraseña
+    con.query("SELECT nom, contrasenya FROM Usuaris", (error, results, fields) => {
+      if (error) {
+        // Manejar errores
+        return res.status(500).json({ error: "Ocurrió un error al consultar la base de datos." });
+      }
 
-    // Verifica si hay algún usuario que coincida con la solicitud
-    const usuarioEncontrado = results.find(
-      (user) =>
-        user.nom === usuarioSolicitado &&
-        user.contrasenya === contrasenyaSolicitada
-    );
+      // Verifica si hay algún usuario que coincida con la solicitud
+      const usuarioEncontrado = results.some(
+        (user) =>
+          user.nom === usuarioSolicitado &&
+          user.contrasenya === contrasenyaSolicitada
+      );
 
-    if (usuarioEncontrado) {
-      // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-      return res.status(200).json({ Boolean: true });
-    } else {
-      // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-      return res.status(401).json({ Boolean: false });
-    }
-  });
-  closeDBconnection();
+      if (usuarioEncontrado === true) {
+        const loginResponse = { loginBool: true };
+        return res.status(200).json(loginResponse);
+      } else {
+        // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
+        const loginResponse = { loginBool: false };
+        return res.status(401).json(loginResponse);
+      }
+    });
+  } catch (error) {
+    console.error("Error: ", error);
+    return res.status(500).json({ error: "Ocurrió un error en el servidor." });
+  } finally {
+    await closeDBconnection();
+  }
 });
+
+app.get("/api/getUserDataByName", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    await crearDBConnnection(); // Creem la conexió
+    await selectUserDataByName(req.query.nom, (err, UsuariJSON) => {
+      if (err) {
+        console.error("Error: " + err);
+      } else {
+        res.json(JSON.parse(UsuariJSON));
+      }
+    });
+  
+    await closeDBconnection(); // Tanquem la conexió
+});
+
 // Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
 
+  const imatgeNom = req.query.imatgeNom; // Obté la imatge
+  const categoria = req.query.categoria; // Obté la categoria del producte
+  const definicio = req.query.definicio; // Obté la definicio del producte
+  const nom = req.query.nom; // Obté el nom del producte
+  const preu = req.query.preu; // Obté el preu del producte
+  const quantitat = req.query.quantitat; // Obté la quantitat del producte
+  await crearDBConnnection(); // Creem la conexió
+  await crearProducte(imatgeNom, nom, definicio, preu, categoria, quantitat)// Inserta els productes a la DB
+  await desarImatge(nom, imatgeNom); // On imate_Nom serie el url
+  closeDBconnection(); // Tanquem la conexió
+  res.send({ message: "Afegit correctament" });
+
+  let newFileName = req.query.imatgeNom;
   fs.rename(
     `./img/productes/${req.file.filename}`,
     `./img/productes/${req.query.imatgeNom}`,
@@ -475,6 +545,7 @@ app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
       res.send({ message: "Afegit correctament" });
     }
   );
+
 });
 // Ruta select productes                                        (comprobada)
 app.get("/api/getProducts", async (req, res) => {
@@ -517,35 +588,29 @@ app.post("/api/deleteProduct", async (req, res) => {
   res.json({ message: "Eliminat correctament" });
 });
 // Ruta update producte                                         (comprobada)
-app.post("/api/updateProduct", imatges.single("img"), async (req, res) => {
+app.post("/api/updateProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const idProducteUpdate = req.query.idProducteUpdate; // Obté la id producte del client
 
-  fs.rename(
-    `./img/productes/${req.file.filename}`,
-    `./img/productes/${req.query.imatgeNom}`,
-    async function () {
-      (imatgeNom = req.query.imatgeNom),
-        (nom = req.query.nom),
-        (definicio = req.query.definicio),
-        (preu = req.query.preu),
-        (categoria = req.query.categoria),
-        (quantitat = req.query.quantitat),
-        console.log(idProducteUpdate);
-      await crearDBConnnection();
-      await updateProducte(
-        idProducteUpdate,
-        imatgeNom,
-        nom,
-        definicio,
-        preu,
-        categoria,
-        quantitat
-      );
-      closeDBconnection();
-      res.json({ message: " Actualitzat" });
-    }
+  (imatgeNom = req.query.imatgeNom),
+    (nom = req.query.nom),
+    (definicio = req.query.definicio),
+    (preu = req.query.preu),
+    (categoria = req.query.categoria),
+    (quantitat = req.query.quantitat),
+    console.log(idProducteUpdate);
+  await crearDBConnnection();
+  await updateProducte(
+    idProducteUpdate,
+    imatgeNom,
+    nom,
+    definicio,
+    preu,
+    categoria,
+    quantitat
   );
+  closeDBconnection();
+  res.json({ message: " Actualitzat" });
 });
 // Ruta afegir categoria                                        (comprobada)
 app.post("/api/addCategoria", async (req, res) => {
@@ -625,18 +690,34 @@ app.post("/api/deleteCart", async (req, res) => {
   closeDBconnection();
   res.json({ message: "Eliminat correctament" });
 });
-// Ruta crear carrito producte                                  (comprobada)
+
 app.post("/api/addShoppingCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  const quantitat = req.query.quantitat;
-  const id_carret = req.query.id_carret;
-  const id_producte = req.query.id_producte;
+  const quantitat = req.body.quantitat;
+  const id_carret = req.body.id_carret;
+  const id_producte = req.body.id_producte;
 
   await crearDBConnnection();
   await crearCarritoProducte(quantitat, id_carret, id_producte);
   closeDBconnection();
   res.json({ message: "Creat correctament" });
 });
+
+app.get("/api/getShoppingCart", async (req, res) => {
+  const usuari = req.query.usuari;
+
+  await crearDBConnnection();
+  await selectCarritoPorUsuario(usuari, (err, id) => {
+    if (err) {
+      res.status(500).json({ message: "Error al obtener el carrito: " + err.message });
+    } else {
+      res.json({ id: id }); // Envía el número como respuesta en un objeto JSON
+    }
+  });
+  await closeDBconnection();
+});
+
+
 // Ruta select carrito producte                                 (comprobada)
 app.get("/api/getCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -651,6 +732,7 @@ app.get("/api/getCartProduct", async (req, res) => {
 
   await closeDBconnection(); // Tanquem la conexió
 });
+
 // Ruta borrar carrito producte                                 (comprobada)
 app.post("/api/deleteShoppingCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");

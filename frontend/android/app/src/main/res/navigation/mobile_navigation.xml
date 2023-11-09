@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_shop">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_shop"
         android:name="com.example.tr1_takeaway.ui.shop.ShopFragment"
-        android:label="@string/title_home"
+        android:label="Shop"
         tools:layout="@layout/fragment_shop" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_shopcart"
         android:name="com.example.tr1_takeaway.ui.shopcart.ShopcartFragment"
-        android:label="@string/title_dashboard"
+        android:label="Shopping Cart"
         tools:layout="@layout/fragment_shopcart" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_profile"
         android:name="com.example.tr1_takeaway.ui.profile.ProfileFragment"
-        android:label="@string/title_notifications"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
