@@ -1,12 +1,20 @@
 package com.example.tr1_takeaway.ui.shop;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tr1_takeaway.shopService.ShopApiService;
+import com.example.tr1_takeaway.MainActivity;
+import com.example.tr1_takeaway.R;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
+import com.example.tr1_takeaway.ui.shopcart.ShoppingCartProduct;
 
 import java.util.List;
 
@@ -17,14 +25,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ShopViewModel extends ViewModel {
-
     private RecyclerView recyclerView;
     private Adapter adapter;
-
     public void fetchDataFromApi() {
-        // Retrofit initialization
+        MainActivity MA = new MainActivity();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
+                .baseUrl(MA.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

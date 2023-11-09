@@ -12,14 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
-import com.example.tr1_takeaway.socketProductes.SocketsConnexion;
+//import com.example.tr1_takeaway.socketProductes.SocketsConnexion;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHolder> {
     Button Comprar;
-    SocketsConnexion SC = new SocketsConnexion();
+    //SocketsConnexion SC = new SocketsConnexion();
     private final List<ShopcartProductDataModel> data;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

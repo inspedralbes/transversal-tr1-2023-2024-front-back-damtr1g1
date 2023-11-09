@@ -1,4 +1,4 @@
-package com.example.tr1_takeaway.loginService;
+package com.example.tr1_takeaway.api.loginService;
 
 public class LoginResponse {
     private boolean loginBool;

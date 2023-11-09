@@ -5,7 +5,6 @@ public class ProductDataModel {
     private int id;
     private String imgURL;
     private String nom;
-    private String definicio;
     private double preu;
     private int categoria_id;
     private int quantitat;
@@ -13,11 +12,10 @@ public class ProductDataModel {
     public ProductDataModel(){
 
     }
-    public ProductDataModel(int id, String imgURL, String nom, String definicio, double preu, int categoria_id, int quantitat) {
+    public ProductDataModel(int id, String imgURL, String nom, double preu, int categoria_id, int quantitat) {
         this.id = id;
-        this.imgURL = imgURL;
+        this.imgURL = "http://localhost:3001/api/getImage/"+imgURL;
         this.nom = nom;
-        this.definicio = definicio;
         this.preu = preu;
         this.categoria_id = categoria_id;
         this.quantitat = quantitat;
@@ -47,14 +45,6 @@ public class ProductDataModel {
         this.nom = nom;
     }
 
-    public String getDefinicio() {
-        return definicio;
-    }
-
-    public void setDefinicio(String definicio) {
-        this.definicio = definicio;
-    }
-
     public double getPreu() {
         return preu;
     }
@@ -78,7 +68,4 @@ public class ProductDataModel {
     public void setQuantitat(int quantitat) {
         this.quantitat = quantitat;
     }
-
-
-
 }

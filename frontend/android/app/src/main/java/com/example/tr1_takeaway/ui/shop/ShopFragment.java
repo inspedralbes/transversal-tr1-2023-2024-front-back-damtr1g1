@@ -15,9 +15,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
-import com.example.tr1_takeaway.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,29 +53,15 @@ public class ShopFragment extends Fragment {
             productDisplay = view.findViewById(R.id.productDisplay);
             productDisplay.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
 
-            ViewTreeObserver vto = productDisplay.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    // The view is now ready; you can initialize your RecyclerView here.
-                    // Remove the listener if it's no longer needed.
-                    productDisplay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            });
-
+            MainActivity MA = new MainActivity();
             Retrofit retrofit = new Retrofit.Builder()
-                    //.baseUrl("http://192.168.205.249:3001")
-                    .baseUrl("http://10.2.2.83:3001")
+                    .baseUrl(MA.URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             ShopApiService apiService = retrofit.create(ShopApiService.class);
-            // Call the method to fetch data from Retrofit
-            fetchDataFromApi(apiService, productDisplay);
 
-            /*addtocart.setOnClickListener(v->{
-                //enviarDatosAlServidor();
-            });*/
+            fetchDataFromApi(apiService, productDisplay);
 
             return view;
         }

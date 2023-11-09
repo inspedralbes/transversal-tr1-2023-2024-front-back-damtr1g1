@@ -1,4 +1,4 @@
-package com.example.tr1_takeaway.shopService;
+package com.example.tr1_takeaway.api.shopService;
 
 import android.widget.Button;
 
@@ -40,7 +40,9 @@ public interface ShopApiService {
     @POST("/api/addComanda")
     Call<ShopResponse> addComanda(
             @Query("id_carret") int shopcartId,
-            @Query("usuari") String usuario
+            @Query("usuari") String usuario,
+            @Query("data_entrega") String dataEntregaComanda,
+            @Query("hora_entrega") String horaEntregaComanda
     );
 
 }
