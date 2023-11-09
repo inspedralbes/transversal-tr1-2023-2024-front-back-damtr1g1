@@ -24,6 +24,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ShopcartDialog extends DialogFragment {
+    MainActivity main = new MainActivity();
+
     public class CustomAlertDialog extends DialogFragment {
 
         @Override
@@ -49,9 +51,7 @@ public class ShopcartDialog extends DialogFragment {
 
         private void initiateRetrofitCall() {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.205.249:3001")
-                    //.baseUrl("http://192.168.205.63:3001") // URL Marti
-                    //.baseUrl("http://10.2.2.83:3001")
+                    .baseUrl(main.URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

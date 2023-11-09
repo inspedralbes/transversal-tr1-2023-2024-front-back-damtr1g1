@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
 import com.example.tr1_takeaway.api.shopService.ShopApiService;
@@ -34,7 +35,9 @@ public class ShopFragment extends Fragment {
 
     private FragmentShopBinding binding;
 
-        private RecyclerView productDisplay;
+    MainActivity main = new MainActivity();
+
+    private RecyclerView productDisplay;
         Button addtocart;
         private Adapter adapter;
 
@@ -53,8 +56,7 @@ public class ShopFragment extends Fragment {
             productDisplay.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.205.249:3001")
-                    //.baseUrl("http://10.2.2.83:3001")
+                    .baseUrl(main.URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

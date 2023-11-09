@@ -35,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private EditText EditTextexpirydateText, EditTextname, EditTextcognoms, EditTextcreditcard, EditTextcreditCardNumber, EditTextemailText, EditTextccvText, EditTextemail, EditTextusername;
 
+    MainActivity main = new MainActivity();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,8 +58,7 @@ public class ProfileFragment extends Fragment {
         this.creditCardCCV = binding.ccvText;
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
-                //.baseUrl("http://10.2.2.83:3001")
+                .baseUrl(main.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ProfileApiService apiService = retrofit.create(ProfileApiService.class);
