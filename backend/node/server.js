@@ -270,8 +270,8 @@ function selectCarrito(callback) {
     callback(null, CarritoJSON); //
   });
 }
-function selectCarritoPorUsuario(username, callback) {
-  con.query("SELECT * FROM Carret WHERE usuari = ?", [username], (err, results, fields) => {
+function selectCarritoPorUsuario(usuari, callback) {
+  con.query("SELECT * FROM Carret WHERE usuari = ?", [usuari], (err, results, fields) => {
     if (err) {
       console.error("Error al realizar la consulta: " + err.message);
       callback(err, null); // Devuelve el error en el callback
@@ -279,11 +279,10 @@ function selectCarritoPorUsuario(username, callback) {
     }
 
     if (results.length > 0) {
-      const carrito = results[0]; // Asume que cada usuario tiene a lo sumo un carrito
-      const carritoJSON = JSON.stringify(carrito); // Convierte el objeto a JSON
-      callback(null, carritoJSON);
+      const id = results[0].id; // Obtén el valor de la variable id
+      callback(null, id); // Devuelve el valor de id en el callback
     } else {
-      callback(new Error("No se encontró un carrito para el usuario " + username), null);
+      callback(new Error("No se encontró un carrito para el usuario " + usuari), null);
     }
   });
 }
@@ -664,18 +663,19 @@ app.post("/api/addShoppingCartProduct", async (req, res) => {
 });
 
 app.get("/api/getShoppingCart", async (req, res) => {
-  const username = req.query.username;
+  const usuari = req.query.usuari;
 
   await crearDBConnnection();
-  await selectCarritoPorUsuario(username, (err, carritoJSON) => {
+  await selectCarritoPorUsuario(usuari, (err, id) => {
     if (err) {
       res.status(500).json({ message: "Error al obtener el carrito: " + err.message });
     } else {
-      res.json(JSON.parse(carritoJSON));
+      res.json({ id: id }); // Envía el número como respuesta en un objeto JSON
     }
   });
   await closeDBconnection();
 });
+
 
 // Ruta select carrito producte                                 (comprobada)
 app.get("/api/getCartProduct", async (req, res) => {
