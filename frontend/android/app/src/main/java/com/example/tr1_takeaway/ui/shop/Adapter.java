@@ -1,12 +1,10 @@
 package com.example.tr1_takeaway.ui.shop;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
+import com.example.tr1_takeaway.ui.shopcart.AddShoppingCartToNode;
+import com.example.tr1_takeaway.ui.shopcart.ShoppingCart;
 import com.example.tr1_takeaway.ui.shopcart.ShoppingCartProduct;
 import com.squareup.picasso.Picasso;
 
@@ -29,11 +29,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private final List<ProductDataModel> data;
+    AddShoppingCartToNode AS = new AddShoppingCartToNode();
     String ProducIDString;
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView ProductID, ProductName, ProductDefinition, ProductPrice, ProductCategory, ProductQuantity;
         public ImageView ProductImage;
         public Button button;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ProductID = itemView.findViewById(R.id.productID);
@@ -105,32 +108,57 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     .build();
 
             addProductToCart service = retrofit.create(addProductToCart.class);
-            //int quantity = // aquí obtienes el valor de cantidad de alguna manera
-            int cartId = 1; // aquí obtienes el valor del ID del carrito de alguna manera
-            ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(1, cartId, productIDIntContent);
-
-            Call<Void> call = service.crearCarritoProducto(shoppingCartProduct);
-            call.enqueue(new Callback<Void>() {
+            //int quantity = 1 // aquí obtienes el valor de cantidad de alguna manera
+            String userID = MA.getUsernameText();
+            AS.GetShoppingCart(userID, new Callback<ShoppingCart>() {
                 @Override
-                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        // Maneja la respuesta exitosa
-                        Log.d("TAG", "Carrito Producto insertado con éxito.");
+                public void onResponse(@NonNull Call<ShoppingCart> callCart, @NonNull Response<ShoppingCart> response) {
+                    if (!response.isSuccessful()) {
+                        Log.e("Error", "Error en la repsuesta");
+                        Log.d("Error", userID);
+                        return;
+                    }
+                    AS.shoppingCart = response.body(); // Guarda el carrito de compras en la variable de instancia
+                    assert AS.shoppingCart != null;
+                    Log.d("Va", "La solicitud va");
+
+                    if (AS.shoppingCart != null) { // Comprueba si se ha obtenido un carrito de compras
+                        int cartId = AS.shoppingCart.getId_carrito();
+                        Log.d("Cart id", String.valueOf(cartId));
+                        ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(1, cartId, productIDIntContent);
+
+                        Call<Void> call = service.crearCarritoProducto(shoppingCartProduct);
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    // Maneja la respuesta exitosa
+                                    Log.d("TAG", "Carrito Producto insertado con éxito.");
+                                } else {
+                                    // Maneja la respuesta de error
+                                    Log.e("TAG", "Error al insertar Carrito Producto: " + response.errorBody());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                // Maneja el fallo de la solicitud
+                                Log.e("TAG", "Error: " + t.getMessage());
+                            }
+                        });
                     } else {
-                        // Maneja la respuesta de error
-                        Log.e("TAG", "Error al insertar Carrito Producto: " + response.errorBody());
+                        Log.e("Error", "No se ha obtenido un carrito de compras");
                     }
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    // Maneja el fallo de la solicitud
-                    Log.e("TAG", "Error: " + t.getMessage());
+                public void onFailure(@NonNull Call<ShoppingCart> callCart, @NonNull Throwable t) {
+                    Log.e("Fail", "Error failed");
                 }
             });
         });
-    }
 
+    }
     @Override
     public int getItemCount() {
         return data.size();

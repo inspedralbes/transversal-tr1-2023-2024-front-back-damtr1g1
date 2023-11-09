@@ -270,6 +270,24 @@ function selectCarrito(callback) {
     callback(null, CarritoJSON); //
   });
 }
+function selectCarritoPorUsuario(username, callback) {
+  con.query("SELECT * FROM Carret WHERE usuari = ?", [username], (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
+    }
+
+    if (results.length > 0) {
+      const carrito = results[0]; // Asume que cada usuario tiene a lo sumo un carrito
+      const carritoJSON = JSON.stringify(carrito); // Convierte el objeto a JSON
+      callback(null, carritoJSON);
+    } else {
+      callback(new Error("No se encontró un carrito para el usuario " + username), null);
+    }
+  });
+}
+
 // function delete carrito                                      (comprobada)
 function deleteCarrito(idCarrito) {
   con.query("DELETE FROM Carret WHERE id=?", idCarrito, (error, results) => {
@@ -645,6 +663,20 @@ app.post("/api/addShoppingCartProduct", async (req, res) => {
   res.json({ message: "Creat correctament" });
 });
 
+app.get("/api/getShoppingCart", async (req, res) => {
+  const username = req.query.username;
+
+  await crearDBConnnection();
+  await selectCarritoPorUsuario(username, (err, carritoJSON) => {
+    if (err) {
+      res.status(500).json({ message: "Error al obtener el carrito: " + err.message });
+    } else {
+      res.json(JSON.parse(carritoJSON));
+    }
+  });
+  await closeDBconnection();
+});
+
 // Ruta select carrito producte                                 (comprobada)
 app.get("/api/getCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -659,6 +691,7 @@ app.get("/api/getCartProduct", async (req, res) => {
 
   await closeDBconnection(); // Tanquem la conexió
 });
+
 // Ruta borrar carrito producte                                 (comprobada)
 app.post("/api/deleteShoppingCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
