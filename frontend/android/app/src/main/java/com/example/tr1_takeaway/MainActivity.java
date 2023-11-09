@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public String getUsernameText() {
         return UsernameText;
     }
+
     public final static String EXTRA_USERNAME_TEXT = "USERNAME: ";
 
     public final static String EXTRA_PASSWORD_TEXT = "PASSWORD: ";
@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = getSharedPreferences("NombrePreferencias", MODE_PRIVATE).edit();
                                 editor.putString("IDUsuario", userId);
                                 editor.apply();
-                                AddCarrito.CreateShoppingCart(userId);
                                 Bundle extras = new Bundle();
                                 secondScreen = new Intent(MainActivity.this, ShopActivity.class);
                                 extras.putString(EXTRA_USERNAME_TEXT, nom.getText().toString());
