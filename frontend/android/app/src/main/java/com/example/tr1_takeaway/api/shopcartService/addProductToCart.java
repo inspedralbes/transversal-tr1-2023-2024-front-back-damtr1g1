@@ -7,7 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface addProductToCart {
-    @POST("/api/addShoppingCartProduct") // Aquí debes colocar la URL
+    @POST("/api/addShoppingCartProduct")
     Call<Void> crearCarritoProducto(@Body ShoppingCartProduct shoppingCartProduct);
 }
 
