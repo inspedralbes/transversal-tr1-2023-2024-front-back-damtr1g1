@@ -41,6 +41,8 @@ public class ShopcartFragment extends Fragment {
     private ShopcartAdapter adapter;
     ShopcartProductDataModel product;
     Button buyCart;
+    Button pickDeliveryTime;
+    Button pickDeliveryDate;
     ImageButton removeFromCart;
     ShopcartDialog confirmPurchase;
 
@@ -57,6 +59,8 @@ public class ShopcartFragment extends Fragment {
         shopcartDisplay = view.findViewById(R.id.ShopCartDisplay);
         shopcartDisplay.setLayoutManager(new LinearLayoutManager(requireContext()));
         buyCart = view.findViewById(R.id.buyShopcartButton);
+        pickDeliveryTime = view.findViewById(R.id.timePickerButton);
+        pickDeliveryDate = view.findViewById(R.id.datePickerButton);
         removeFromCart = productview.findViewById(R.id.deleteShopcartProduct);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -89,12 +93,23 @@ public class ShopcartFragment extends Fragment {
             });
         });
 
+        pickDeliveryDate.setOnClickListener(v -> {
+            DatePickerFragment pickDate = new DatePickerFragment();
+            pickDate.show(getParentFragmentManager(), "datePicker");
+        });
+
+        pickDeliveryTime.setOnClickListener(v -> {
+            TimePickerFragment pickTime = new TimePickerFragment();
+            pickTime.show(getParentFragmentManager(), "timePicker");
+        });
+
         buyCart.setOnClickListener(v -> {
             Call<ShopResponse> call = service.addComanda(1, "admin");
             call.enqueue(new Callback<ShopResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<ShopResponse> call, @NonNull Response<ShopResponse> response) {
                     if (response.isSuccessful()) {
+
                         confirmPurchase = new ShopcartDialog();
                         confirmPurchase.show(getParentFragmentManager(), "Completar comanda");
                     }
