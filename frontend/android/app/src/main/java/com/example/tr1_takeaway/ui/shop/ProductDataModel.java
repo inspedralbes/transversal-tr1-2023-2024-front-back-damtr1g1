@@ -3,22 +3,13 @@ package com.example.tr1_takeaway.ui.shop;
 public class ProductDataModel {
 
     private int id;
-    private String imgURL;
+    private String imatgeNom;
     private String nom;
     private double preu;
     private int categoria_id;
     private int quantitat;
 
     public ProductDataModel(){
-
-    }
-    public ProductDataModel(int id, String imgURL, String nom, double preu, int categoria_id, int quantitat) {
-        this.id = id;
-        this.imgURL = "http://localhost:3001/api/getImage/"+imgURL;
-        this.nom = nom;
-        this.preu = preu;
-        this.categoria_id = categoria_id;
-        this.quantitat = quantitat;
     }
 
     public int getId() {
@@ -30,11 +21,11 @@ public class ProductDataModel {
     }
 
     public String getImageUrl() {
-        return imgURL;
+        return "http://192.168.1.195:3001/api/getImage/"+imatgeNom;
     }
 
     public void setImageUrl(String url_img) {
-        this.imgURL = url_img;
+        this.imatgeNom = url_img;
     }
 
     public String getNom() {
