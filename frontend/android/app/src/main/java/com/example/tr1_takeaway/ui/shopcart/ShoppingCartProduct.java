@@ -14,7 +14,6 @@ public class ShoppingCartProduct {
     public int getQuantitat() {
         return quantitat;
     }
-
     public int getId_carret() {
         return id_carret;
     }

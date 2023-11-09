@@ -4,9 +4,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.api.shopcartService.ShopCartApiService;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -14,33 +14,37 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddShoppingCartToNode {
-    public void CreateShoppingCart(String nomUsuari) {
+    public ShoppingCart shoppingCart;
+    MainActivity main = new MainActivity();
+    public void GetShoppingCart(String nomUsuari, Callback<ShoppingCart> callback){
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.249:3001")
-                .baseUrl("http://10.2.2.83:3001")
+                .baseUrl(main.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+            ShopCartApiService api = retrofit.create(ShopCartApiService.class);
 
-        ShopCartApiService apiInterface = retrofit.create(ShopCartApiService.class);
-        Call<ResponseBody> call = apiInterface.crearCarritoCompra(nomUsuari);
+            Call<ShoppingCart> call = api.getShoppingCart(nomUsuari);
+            call.enqueue(new Callback<ShoppingCart>() {
+                @Override
+                public void onResponse(@NonNull Call<ShoppingCart> callCart, @NonNull Response<ShoppingCart> response) {
+                    if (!response.isSuccessful()) {
+                        Log.e("Error", "Error en la repsuesta");
+                        Log.d("Error", nomUsuari);
+                        return;
+                    }
+                    shoppingCart = response.body();
 
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    // Operación exitosa
-                    Log.d("RESPONSE", "Carrito Creado con éxito.");
-                } else {
-                    // Error en la operación
-                    Log.e("RESPONSE", "Error al insertar Carrito Producto.");
+                    assert shoppingCart != null;
+                    //String username = shoppingCart.getUsuari();
+                    Log.d("Va", "La solicitud va");
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                // Manejo de fallos en la solicitud
-                Log.e("RESPONSE", "Fallo en la solicitud: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<ShoppingCart> callCart, @NonNull Throwable t) {
+                    Log.e("Fail", "Error failed");
+                }
+            });
+
+        }
     }
-}
+

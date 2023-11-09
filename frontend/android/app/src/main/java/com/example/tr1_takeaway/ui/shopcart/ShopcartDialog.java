@@ -24,6 +24,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ShopcartDialog extends DialogFragment {
+    MainActivity main = new MainActivity();
+    String deliveryDate, deliveryTime;
+
     public class CustomAlertDialog extends DialogFragment {
 
         @Override
@@ -34,7 +37,7 @@ public class ShopcartDialog extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            initiateRetrofitCall();
+                            initiateRetrofitCall(deliveryDate, deliveryTime);
                         }
                     })
                     .setNegativeButton("Cancel·lar Comanda", new DialogInterface.OnClickListener() {
@@ -47,16 +50,14 @@ public class ShopcartDialog extends DialogFragment {
             return builder.create();
         }
 
-        private void initiateRetrofitCall() {
+        private void initiateRetrofitCall(String deliveryDate, String deliveryTime) {
             Retrofit retrofit = new Retrofit.Builder()
-                    //.baseUrl("http://192.168.205.249:3001")
-                    //.baseUrl("http://192.168.205.63:3001") // URL Marti
-                    .baseUrl("http://10.2.2.83:3001")
+                    .baseUrl(main.URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             ShopApiService retrofitService = retrofit.create(ShopApiService.class);
-            Call<ShopResponse> call = retrofitService.addComanda(1, "admin");
+            Call<ShopResponse> call = retrofitService.addComanda(1, "admin", deliveryDate, deliveryTime);
             // Execute the call
             call.enqueue(new Callback<ShopResponse>() {
                 @Override

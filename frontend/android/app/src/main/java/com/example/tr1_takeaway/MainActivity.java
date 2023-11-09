@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -22,6 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    public String URL = "http://192.168.205.249:3001"; //"http://192.168.205.249:3001" URL Ramon | "http://192.168.205.99:3001" URL Wilson | "http://192.168.205.63:3001"
 
     Button loginButton;
     EditText nom, contrasenya;
@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public String getUsernameText() {
         return UsernameText;
     }
+
     public final static String EXTRA_USERNAME_TEXT = "USERNAME: ";
 
     public final static String EXTRA_PASSWORD_TEXT = "PASSWORD: ";
@@ -46,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
         AddShoppingCartToNode AddCarrito = new AddShoppingCartToNode();
 
         Retrofit retrofit = new Retrofit.Builder()
-                //.baseUrl("http://192.168.205.99:3001") // URL Wilson
-                //.baseUrl("http://192.168.205.249:3001") // URL Ramon
-                .baseUrl("http://10.2.2.83:3001")
+                .baseUrl(URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         LoginApiService service = retrofit.create(LoginApiService.class);
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = getSharedPreferences("NombrePreferencias", MODE_PRIVATE).edit();
                                 editor.putString("IDUsuario", userId);
                                 editor.apply();
-                                AddCarrito.CreateShoppingCart(userId);
                                 Bundle extras = new Bundle();
                                 secondScreen = new Intent(MainActivity.this, ShopActivity.class);
                                 extras.putString(EXTRA_USERNAME_TEXT, nom.getText().toString());
