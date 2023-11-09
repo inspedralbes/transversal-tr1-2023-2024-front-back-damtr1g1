@@ -1,5 +1,6 @@
 <script setup>
 import OrdersToDo from "./OrdersToDo.vue";
+import OrdersDone from "./OrdersDone.vue";
 </script>
 
 <script>
@@ -35,7 +36,7 @@ export default {
           <v-window v-model="tab">
             <v-window-item value="one"><OrdersToDo /></v-window-item>
 
-            <v-window-item value="two"> Two </v-window-item>
+            <v-window-item value="two"> <OrdersDone /> </v-window-item>
           </v-window>
         </v-card-text>
       </v-card>

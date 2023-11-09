@@ -20,7 +20,24 @@ function EnviarJson(io) {
                 nom: "poma verda",
                 unitats: 5,
               },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
+              {
+                nom: "poma verda",
+                unitats: 5,
+              },
             ],
+            dia: "25/10/2023",
             hora: "13:46",
           },
         },
@@ -28,7 +45,7 @@ function EnviarJson(io) {
           comanda: {
             productes: [
               {
-                nom: "patata",
+                nom: "patata1",
                 unitats: 3,
               },
               {
@@ -36,6 +53,7 @@ function EnviarJson(io) {
                 unitats: 2,
               },
             ],
+            dia: "25/10/2023",
             hora: "13:46",
           },
         },
@@ -43,7 +61,7 @@ function EnviarJson(io) {
           comanda: {
             productes: [
               {
-                nom: "patata",
+                nom: "patata2",
                 unitats: 3,
               },
               {
@@ -51,6 +69,55 @@ function EnviarJson(io) {
                 unitats: 2,
               },
             ],
+            dia: "25/10/2023",
+            hora: "13:46",
+          },
+        },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata3",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
+            ],
+            dia: "25/10/2023",
+            hora: "13:46",
+          },
+        },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata4",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
+            ],
+            dia: "25/10/2023",
+            hora: "13:46",
+          },
+        },
+        {
+          comanda: {
+            productes: [
+              {
+                nom: "patata5",
+                unitats: 3,
+              },
+              {
+                nom: "pera",
+                unitats: 2,
+              },
+            ],
+            dia: "25/10/2023",
             hora: "13:46",
           },
         },
