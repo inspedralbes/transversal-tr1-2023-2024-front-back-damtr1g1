@@ -725,6 +725,10 @@ app.get("/api/getImatgeEstadistiques/DinersComanda", (req, res) => {
   res.sendFile(path.resolve("img_estadistiques/DinersComanda.png"));
 });
 
+app.get("/api/getImatgeEstadistiques/TempsPreparacio", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/TempsPreparacio.png"));
+});
 
 //Ejecutar archivo python
 app.get("/api/executeStatistics", async (req, res) => {
@@ -775,7 +779,7 @@ function calculateTimeToNextHour() {
   const secondsToNextHour = minutesToNextHour * 60;
   const millisecondsToNextHour = secondsToNextHour * 1000;
   
-  setTimeout(calculateTimeToNextHour, 30000);
+  setTimeout(calculateTimeToNextHour, millisecondsToNextHour);
 }
 
 calculateTimeToNextHour()

@@ -88,7 +88,12 @@ def obtenir_diners_comandes(cursor):
 
 def obtenir_temps_preparacio(cursor):
     """Obtiene la media de tiempo que tarda en preparar la comanda"""
-    consulta = """"""
+
+    consulta = """SELECT data_comanda,avg(temps_preparacio) FROM Comanda GROUP BY data_comanda;"""
+
+    cursor.execute(consulta)
+    return cursor.fetchall()
+
 def graficoCantidadVendida(df, filename):
     """Crea un gráfico de barras horizontales a partir de un DataFrame."""
     plt.figure(figsize=(10, 6), facecolor='#f3f1ff')  # Establecer el color de fondo de toda la figura
@@ -214,6 +219,33 @@ def graficoDinersComandas(df,filename):
     plt.savefig(filename)
     plt.close()
 
+def graficTempsPreparacio(df,filename):
+    """Crea un gráfico de barras horizontales a partir de un DataFrame."""
+   
+    plt.figure(figsize=(10, 6), facecolor='#f3f1ff')
+    
+    plt.barh(df['data_comanda'], df['temps_preparacio'], color='#9094e9', capstyle='round')
+
+    
+
+    # Obtener la fecha actual
+    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Utilizar la fecha actual en el título del gráfico
+    plt.title(f'Temps Preparacio ({fecha_actual})', fontsize=16)
+
+    plt.yticks(df['data_comanda'], fontsize=12)  # Utiliza las horas como etiquetas en el eje y
+    plt.xlabel('Total de Segons', fontsize=14)
+    plt.ylabel('Estat Comanda', fontsize=14)
+
+    # Eliminar la cuadrícula horizontal
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
+
+    # Guardar la figura en un archivo (reemplaza 'nombre_del_archivo' con el nombre que desees)
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+
 def CantidaRestante():
     conexion, cursor = establecer_conexion()
     resultados = obtener_productos_ordenados_cantidad(cursor)
@@ -273,14 +305,22 @@ def DinersComanda():
     graficoDinersComandas(df,filename)
 
 def mitjanaTempsPreparacio():
-    conexion,cursor = establecer_conexion()
-    resultados = o
+    conexion, cursor = establecer_conexion()
+    resultados = obtenir_temps_preparacio(cursor)
+    print(resultados)
+    conexion.close()
+
+    df = pd.DataFrame(resultados, columns=['data_comanda','temps_preparacio'])
+    filename = './img_estadistiques/TempsPreparacio.png'
+    graficTempsPreparacio(df,filename)
+
 def main():
     CantidaRestante()
     CantidadVendida()
     HoraComun()
     HoraDiners()
     DinersComanda()
+    mitjanaTempsPreparacio()
    
 main()
 
