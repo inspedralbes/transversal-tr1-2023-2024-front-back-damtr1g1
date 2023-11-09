@@ -1,8 +1,10 @@
 package com.example.tr1_takeaway.ui.shopcart;
 
+import com.example.tr1_takeaway.MainActivity;
+
 public class ShopcartProductDataModel {
 
-    private String imgURL;
+    private String imatgeNom;
     private String nom;
 
     private int id;
@@ -10,12 +12,8 @@ public class ShopcartProductDataModel {
     private int quantitat;
 
 
-    public ShopcartProductDataModel(String imgURL, String nom, double preu, int id, int quantitat) {
-        this.imgURL = imgURL;
-        this.nom = nom;
-        this.preu = preu;
-        this.id = id;
-        this.quantitat = quantitat;
+    public ShopcartProductDataModel() {
+
     }
 
     public int getId() {
@@ -27,11 +25,12 @@ public class ShopcartProductDataModel {
     }
 
     public String getImageUrl() {
-        return imgURL;
+        MainActivity MA = new MainActivity();
+        return MA.URL+"/api/getImage/" +imatgeNom;
     }
 
     public void setImageUrl(String url_img) {
-        this.imgURL = url_img;
+        this.imatgeNom = url_img;
     }
 
     public String getNom() {

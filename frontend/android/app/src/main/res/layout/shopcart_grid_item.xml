@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="500px">
 
     <ImageView
         android:id="@+id/shopcartProductImage"
@@ -47,10 +47,10 @@
 
     <ImageButton
         android:id="@+id/deleteShopcartProduct"
-        android:layout_width="65dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="51dp"
+        android:layout_width="189dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="40dp"
         android:backgroundTint="#FF7A68"
         app:layout_constraintStart_toEndOf="@+id/shopcartProductPrice"
         app:layout_constraintTop_toTopOf="parent"

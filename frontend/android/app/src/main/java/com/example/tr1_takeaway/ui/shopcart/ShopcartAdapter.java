@@ -1,5 +1,8 @@
 package com.example.tr1_takeaway.ui.shopcart;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
 //import com.example.tr1_takeaway.socketProductes.SocketsConnexion;
+import com.example.tr1_takeaway.ui.shop.Adapter;
 import com.squareup.picasso.Picasso;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHolder> {
@@ -46,6 +51,10 @@ public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHo
         public TextView getProductQuantity() {
             return ProductQuantity;
         }
+
+        public ImageView getProductImage() {
+            return ProductImage;
+        }
     }
 
     public ShopcartAdapter(List<ShopcartProductDataModel> data) {
@@ -59,19 +68,38 @@ public class ShopcartAdapter extends RecyclerView.Adapter<ShopcartAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shopcart_grid_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShopcartProductDataModel currentItem = data.get(position);
-        Log.d("TAG", String.valueOf(currentItem.getNom()));
         holder.getProductName().setText(String.valueOf(currentItem.getNom()));
         holder.getProductPrice().setText(String.valueOf(currentItem.getPreu()));
+        new DownloadImageFromInternet(holder.getProductImage()).execute(currentItem.getImageUrl().toString());
+        Log.d("HOLA", currentItem.getImageUrl());
         holder.getProductQuantity().setText("1");
-        Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage);
+    }
+
+    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+        public DownloadImageFromInternet(ImageView imageView) {
+            this.imageView=imageView;
+        }
+        protected Bitmap doInBackground(String... urls) {
+            String imageURL=urls[0];
+            Bitmap bimage=null;
+            try {
+                InputStream in=new java.net.URL(imageURL).openStream();
+                bimage=BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bimage;
+        }
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
     }
 
 
