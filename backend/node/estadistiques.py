@@ -274,15 +274,9 @@ def HoraComun():
     conexion.close()
     
     df = pd.DataFrame(resultados, columns=['id', 'usuari', 'id_carret', 'data_comanda'])
-    df['data_comanda'] = pd.to_datetime(df['data_comanda'])
 
-    # Extraer la hora de 'data_comanda'
-    df['hora_creacion'] = df['data_comanda'].dt.hour
-
-    # Calcular la hora más común
-    hora_mas_comun = df['hora_creacion'].mode().values[0]
     filename = './img_estadistiques/HoraMesComu.png'
-    graficHoresComanda(df,filename,hora_mas_comun)
+    graficHoresComanda(df,filename)
     
 def HoraDiners():
     conexion,cursor = establecer_conexion()
@@ -317,7 +311,7 @@ def mitjanaTempsPreparacio():
 def main():
     CantidaRestante()
     CantidadVendida()
-    HoraComun()
+    #HoraComun()
     HoraDiners()
     DinersComanda()
     mitjanaTempsPreparacio()
