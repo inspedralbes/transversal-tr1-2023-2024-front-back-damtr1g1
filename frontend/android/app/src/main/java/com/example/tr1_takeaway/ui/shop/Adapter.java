@@ -1,27 +1,39 @@
 package com.example.tr1_takeaway.ui.shop;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
+import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
+import com.example.tr1_takeaway.ui.shopcart.ShoppingCartProduct;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private final List<ProductDataModel> data;
-
+    String ProducIDString;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView ProductID, ProductName, ProductDefinition, ProductPrice, ProductCategory, ProductQuantity;
         public ImageView ProductImage;
-
+        public Button button;
         public ViewHolder(View itemView) {
             super(itemView);
             ProductID = itemView.findViewById(R.id.productID);
@@ -31,6 +43,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             ProductCategory = itemView.findViewById(R.id.productCategory);
             ProductQuantity = itemView.findViewById(R.id.productQuantity);
             ProductImage = itemView.findViewById(R.id.productImage);
+            button = itemView.findViewById(R.id.addProductToCart);
         }
 
         public TextView getProductID() {
@@ -80,8 +93,43 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.getProductCategory().setText(String.valueOf(currentItem.getCategoria_id())); // Usar la categoría real del producto
         holder.getProductQuantity().setText(String.valueOf(currentItem.getQuantitat())); // Usar la cantidad real del producto
         Picasso.get().load(currentItem.getImageUrl()).into(holder.ProductImage); // L'imatge la pasem per picasso
-    }
+        holder.button.setOnClickListener(v -> {
+            String productIDContent = holder.getProductID().getText().toString();
+            int productIDIntContent = Integer.parseInt(productIDContent);
 
+            // Retrofit initialization
+            MainActivity MA = new MainActivity();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(MA.URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            addProductToCart service = retrofit.create(addProductToCart.class);
+            //int quantity = // aquí obtienes el valor de cantidad de alguna manera
+            int cartId = 1; // aquí obtienes el valor del ID del carrito de alguna manera
+            ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(1, cartId, productIDIntContent);
+
+            Call<Void> call = service.crearCarritoProducto(shoppingCartProduct);
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        // Maneja la respuesta exitosa
+                        Log.d("TAG", "Carrito Producto insertado con éxito.");
+                    } else {
+                        // Maneja la respuesta de error
+                        Log.e("TAG", "Error al insertar Carrito Producto: " + response.errorBody());
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                    // Maneja el fallo de la solicitud
+                    Log.e("TAG", "Error: " + t.getMessage());
+                }
+            });
+        });
+    }
 
     @Override
     public int getItemCount() {
