@@ -24,7 +24,7 @@ public class SocketsConnexion extends AppCompatActivity {
 
     public void GuardaProdCarrito(){
         try {
-            Socket socket = IO.socket("http://192.168.205.99:3001"); // Reemplaza con la URL de tu servidor
+            Socket socket = IO.socket("http://192.168.1.195:3001"); // Reemplaza con la URL de tu servidor
             socket.connect();
 
             socket.emit("CrearCarrito", idProducte, nomProducte, preuProducte, quantitatProducte, imatgeURL);
