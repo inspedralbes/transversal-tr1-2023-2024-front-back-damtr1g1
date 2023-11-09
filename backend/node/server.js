@@ -18,6 +18,10 @@ const io = new Server(server, {
   }
 });
 const { eliminarImatge } = require("./gestio_imatges");
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.use(cors());
 
@@ -628,18 +632,19 @@ app.post("/api/deleteCart", async (req, res) => {
   closeDBconnection();
   res.json({ message: "Eliminat correctament" });
 });
-// Ruta crear carrito producte                                  (comprobada)
+
 app.post("/api/addShoppingCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  const quantitat = req.query.quantitat;
-  const id_carret = req.query.id_carret;
-  const id_producte = req.query.id_producte;
+  const quantitat = req.body.quantitat;
+  const id_carret = req.body.id_carret;
+  const id_producte = req.body.id_producte;
 
   await crearDBConnnection();
   await crearCarritoProducte(quantitat, id_carret, id_producte);
   closeDBconnection();
   res.json({ message: "Creat correctament" });
 });
+
 // Ruta select carrito producte                                 (comprobada)
 app.get("/api/getCartProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");

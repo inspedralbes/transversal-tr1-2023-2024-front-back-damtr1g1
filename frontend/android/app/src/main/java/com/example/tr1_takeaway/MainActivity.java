@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    public String URL = "http://192.168.205.99:3001"; //"http://192.168.205.249:3001" URL Ramon | "http://192.168.205.99:3001" URL Wilson | "http://192.168.205.63:3001"
+    public String URL = "http://192.168.205.249:3001"; //"http://192.168.205.249:3001" URL Ramon | "http://192.168.205.99:3001" URL Wilson | "http://192.168.205.63:3001"
 
     Button loginButton;
     EditText nom, contrasenya;
