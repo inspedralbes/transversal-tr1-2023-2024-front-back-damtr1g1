@@ -52,19 +52,9 @@ public class ShopFragment extends Fragment {
             productDisplay = view.findViewById(R.id.productDisplay);
             productDisplay.setLayoutManager(new GridLayoutManager(requireContext(), 2)); // 2 columns grid
 
-            ViewTreeObserver vto = productDisplay.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    // The view is now ready; you can initialize your RecyclerView here.
-                    // Remove the listener if it's no longer needed.
-                    productDisplay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            });
-
             Retrofit retrofit = new Retrofit.Builder()
-                    //.baseUrl("http://192.168.205.249:3001")
-                    .baseUrl("http://10.2.2.83:3001")
+                    .baseUrl("http://192.168.205.249:3001")
+                    //.baseUrl("http://10.2.2.83:3001")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

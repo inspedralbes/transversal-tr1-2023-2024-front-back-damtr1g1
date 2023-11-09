@@ -1,4 +1,4 @@
-package com.example.tr1_takeaway.ui.shop;
+package com.example.tr1_takeaway.api.shopService;
 
 import com.example.tr1_takeaway.ui.shop.AddtoShoppingCartResponse;
 
