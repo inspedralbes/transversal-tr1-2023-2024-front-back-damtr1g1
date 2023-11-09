@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AddShoppingCartToNode AS = new AddShoppingCartToNode();
+
         loginButton = findViewById(R.id.loginButton);
         nom = findViewById(R.id.usernameText);
         contrasenya = findViewById(R.id.passwordText);
-
-        AddShoppingCartToNode AddCarrito = new AddShoppingCartToNode();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                                 String userId = nom.getText().toString();
                                 SharedPreferences.Editor editor = getSharedPreferences("NombrePreferencias", MODE_PRIVATE).edit();
                                 editor.putString("IDUsuario", userId);
+                                AS.GetShoppingCart(userId);
                                 editor.apply();
                                 Bundle extras = new Bundle();
                                 secondScreen = new Intent(MainActivity.this, ShopActivity.class);

@@ -14,37 +14,38 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddShoppingCartToNode {
-    public ShoppingCart shoppingCart;
     MainActivity main = new MainActivity();
-    public void GetShoppingCart(String nomUsuari, Callback<ShoppingCart> callback){
+    private String cartId;
+
+    public void GetShoppingCart(String nomUsuari) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(main.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-            ShopCartApiService api = retrofit.create(ShopCartApiService.class);
+        ShopCartApiService api = retrofit.create(ShopCartApiService.class);
 
-            Call<ShoppingCart> call = api.getShoppingCart(nomUsuari);
-            call.enqueue(new Callback<ShoppingCart>() {
-                @Override
-                public void onResponse(@NonNull Call<ShoppingCart> callCart, @NonNull Response<ShoppingCart> response) {
-                    if (!response.isSuccessful()) {
-                        Log.e("Error", "Error en la repsuesta");
-                        Log.d("Error", nomUsuari);
-                        return;
+        Call<ShoppingCart> call = api.getShoppingCart(nomUsuari);
+        call.enqueue(new Callback<ShoppingCart>() {
+            @Override
+            public void onResponse(@NonNull Call<ShoppingCart> call, @NonNull Response<ShoppingCart> response) {
+                if (response.isSuccessful()) {
+                    ShoppingCart shoppingCartResponse = response.body();
+                    if (shoppingCartResponse != null) {
+                        cartId = shoppingCartResponse.getId();
+                        Log.d("CartId", "ID del carrito: " + cartId);
                     }
-                    shoppingCart = response.body();
-
-                    assert shoppingCart != null;
-                    //String username = shoppingCart.getUsuari();
-                    Log.d("Va", "La solicitud va");
+                } else {
+                    Log.e("Error", "Error en la respuesta: " + response.code());
                 }
+            }
 
-                @Override
-                public void onFailure(@NonNull Call<ShoppingCart> callCart, @NonNull Throwable t) {
-                    Log.e("Fail", "Error failed");
-                }
-            });
-
-        }
+            @Override
+            public void onFailure(@NonNull Call<ShoppingCart> call, @NonNull Throwable t) {
+                Log.e("Fail", "Error en la solicitud: " + t.getMessage());
+            }
+        });
     }
+
+}
+
 

@@ -17,8 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tr1_takeaway.MainActivity;
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.api.shopcartService.addProductToCart;
+import com.example.tr1_takeaway.ui.shopcart.AddShoppingCartToNode;
+import com.example.tr1_takeaway.ui.shopcart.ShoppingCart;
 import com.example.tr1_takeaway.ui.shopcart.ShoppingCartProduct;
-import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.List;
@@ -35,6 +36,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         public TextView ProductID, ProductName, ProductPrice, ProductCategory, ProductQuantity;
         public ImageView ProductImage;
         public Button button;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ProductName = itemView.findViewById(R.id.productName);
@@ -75,7 +77,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     public Adapter(List<ProductDataModel> data) {
         this.data = data;
-
     }
 
     @NonNull
@@ -87,6 +88,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        AddShoppingCartToNode AS = new AddShoppingCartToNode();
         ProductDataModel currentItem = data.get(position);
         holder.getProductName().setText(currentItem.getNom());
         holder.getProductPrice().setText(String.valueOf(currentItem.getPreu() + "€")); // Usar el precio real del producto
@@ -95,7 +97,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.button.setOnClickListener(v -> {
             String productIDContent = holder.getProductID().getText().toString();
             int productIDIntContent = Integer.parseInt(productIDContent);
-
+            ShoppingCart shoppingCart = new ShoppingCart();
+            //String id = shoppingCart.getId();
             // Retrofit initialization
             MainActivity main = new MainActivity();
             Retrofit retrofit = new Retrofit.Builder()
@@ -104,6 +107,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     .build();
 
             addProductToCart service = retrofit.create(addProductToCart.class);
+            //int id = Integer.parseInt(AS.cartId);
+            //Log.d("id", String.valueOf(id));
             int quantity = 1;
             int cartId = 1;
             ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(quantity, cartId, productIDIntContent);
