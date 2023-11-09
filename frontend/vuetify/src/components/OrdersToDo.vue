@@ -34,10 +34,10 @@ export default {
       this.switchsNotSelected = true;
       document.querySelectorAll(".v-list-item").forEach((item) => {
         item.style =
-          "background-color: #7875df; width: 100%; height: 100px; border: 2px solid #473f94;";
+          "background-color: #7875df; width: 100%; height: 100px; border: 2px solid #473f94; font-weight: bold;";
       });
       document.getElementById("comanda-" + index).style =
-        "background-color: #9094e9; width: 100%; height: 100px; border: 4px solid #473f94;";
+        "background-color: #9094e9; width: 100%; height: 100px; border: 4px solid #473f94; font-weight: bold;";
     },
     switchSelected(nProductes) {
       setTimeout(() => {
@@ -63,7 +63,6 @@ export default {
     <v-row class="pl-3 pt-2">
       <v-col
         id="no-scroll"
-        cols="2"
         align="center"
         class="pa-2"
         style="
@@ -77,33 +76,27 @@ export default {
         <v-list-item
           :key="comandes"
           v-for="(comandes, index) in jsonComandes.comandes"
-          class="mb-2"
+          class="mb-2 pa-3"
           style="
             background-color: #7875df;
             width: 100%;
             height: 100px;
             border: 2px solid #473f94;
+            font-weight: bold;
           "
           rounded="xl"
           link
           :id="'comanda-' + index"
           @click="canviComanda(index)"
         >
-          <v-row align="center">
-            <v-col cols="2">
-              {{ index + 1 }}
-            </v-col>
-            <v-divider vertical class="border-opacity-100"></v-divider>
-            <v-col>
-              <div>
-                <p>
-                  {{ comandes.comanda.productes.length }}
-                  <v-icon size="x-small">mdi-food-drumstick</v-icon>
-                </p>
-              </div>
-              <p>{{ comandes.comanda.hora }}</p>
-            </v-col>
-          </v-row>
+          <div>
+            <p>
+              {{ comandes.comanda.productes.length }}
+              <v-icon size="x-small" style="color: #ad4234;">mdi-food-drumstick</v-icon>
+            </p>
+          </div>
+          <p>{{ comandes.comanda.dia }}</p>
+          <p>{{ comandes.comanda.hora }}</p>
         </v-list-item>
       </v-col>
       <v-col cols="16" class="pa-0 pr-3">
@@ -131,7 +124,7 @@ export default {
           height="430px"
           style="background-color: transparent; color: black; font-weight: bold"
         >
-          <thead class="text-h4" style="background-color: #9094e9;">
+          <thead class="text-h4" style="background-color: #9094e9">
             <tr>
               <th>Unitats</th>
               <th>Producte</th>
@@ -162,7 +155,6 @@ export default {
               <td class="pl-8">{{ producte.nom }}</td>
               <td>
                 <v-switch
-                  
                   @click="
                     switchSelected(
                       jsonComandes.comandes[comandaActual].comanda.productes

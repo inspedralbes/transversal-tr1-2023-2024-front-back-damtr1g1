@@ -11,7 +11,7 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.jsonComandes = data;
-        console.log(this.jsonComandes);
+        console.log(data);
       });
   },
 };
@@ -28,7 +28,9 @@ export default {
         <tr>
           <th class="text-center">Id</th>
           <th class="text-center">Nom d'usuari</th>
-          <th class="text-center">Hora d'encarrec</th>
+          <th class="text-center">Temps trigat</th>
+          <th class="text-center">Data d'entrega</th>
+          <th class="text-center">Hora d'entrega</th>
         </tr>
       </thead>
       <tbody>
@@ -48,7 +50,9 @@ export default {
             </div>
           </td>
           <td>{{ comanda.usuari }}</td>
-          <td>{{ comanda.data_comanda }}</td>
+          <td>{{ comanda.temps_preparacio }}s</td>
+          <td>{{ comanda.data_entrega }}</td>
+          <td>{{ comanda.hora_entrega }}</td>
         </tr>
       </tbody>
     </v-table>
