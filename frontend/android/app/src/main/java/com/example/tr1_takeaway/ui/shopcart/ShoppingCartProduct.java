@@ -1,6 +1,12 @@
 package com.example.tr1_takeaway.ui.shopcart;
 
 public class ShoppingCartProduct {
+    public ShoppingCartProduct(int quantitat, int id_carret, int id_producte) {
+        this.quantitat = quantitat;
+        this.id_carret = id_carret;
+        this.id_producte = id_producte;
+    }
+
     private int quantitat;
     private int id_carret;
     private int id_producte;

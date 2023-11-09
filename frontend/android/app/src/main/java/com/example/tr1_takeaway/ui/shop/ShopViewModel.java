@@ -1,8 +1,9 @@
 package com.example.tr1_takeaway.ui.shop;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,36 +24,32 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ShopViewModel extends ViewModel {
-    public Button addProduct;
     private RecyclerView recyclerView;
     private Adapter adapter;
-
-    public void setAdapter(Adapter adapter) {
-        this.adapter = adapter;
-    }
-
-    public void addProductToCart() {
-        addProduct.findViewById(R.id.addProductToCart);
-
-        // Retrofit initialization
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        addProductToCart service = retrofit.create(addProductToCart.class);
+    public void addProductToCart(View view) {
+        Button addProduct = view.findViewById(R.id.addProductToCart);
+        EditText productID = view.findViewById(R.id.productID);
 
         addProduct.setOnClickListener(v -> {
-            int quantity = // aquí obtienes el valor de cantidad de alguna manera
-            int cartId = // aquí obtienes el valor del ID del carrito de alguna manera
-            int productId = // aquí obtienes el valor del ID del producto de alguna manera
+            String productIDContent = productID.getText().toString();
+            int productIDIntContent = Integer.parseInt(productIDContent);
 
-            ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(quantity, cartId, productId);
+            // Retrofit initialization
+            Retrofit retrofit = new Retrofit.Builder()
+                    //.baseUrl("http://192.168.205.249:3001")
+                    .baseUrl("http://10.2.2.83:3001")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            addProductToCart service = retrofit.create(addProductToCart.class);
+            //int quantity = // aquí obtienes el valor de cantidad de alguna manera
+            int cartId = 0; // aquí obtienes el valor del ID del carrito de alguna manera
+            ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct(1, cartId, productIDIntContent);
 
             Call<Void> call = service.crearCarritoProducto(shoppingCartProduct);
             call.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
+                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                     if (response.isSuccessful()) {
                         // Maneja la respuesta exitosa
                         Log.d("TAG", "Carrito Producto insertado con éxito.");
@@ -63,7 +60,7 @@ public class ShopViewModel extends ViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                     // Maneja el fallo de la solicitud
                     Log.e("TAG", "Error: " + t.getMessage());
                 }
@@ -71,10 +68,12 @@ public class ShopViewModel extends ViewModel {
         });
     }
 
+
     public void fetchDataFromApi() {
         // Retrofit initialization
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.205.249:3001")
+                //.baseUrl("http://192.168.205.249:3001")
+                .baseUrl("http://10.2.2.83:3001")
                 //.baseUrl("http://192.168.205.63:3001") // URL Marti
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

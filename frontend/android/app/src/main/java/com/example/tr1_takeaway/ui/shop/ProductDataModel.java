@@ -78,7 +78,4 @@ public class ProductDataModel {
     public void setQuantitat(int quantitat) {
         this.quantitat = quantitat;
     }
-
-
-
 }
