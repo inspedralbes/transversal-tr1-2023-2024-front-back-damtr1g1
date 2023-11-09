@@ -853,7 +853,7 @@ app.get("/api/executeStatistics", async (req, res) => {
 } );
 
 function callPython( ) {
-  const pythonProcess = spawn("python", ["./estadistiques.py"]);
+  const pythonProcess = spawn("python3", ["./estadistiques.py"]);
   var obj = {};
 
   var prom = new Promise( (resolve, fail) => {
