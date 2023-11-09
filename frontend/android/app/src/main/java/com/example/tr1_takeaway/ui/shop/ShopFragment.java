@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tr1_takeaway.R;
 import com.example.tr1_takeaway.databinding.FragmentShopBinding;
-import com.example.tr1_takeaway.shopService.ShopApiService;
+import com.example.tr1_takeaway.api.shopService.ShopApiService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
