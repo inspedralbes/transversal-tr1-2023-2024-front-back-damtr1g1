@@ -310,11 +310,11 @@ def mitjanaTempsPreparacio():
 
 def main():
     CantidaRestante()
-    # CantidadVendida()
-    # HoraComun()
-    # HoraDiners()
-    # DinersComanda()
-    # mitjanaTempsPreparacio()
+    CantidadVendida()
+    HoraComun()
+    HoraDiners()
+    DinersComanda()
+    mitjanaTempsPreparacio()
    
 main()
 
