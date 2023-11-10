@@ -578,25 +578,31 @@ app.post("/api/updateProduct", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const idProducteUpdate = req.query.idProducteUpdate; // Obté la id producte del client
 
-  (imatgeNom = req.query.imatgeNom),
-    (nom = req.query.nom),
-    (definicio = req.query.definicio),
-    (preu = req.query.preu),
-    (categoria = req.query.categoria),
-    (quantitat = req.query.quantitat),
-    console.log(idProducteUpdate);
-  await crearDBConnnection();
-  await updateProducte(
-    idProducteUpdate,
-    imatgeNom,
-    nom,
-    definicio,
-    preu,
-    categoria,
-    quantitat
+  fs.rename(
+    `./img/productes/${req.file.filename}`,
+    `./img/productes/${req.query.imatgeNom}`,
+    async function () {
+      (imatgeNom = req.query.imatgeNom),
+        (nom = req.query.nom),
+        (definicio = req.query.definicio),
+        (preu = req.query.preu),
+        (categoria = req.query.categoria),
+        (quantitat = req.query.quantitat),
+        console.log(idProducteUpdate);
+      await crearDBConnnection();
+      await updateProducte(
+        idProducteUpdate,
+        imatgeNom,
+        nom,
+        definicio,
+        preu,
+        categoria,
+        quantitat
+      );
+      closeDBconnection();
+      res.json({ message: " Actualitzat" });
+    }
   );
-  closeDBconnection();
-  res.json({ message: " Actualitzat" });
 });
 // Ruta afegir categoria                                        (comprobada)
 app.post("/api/addCategoria", async (req, res) => {
