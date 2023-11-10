@@ -455,6 +455,21 @@ app.get("/api/validateLogin", async (req, res) => {
     await closeDBconnection();
   }
 });
+
+app.get("/api/getUserDataByName", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  await crearDBConnnection(); // Creem la conexió
+  await selectUserDataByName(req.query.nom, (err, UsuariJSON) => {
+    if (err) {
+      console.error("Error: " + err);
+    } else {
+      res.json(JSON.parse(UsuariJSON));
+    }
+  });
+
+  await closeDBconnection(); // Tanquem la conexió
+});
+
 // Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
