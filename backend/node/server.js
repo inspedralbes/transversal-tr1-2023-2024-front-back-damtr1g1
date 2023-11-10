@@ -354,6 +354,21 @@ function crearComanda(id_carret, usuari) {
   });
 }
 // function select comandes                                     (comprobada)
+function selectComandesFinalitzades(callback) {
+  con.query("SELECT * FROM Comanda WHERE finalitzat = 1", (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callbac
+      return;
+    }
+
+    const ComandaJSON = JSON.stringify(results); // Convierte el objeto a JSON
+
+    callback(null, ComandaJSON); //
+  });
+}
+
+// function select comandes                                     (comprobada)
 function selectComandes(callback) {
   con.query("SELECT * FROM Comanda ", (err, results, fields) => {
     if (err) {
@@ -367,6 +382,7 @@ function selectComandes(callback) {
     callback(null, ComandaJSON); //
   });
 }
+
 // function delete comandes                                     (comprobada)
 function deleteComandes(id_Comanda) {
   con.query(
@@ -672,6 +688,21 @@ app.get("/api/getComanda", async (req, res) => {
 
   await closeDBconnection(); // Tanquem la conexió
 });
+
+// Ruta select comanda                                          (comprobada)
+app.get("/api/getComandesFinalitzades", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  await crearDBConnnection(); // Creem la conexió
+  await selectComandesFinalitzades((err, comandesJSON) => {
+    if (err) {
+      console.error("Error: " + err);
+    } else {
+      res.json(JSON.parse(comandesJSON));
+    }
+  });
+
+  await closeDBconnection(); // Tanquem la conexió
+});
 // Ruta delete comanda                                          (comprobada)
 app.post("/api/deleteComanda", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -697,6 +728,7 @@ server.listen(PORT, function () {
   console.log("Server running on port " + PORT);
 });
 
+// Recibir la imagen del nombre pedido
 app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
