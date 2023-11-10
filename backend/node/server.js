@@ -697,10 +697,10 @@ server.listen(PORT, function () {
   console.log("Server running on port " + PORT);
 });
 
-// Recibir la imagen del nombre pedido
 app.get("/api/getImage/:img", (req, res) => {
   res.sendFile(path.resolve(`./img/productes/${req.params.img}`));
 });
+
 //Recibir la imagen de la estadistica
 app.get("/api/getImatgeEstadistiques/producteCantidad", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -715,6 +715,21 @@ app.get("/api/getImatgeEstadistiques/producteMesVenut", (req, res) => {
 app.get("/api/getImatgeEstadistiques/HoraMesComu", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.sendFile(path.resolve("img_estadistiques/HoraMesComu.png"));
+});
+
+app.get("/api/getImatgeEstadistiques/HoraMesDiners", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/HoraMesDiners.png"));
+});
+
+app.get("/api/getImatgeEstadistiques/DinersComanda", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/DinersComanda.png"));
+});
+
+app.get("/api/getImatgeEstadistiques/TempsPreparacio", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.sendFile(path.resolve("img_estadistiques/TempsPreparacio.png"));
 });
 
 //Ejecutar archivo python
