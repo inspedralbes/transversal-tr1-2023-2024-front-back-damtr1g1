@@ -418,37 +418,42 @@ app.get("/", function (req, res) {
   res.send("Conectat al server");
 });
 
-// Ruta per a validar el login
+// Ruta para validar el login
 app.get("/api/validateLogin", async (req, res) => {
-  const usuarioSolicitado = req.query.nom; // Obté l'usuari del client
-  const contrasenyaSolicitada = req.query.contrasenya; // Obté la contrasenya del client
+  const usuarioSolicitado = req.query.nom; // Obtén el usuario del cliente
+  const contrasenyaSolicitada = req.query.contrasenya; // Obtén la contraseña del cliente
 
-  await crearDBConnnection();
-  // Consulta la DB para validar l'usuari i la contrasenya
-  con.query("SELECT * FROM Usuaris", (error, results, fields) => {
-    if (error) {
-      // Errors
-      return res
-        .status(500)
-        .json({ error: "Ocurrió un error al consultar la base de datos." });
-    }
+  try {
+    await crearDBConnnection();
+    // Consulta la DB para validar el usuario y la contraseña
+    con.query("SELECT nom, contrasenya FROM Usuaris", (error, results, fields) => {
+      if (error) {
+        // Manejar errores
+        return res.status(500).json({ error: "Ocurrió un error al consultar la base de datos." });
+      }
 
-    // Verifica si hay algún usuario que coincida con la solicitud
-    const usuarioEncontrado = results.find(
-      (user) =>
-        user.nom === usuarioSolicitado &&
-        user.contrasenya === contrasenyaSolicitada
-    );
+      // Verifica si hay algún usuario que coincida con la solicitud
+      const usuarioEncontrado = results.some(
+        (user) =>
+          user.nom === usuarioSolicitado &&
+          user.contrasenya === contrasenyaSolicitada
+      );
 
-    if (usuarioEncontrado) {
-      // Si el usuario y la contraseña coinciden, devuelve un mensaje de éxito o los datos relevantes
-      return res.status(200).json({ Boolean: true });
-    } else {
-      // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
-      return res.status(401).json({ Boolean: false });
-    }
-  });
-  closeDBconnection();
+      if (usuarioEncontrado === true) {
+        const loginResponse = { loginBool: true };
+        return res.status(200).json(loginResponse);
+      } else {
+        // Si el usuario y la contraseña no coinciden, devuelve un mensaje de error
+        const loginResponse = { loginBool: false };
+        return res.status(401).json(loginResponse);
+      }
+    });
+  } catch (error) {
+    console.error("Error: ", error);
+    return res.status(500).json({ error: "Ocurrió un error en el servidor." });
+  } finally {
+    await closeDBconnection();
+  }
 });
 // Ruta afegir producte                                         (comprobada)
 app.post("/api/addProduct", imatges.single("img"), async (req, res) => {
