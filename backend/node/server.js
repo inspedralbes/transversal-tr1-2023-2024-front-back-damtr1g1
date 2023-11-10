@@ -574,7 +574,7 @@ app.post("/api/deleteProduct", async (req, res) => {
   res.json({ message: "Eliminat correctament" });
 });
 // Ruta update producte                                         (comprobada)
-app.post("/api/updateProduct", async (req, res) => {
+app.post("/api/updateProduct", imatges.single("img"), async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const idProducteUpdate = req.query.idProducteUpdate; // Obté la id producte del client
 
