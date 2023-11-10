@@ -56,6 +56,27 @@ function closeDBconnection() {
   });
 }
 
+function selectUserDataByName(nom, callback) {
+  con.query('SELECT * FROM Usuaris WHERE nom = ?', [nom], (err, results, fields) => {
+    if (err) {
+      console.error("Error al realizar la consulta: " + err.message);
+      callback(err, null); // Devuelve el error en el callback
+      return;
+    }
+    console.log("Resultados de la consulta:", results); // Verifica los resultados de la consulta
+
+    // Procesa los datos devueltos según la estructura de los resultados
+    if (results.length > 0) {
+      const UsuariJSON = JSON.stringify(results[0]); // Obtén el primer resultado como JSON
+      console.log("Usuario encontrado:", UsuariJSON); // Verifica el usuario encontrado
+      callback(null, UsuariJSON); // Devuelve el JSON en el callback
+    } else {
+      console.log("Usuario no encontrado para el nombre proporcionado");
+      callback(null, null); // No se encontraron resultados, devuelve null en el callback
+    }
+  });
+}
+
 
 
 // falta fer lo dels fixers d'imatges                           (comprobada)
