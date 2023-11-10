@@ -104,7 +104,6 @@ public class ShopcartFragment extends Fragment implements DatePickerFragment.IDa
             pickTime.show(getActivity().getSupportFragmentManager(), "timePicker");
         });
 
-        if(pickDeliveryDate.isPressed() && pickDeliveryTime.isPressed()){
             Log.e("TAG", "the order can be processed");
             buyCart.setOnClickListener(v -> {
                 Log.e("TAG", "Processing order");
@@ -126,7 +125,7 @@ public class ShopcartFragment extends Fragment implements DatePickerFragment.IDa
                     }
                 });
             });
-        }
+
 
         fetchDataFromApi(service);
 
